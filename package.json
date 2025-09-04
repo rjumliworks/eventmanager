@@ -50,6 +50,7 @@
     "vue3-apexcharts": "^1.5.2",
     "vue3-count-to": "^1.1.2",
     "vuex": "^4.1.0",
+    "vuex-persistedstate": "^4.1.0",
     "yarn": "^1.22.22"
   },
   "devDependencies": {

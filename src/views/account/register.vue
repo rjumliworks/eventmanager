@@ -6,7 +6,7 @@
         </div>
 
         <div class="modal-body p-4 mt-4">
-            <form class="customform">
+            <form class="customform" v-if="!completed">
                 <BRow class="g-3" style="margin-top: -35px;">
                     <div class="p-2 mt-1">
                         <div class="row g-2">
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <BButton variant="primary" class="w-100 mt-n1" type="button" @click="send" :disabled="next">Submit</BButton>
+                            <BButton variant="primary" class="w-100 mt-n1" type="button" @click="submit" :disabled="sub">Submit</BButton>
                             <router-link to="/login">
                                 <BButton variant="white" class="w-100 mt-2 bg-primary-subtle" type="button">Cancel</BButton>
                             </router-link>
@@ -66,18 +66,39 @@
                     </div>
                 </BRow>
             </form>
+            <div v-else>
+                <div class="mt-2 text-center">
+                    <lottie trigger="hover" :options="defaultOptions5" :height="150" :width="150" />
+
+                    <h4 class="mb-3 mt-4 fs-18">
+                        Registration Successful!
+                    </h4>
+                    <p class="text-muted fs-13 mb-4">
+                        Thank you for registering. Your account has been created successfully and you can now participate in the event.  
+                    </p>
+                    <div class="hstack gap-2 justify-content-center">
+                        <router-link to="/login"><BButton variant="primary">Login Here</BButton></router-link>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
+    import Lottie from "@/components/widgets/lottie.vue";
     import axios from 'axios';
     import Multiselect from "@vueform/multiselect";
     import "@vueform/multiselect/themes/default.css";
+    import animationData5 from "@/components/widgets/tqywkdcz.json";
     export default {
-        components: { Multiselect },
+        components: { Multiselect, lottie: Lottie, },
         data() {
             return {
                 form: {
+                    firstname: null,
+                    middlename: null,
+                    lastname: null,
+                    suffix: null,
                     email: null,
                     contact_no: null,
                     birthdate: null,
@@ -85,18 +106,34 @@
                     affiliation: null,
                     designation: null
                 },
-                showModal: false
+                 defaultOptions5: {
+                animationData: animationData5
+            },
+                sub: false,
+                showModal: false,
+                completed: false,
+                validationErrors:{},
+                error: ''
             }
         },
         methods: {
-            submit() {
+            async submit() {
                 this.sub = true;
-                this.form.code = this.code;
-                axios.post('http://eventmanager.test/api/verify', this.form).then(res => {
-                    if (res.data.status) {
-                        console.log(res.data.token);
+                await axios.post('register', this.form).then(response => {
+                    if (response.data.status) {
                         this.sub = false;
+                        this.completed = true;
+                    } 
+                }).catch(({response})=>{
+                    if(response.status===422){
+                        this.validationErrors = response.data.errors
+                    }else{
+                        this.validationErrors = {};
+                        this.error = response.data.message;
                     }
+                    this.sub = false;
+                }).finally(()=>{
+                    this.processing = false
                 });
             },
             hide() {

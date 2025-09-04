@@ -70,6 +70,7 @@
 </template>
 <script>
     import axios from 'axios';
+    import { mapActions } from 'vuex';
     import { nextTick } from 'vue';
     export default {
         data() {
@@ -84,6 +85,8 @@
                 sent: false,
                 next: false,
                 sub: false,
+                validationErrors:{},
+                error: '',
                 showModal: false
             }
         },
@@ -93,24 +96,38 @@
             },
         },
         methods: {
-            send() {
+            ...mapActions({
+                signIn:'auth/login'
+            }),
+            async send() {
                 this.next = true;
-                axios.post('http://eventmanager.test/api/login', this.form).then(res => {
-                    if (res.data.status) {
+                await axios.post('login', this.form).then(response => {
+                    if (response.data.status) {
                         this.next = false;
                         this.sent = true
                     } else {
                         this.next = false;
                     }
+                }).catch(({response})=>{
+                    if(response.status===422){
+                        this.validationErrors = response.data.errors
+                    }else{
+                        this.validationErrors = {};
+                        this.error = response.data.message;
+                        // alert(response.data.message)
+                    }
+                }).finally(()=>{
+                    this.processing = false
                 });
             },
             submit() {
                 this.sub = true;
                 this.form.code = this.code;
-                axios.post('http://eventmanager.test/api/verify', this.form).then(res => {
-                    if (res.data.status) {
-                        console.log(res.data.token);
+                axios.post('verify', this.form).then(response => {
+                    if (response.data.status) {
                         this.sub = false;
+                        localStorage.setItem('token', response.data.token);
+                        this.signIn();
                     } 
                 });
             },

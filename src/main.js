@@ -5,6 +5,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import i18n from './i18n';
 import store from "./state/store";
+import axios from 'axios';
 
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -40,6 +41,16 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 
 // initFirebaseBackend(firebaseConfig);
 
+axios.defaults.baseURL = 'http://dosteventmanager.test/api/';
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`
+  }
+  return config
+}, error => {
+  return Promise.reject(error)
+});
 
 
 AOS.init({

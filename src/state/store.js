@@ -1,13 +1,18 @@
 import { createStore } from 'vuex'
-
+import createPersistedState from 'vuex-persistedstate'
+import auth from '@/state/auth'
 import modules from './modules'
 
+
 const store = createStore({
-  modules,
-  // Enable strict mode in development to get a warning
-  // when mutating state outside of a mutation.
-  // https://vuex.vuejs.org/guide/strict.html
-  strict: process.env.NODE_ENV !== 'production',
+    plugins:[
+        createPersistedState()
+    ],
+    modules: {
+        ...modules, 
+        auth        
+    },
+    strict: process.env.NODE_ENV !== 'production',
 })
 
 export default store
