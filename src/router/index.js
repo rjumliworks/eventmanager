@@ -46,6 +46,24 @@ const routes = [
             middleware: "auth",
             title: `Sessions`
         }
+    },
+    {
+        path: "/session/:id",
+        name: "session/view",
+        component: () => import('@/views/modules/sessions/view.vue'),
+        meta: {
+            middleware: "auth",
+            title: `Session View`
+        }
+    },
+    {
+        path: "/qrcode",
+        name: "qrcode",
+        component: () => import('@/views/modules/qrcode/index.vue'),
+        meta: {
+            middleware: "auth",
+            title: `Qr Profile`
+        }
     }
 ]
 

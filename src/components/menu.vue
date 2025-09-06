@@ -34,9 +34,9 @@ export default {
     if (this.rmenu == 'vertical' && this.layoutType == 'twocolumn') {
       document.documentElement.setAttribute("data-layout", "vertical");
     }
-    document.getElementById('overlay').addEventListener('click', () => {
-      document.body.classList.remove('vertical-sidebar-enable');
-    });
+    // document.getElementById('overlay').addEventListener('click', () => {
+    //   document.body.classList.remove('vertical-sidebar-enable');
+    // });
 
     window.addEventListener("resize", () => {
       if (this.layoutType == 'twocolumn') {

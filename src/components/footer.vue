@@ -12,7 +12,7 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <Link href="/qrcode" class="nav-link">
+                <router-link to="/qrcode" class="nav-link">
                     <button class="btn btn-primary btn-md position-relative p-0 avatar-md rounded-circle" style="margin-top: -55px;" type="button">
                         <div class="btn-content">
                             <span class="avatar-title bg-transparent text-reset">
@@ -20,7 +20,7 @@
                             </span>
                         </div>
                     </button>
-                </Link>
+                </router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/sessions" class="nav-link">
@@ -37,10 +37,12 @@
 </template>
 <style scoped>
     .footer {
+        height: 80px;
         left: 0;
         position: fixed;
         border-top: .1rem solid;
         border-color: #e4e2e2;
+        z-index: 60;
     }
     .mobile-curved-header {
         position: absolute;

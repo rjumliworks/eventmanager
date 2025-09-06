@@ -41,7 +41,8 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 
 // initFirebaseBackend(firebaseConfig);
 
-axios.defaults.baseURL = 'http://dosteventmanager.test/api/';
+// axios.defaults.baseURL = 'https://rstwhanda.dost9.ph/api/';
+axios.defaults.baseURL = 'http://eventmanager.test/api/';
 axios.interceptors.request.use(config => {
   const token = localStorage.getItem('token')
   if (token) {

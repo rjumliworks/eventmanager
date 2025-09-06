@@ -1,9 +1,9 @@
 <template>
     <Layout>
         <div class="page-title-box" style=" border-top: 1px solid #e0e0e0; position: fixed; width: 100%; margin-top: -24px; z-index: 100;">
-            <h4 class="font-size-18 mb-0">Exhibitors</h4>
+            <h6 class="fw-bold mb-0">EXHIBITORS</h6>
             <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item active">Showcase of innovations, projects, and technologies.</li>
+                <li class="breadcrumb-item active fs-10">Showcase of innovations, projects, and technologies.</li>
             </ol>
         </div>
         <br/><br/>

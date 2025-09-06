@@ -27,6 +27,9 @@
                                 </div>
                             </div>
                         </form>
+                        <div v-if="error" class="alert alert-danger alert-dismissible fade show material-shadow mb-xl-0 mt-3 fs-11" role="alert">
+                            <strong>{{error}}</strong> 
+                        </div>
                         <div class="mt-4">
                             <BButton variant="primary" class="w-100 mt-n1" type="button" @click="send" :disabled="next">
                                 <span v-if="!next">Next</span>
@@ -58,6 +61,9 @@
                             <!-- <p class="text-muted">Code valid for : <span v-if="timeLeft.total > 0"> {{ timeLeft.minutes }}m {{ timeLeft.seconds }}s remaining
                         </span></p>  -->
                         </form>
+                        <div v-if="error" class="alert alert-danger alert-dismissible fade show material-shadow mb-xl-0 mt-3 mb-n3 fs-11" role="alert">
+                            <strong>{{error}}</strong> 
+                        </div>
                         <div class="mt-4">
                             <BButton variant="primary" class="w-100 mt-2" type="submit" :disabled="sub" @click="submit">Submit</BButton>
                             <BButton variant="white" class="w-100 mt-2 bg-primary-subtle" @click="sent = false" type="button">Back</BButton>
@@ -87,7 +93,8 @@
                 sub: false,
                 validationErrors:{},
                 error: '',
-                showModal: false
+                showModal: false,
+                res: null
             }
         },
         computed: {
@@ -114,8 +121,8 @@
                     }else{
                         this.validationErrors = {};
                         this.error = response.data.message;
-                        // alert(response.data.message)
                     }
+                    this.next = false;
                 }).finally(()=>{
                     this.processing = false
                 });
@@ -129,7 +136,18 @@
                         localStorage.setItem('token', response.data.token);
                         this.signIn();
                     } 
-                });
+                    this.res = response;
+                }).catch(({response})=>{
+                    if(response.status===422){
+                        this.validationErrors = response.data.errors
+                    }else{
+                        this.validationErrors = {};
+                        this.error = response.data.message;
+                        // alert(response.data.message)
+                    }
+                    this.sub = false
+                    this.res = response;
+                })
             },
             focusInput(idx) {
                 const inputs = this.$refs.otpInputs;
