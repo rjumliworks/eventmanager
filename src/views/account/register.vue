@@ -106,9 +106,9 @@
                     affiliation: null,
                     designation: null
                 },
-                 defaultOptions5: {
-                animationData: animationData5
-            },
+                defaultOptions5: {
+                    animationData: animationData5
+                },
                 sub: false,
                 showModal: false,
                 completed: false,

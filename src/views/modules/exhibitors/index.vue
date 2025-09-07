@@ -7,8 +7,59 @@
             </ol>
         </div>
         <br/><br/>
-        
-        <b-list-group flush style="margin-left: -22px; margin-right: -22px;">
+        <!-- <div class="alert alert-warning alert-dismissible alert-label-icon label-arrow fade show material-shadow" role="alert">
+            <i class="ri-alert-line label-icon"></i><strong>Warning</strong> -
+            Label icon arrow alert
+        </div> -->
+        <div class="alert alert-success alert-dismissible alert-label-icon label-arrow fade show material-shadow mt-1" role="alert" style="margin-left: -6px; margin-right: -6px;">
+            <i class="ri-checkbox-circle-fill fs-18 label-icon"></i><span style="font-size: 11px;">Visited Exhibits</span> <b style="font-size: 11px;" class="float-end me-n4">0 / {{ lists.length }}</b>
+        </div>
+        <b-list-group flush style="margin-left: -22px; margin-right: -22px; margin-bottom: 40px;">
+            <template v-for="(list,index) in lists" v-bind:key="index">
+                <router-link :to="{ path: '/exhibitor/'+list.id}">
+                    <b-list-group-item  class="d-flex justify-content-between align-items-center" style="cursor: pointer;" >
+                        
+                        <div class="card border shadow-none bg-light-subtle w-100 card-height-100 mb-2 mt-2">
+                            <div class="card-body">
+                                <div class="d-flex flex-column h-100">
+                                    <div class="d-flex mb-n3">
+                                        <!-- <div class="flex-shrink-0 me-3">
+                                            <div class="avatar-sm">
+                                                <span class="avatar-title bg-subtle rounded p-2 bg-warning-subtle">
+                                                    <img src="@/assets/images/logo-sm.png" alt="" class="img-fluid p-1">
+                                                </span>
+                                            </div>
+                                        </div> -->
+                                        <div class="flex-grow-1">
+                                            <h5 class="mb-1 fs-12 fw-semibold text-primary">{{list.title}}</h5>
+                                            <p class="text-muted fs-10 text-truncate-two-lines mb-3">{{list.area}}</p>
+                                        </div>
+                                        <div class="flex-shrink-0 avatar-sm mt-n2" @click="vote(list.id,index)">
+                                            <div v-if="list.has_voted" class="avatar-title bg-warning-subtle rounded-circle">
+                                                <i class="fs-20 ri-trophy-fill text-warning bx-tada"></i>
+                                            </div>
+                                            <div v-else class="avatar-title bg-light rounded-circle"><i class="fs-20 ri-trophy-fill text-primary"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-dashed py-2">
+                                <div class="d-flex align-items-center fs-10">
+                                    <div class="flex-grow-1">
+                                        <i class="ri-team-fill text-danger me-1"></i>{{list.institution }}
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div v-if="list.has_visited" class="text-success"><i class="ri-checkbox-circle-fill fs-11 me-1"></i>Visited</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </b-list-group-item>
+                </router-link>
+            </template>
+        </b-list-group>
+        <!-- <b-list-group flush style="margin-left: -22px; margin-right: -22px;">
             <template v-for="(list,index) in lists" v-bind:key="index">
                 <b-list-group-item  class="d-flex justify-content-between align-items-center" style="cursor: pointer;" >
                     <div class="flex-grow-1">
@@ -28,7 +79,7 @@
                     </div>
                 </b-list-group-item>
             </template>
-        </b-list-group>
+        </b-list-group> -->
     </Layout>
 </template>
 <script>

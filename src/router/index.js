@@ -39,6 +39,15 @@ const routes = [
         }
     },
     {
+        path: "/exhibitor/:id",
+        name: "exhibitor/view",
+        component: () => import('@/views/modules/exhibitors/view.vue'),
+        meta: {
+            middleware: "auth",
+            title: `Exhibitor View`
+        }
+    },
+    {
         path: "/sessions",
         name: "sessions",
         component: () => import('@/views/modules/sessions/index.vue'),
@@ -63,6 +72,24 @@ const routes = [
         meta: {
             middleware: "auth",
             title: `Qr Profile`
+        }
+    },
+    {
+        path: "/profile",
+        name: "profile",
+        component: () => import('@/views/modules/profiles/index.vue'),
+        meta: {
+            middleware: "auth",
+            title: `Profile`
+        }
+    },
+    {
+        path: "/information",
+        name: "information",
+        component: () => import('@/views/modules/profiles/information.vue'),
+        meta: {
+            middleware: "auth",
+            title: `Information`
         }
     }
 ]

@@ -7,14 +7,14 @@
                         <img :src="participant.avatar" alt="user-img" class="img-thumbnail rounded-circle avatar-lg" style="width: 80px; height: 80px; object-fit: cover; z-index: 3;" />
                     </div>
                     <div class="p-2">
-                        <h4 class="fs-14 text-primary text-uppercase fw-bold mb-2"> {{ participant.firstname }} {{ participant.middlename }} {{ participant.lastname }}</h4>
+                        <h4 class="fs-14 text-primary text-uppercase fw-bold mb-0"> {{ participant.firstname }} {{ participant.middlename }} {{ participant.lastname }}</h4>
                         <p class="fs-11 text-muted mb-0">{{ participant.email }}</p>
                         <p class="fs-11 text-muted">{{ participant.contact_no }}</p>
                     </div>
-                    <img :src="participant.qr" class="img-fluid mt-2" style="width: 200px;" alt="QR Code" v-if="!showScanner" />
+                    <img :src="participant.qr" class="img-fluid mt-2" style="width: 180px;" alt="QR Code" v-if="!showScanner" />
                     <button type="button" class="btn btn-soft-secondary rounded-pill btn-sm waves-effect material-shadow-none fs-10 mt-2">Enlarge QR <i class="ri-qr-code-line"></i></button>
                     <!-- Switch Button -->
-                    <b-form-group class="mt-3">
+                    <b-form-group class="mt-3 fs-11">
                         <b-form-checkbox switch v-model="showScanner">
                             {{ showScanner ? 'Switch to My QR Code' : 'Switch to Scanner' }}
                         </b-form-checkbox>

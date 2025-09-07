@@ -1,14 +1,14 @@
 <template>
-    <footer class="footer p-2">
+    <footer class="footer p-2" v-if="showFooter">
         <ul class="nav nav-pills nav-justified card-footer-tabs">
             <li class="nav-item">
                 <router-link to="/" class="nav-link">
-                    <i class="fs-20 ri-home-3-fill"></i>
+                    <i class="fs-20 ri-home-wifi-line"></i>
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/exhibitors" class="nav-link">
-                    <i class="fs-20 ri-file-text-fill"></i>
+                <router-link to="/sessions" class="nav-link">
+                    <i class="fs-20 ri-calendar-event-line"></i>
                 </router-link>
             </li>
             <li class="nav-item">
@@ -23,8 +23,8 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/sessions" class="nav-link">
-                    <i class="fs-20 ri-calendar-fill"></i>
+                <router-link to="/exhibitors" class="nav-link">
+                    <i class="fs-20 ri-store-2-line"></i>
                 </router-link>
             </li>
             <li class="nav-item">
@@ -33,8 +33,29 @@
                 </router-link>
             </li>
         </ul>
+ 
     </footer>
 </template>
+<script>
+export default {
+    computed: {
+        showFooter() {
+            // return !/^\/session\/\d+$/.test(this.$route.path);
+            // List of routes where footer should be hidden
+            const hiddenRoutes = [
+                /^\/session\/\d+$/,   // session details
+                /^\/exhibitor\/\d+$/, 
+                // /^\/profile$/, 
+                /^\/information$/,         // login page      // register page
+                /^\/profile\/\d+$/,   // profile details
+            ];
+
+            // Return false if current path matches any hidden route
+            return !hiddenRoutes.some(pattern => pattern.test(this.$route.path));
+        },
+    },
+}
+</script>
 <style scoped>
     .footer {
         height: 80px;

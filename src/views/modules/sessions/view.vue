@@ -29,21 +29,12 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer bg-transparent border-top-dashed py-2">
+            <div class="card-footer bg-transparent border-top-dashed py-2 mb-1">
                 <div class="fs-11">
                     <i class="ri-account-circle-fill text-success fs-14 me-2"></i>{{session.managers[0]?.user.profile.firstname}} {{session.managers[0]?.user.profile.lastname}}<br/>
                     <i class="ri-map-pin-fill text-danger fs-14 me-2"></i>{{session.venue.name}}, {{ session.venue.establishment }}<br/>
                     <i class="ri-calendar-event-fill text-info fs-14 me-2"></i>{{dateRangeText(session.schedules)}}
                 </div>
-                <!-- <div class="d-flex align-items-center fs-10">
-                    <div class="flex-grow-1">
-                        <i class="ri-map-pin-fill text-danger me-1"></i>{{session.venue.name}}, {{ session.venue.establishment }}
-                        
-                    </div>
-                    <div class="flex-shrink-0">
-                        <div><i class="ri-calendar-event-fill text-info me-1 align-bottom"></i>{{dateRangeText(session.schedules)}}</div>
-                    </div>
-                </div> -->
             </div>
         </div>
 
@@ -52,15 +43,15 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <div class="fs-16 align-middle text-warning">
-                            <i class="ri-star-fill"></i>
-                            <i class="ri-star-fill"></i>
-                            <i class="ri-star-fill"></i>
-                            <i class="ri-star-fill"></i>
-                            <i class="ri-star-half-fill"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
                         </div>
                     </div>
                     <div class="flex-shrink-0">
-                        <h6 class="mb-0 fs-10">4.5 out of 5</h6>
+                        <h6 class="mb-0 fs-10">0 out of 5</h6>
                     </div>
                 </div>
             </div>
@@ -87,7 +78,7 @@
                         <div class="carousel-container">
                             <div class="carousel-content">
                                 <transition mode="out-in">
-                                    <div :key="index" class="tab-content mt-n2">
+                                    <div :key="index" class="tab-content mt-n2 mb-n2">
                                         <template v-if="menu == 'Activities'">
                                             <template v-for="(list,index) in session.activities" v-bind:key="index">  
                                                 <div class="card border shadow-none bg-light-subtle w-100 card-height-100 mb-2 mt-2">
@@ -118,7 +109,7 @@
 
                                         <template v-if="menu == 'Comments'">
                                             <b-list-group flush class="mt-n3" style="margin-left: -16px; margin-right: -16px;">
-                                                <b-list-group-item class="text-center" style="cursor: pointer;"  v-if="session.feedbackable.length == 0">
+                                                <b-list-group-item class="text-center mt-1" style="cursor: pointer;"  v-if="session.feedbackable.length == 0">
                                                     <span class="text-muted text-center fs-10">No comments found</span>
                                                 </b-list-group-item>
                                                 <b-list-group-item v-else v-for="(list,index) in session.feedbackable" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
@@ -136,30 +127,37 @@
                                         </template>
 
                                         <template v-if="menu == 'Questions'">
-                                            <div class="col">
-                                                <input type="text" v-model="form.question" class="form-control form-control-sm chat-input bg-light border-light" 
-                                                style="font-size: 10px;" id="chat-input" 
-                                                placeholder="Ask your questions..." 
-                                                @keyup.enter="submit"
-                                                autocomplete="off">
-                                            </div>
-                                            <hr class="text-muted mb-1" style="margin-left: -16px; margin-right: -16px;"/>
-                                            <b-list-group flush class="mt-0" style="margin-left: -16px; margin-right: -16px;">
-                                                <b-list-group-item class="text-center" style="cursor: pointer;" v-if="session.questions.length == 0">
-                                                    <span class="text-muted text-center fs-10">No questions asked</span>
-                                                </b-list-group-item>
-                                                <b-list-group-item v-else v-for="(list,index) in session.questions" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
-                                                    <div class="d-flex mb-n3">
-                                                        <div class="flex-shrink-0">
-                                                            <img :src="list.avatar" alt="" class="avatar-xs rounded-circle material-shadow">
+                                            <template v-if="session.status.name == 'Ongoing'">
+                                                <div class="col mt-2">
+                                                    <input type="text" v-model="form.question" class="form-control form-control-sm chat-input bg-light border-light" 
+                                                    style="font-size: 10px;" id="chat-input" 
+                                                    placeholder="Ask your questions..." 
+                                                    @keyup.enter="submit"
+                                                    autocomplete="off">
+                                                </div>
+                                                <hr class="text-muted mb-1" style="margin-left: -16px; margin-right: -16px;"/>
+                                                <b-list-group flush class="mt-0" style="margin-left: -16px; margin-right: -16px;">
+                                                    <b-list-group-item class="text-center" style="cursor: pointer;" v-if="session.questions.length == 0">
+                                                        <span class="text-muted text-center fs-10">No questions asked</span>
+                                                    </b-list-group-item>
+                                                    <b-list-group-item v-else v-for="(list,index) in session.questions" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
+                                                        <div class="d-flex mb-n3">
+                                                            <div class="flex-shrink-0">
+                                                                <img :src="list.avatar" alt="" class="avatar-xs rounded-circle material-shadow">
+                                                            </div>
+                                                            <div class="flex-grow-1 ms-3">
+                                                                <h5 class="fs-10 mb-1">{{list.name}}<small class="text-muted ms-2">({{timeAgo(list.created_at)}})</small></h5>
+                                                                <p class="text-muted fs-10">{{list.question}}</p>
+                                                            </div>
                                                         </div>
-                                                        <div class="flex-grow-1 ms-3">
-                                                            <h5 class="fs-10 mb-1">{{list.name}}<small class="text-muted ms-2">({{timeAgo(list.created_at)}})</small></h5>
-                                                            <p class="text-muted fs-10">{{list.question}}</p>
-                                                        </div>
-                                                    </div>
-                                                </b-list-group-item>
-                                            </b-list-group>
+                                                    </b-list-group-item>
+                                                </b-list-group>
+                                            </template>
+                                            <template v-else>
+                                                <div class="alert alert-danger mb-xl-0 text-center material-shadow fs-10 mt-2" role="alert">
+                                                    Questioning is still closed.
+                                                </div>
+                                            </template>
                                         </template>
 
                                     </div>
@@ -172,6 +170,21 @@
             </div>
         </div>
         <Csf ref="csf"/>
+        <Cancel @cancel="updateRegister" ref="cancel"/>
+        <Register @success="updateRegister" ref="register"/>
+        <footer class="footer p-2">
+            <template v-if="session.status.name == 'Waiting' || session.status.name == 'Open'">
+                <div class="p-3 mt-n1" v-if="!session.has_registered">
+                    <button @click="openRegister()" type="button" class="btn w-100 btn-warning waves-effect waves-light fs-11">Register Now</button>
+                </div>
+                <div class="p-3 mt-n1" v-else>
+                    <button @click="openCancel()" type="button" class="btn w-100 btn-danger waves-effect waves-light fs-11">Cancel Registration</button>
+                </div>
+            </template>
+            <template v-else>
+                
+            </template>
+        </footer>
     </Layout>
 </template>
 <script>
@@ -179,10 +192,12 @@ import axios from 'axios';
 import Layout from "@/layouts/main.vue";
 import Csf from './csf.vue';
 import dayjs from "dayjs";
+import Cancel from './cancel.vue';
+import Register from './register.vue';
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 export default {
-    components: { Layout, Csf },
+    components: { Layout, Csf, Register, Cancel },
     data(){
         return {
             session: {
@@ -218,7 +233,7 @@ export default {
     },
     methods: { 
         fetch(){
-            axios.get('/sessions/view/'+this.$route.params.id)
+            axios.get('/sessions/view/'+this.$route.params.id,{ params : {participant_id : this.$store.state.auth.user.data.id}})
             .then(response => {
                 if(response){
                     this.session = response.data.data;     
@@ -268,8 +283,17 @@ export default {
                 ? formatDate(start)
                 : `${formatDate(start)} - ${formatDate(end)}`;
         },
+        openRegister(){
+            this.$refs.register.show(this.session.id,this.$store.state.auth.user.data.id);
+        },
+        openCancel(){
+            this.$refs.cancel.show(this.session.id,this.$store.state.auth.user.data.id);
+        },
         openCsf(){
             this.$refs.csf.show();
+        },
+        updateRegister(status){
+            this.session.has_registered = status;
         },
         timeAgo(date) {
             return dayjs(date).from(this.now);
@@ -277,3 +301,14 @@ export default {
     }
 };
 </script>
+<style>
+ .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 80px;
+        border-top: 0.1rem solid #e4e2e2;
+        background-color: #fff;
+        z-index: 10;
+    }
+</style>
