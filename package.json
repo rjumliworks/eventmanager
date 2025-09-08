@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@capacitor-community/barcode-scanner": "^4.0.1",
     "@capacitor/android": "^7.4.3",
     "@capacitor/camera": "^7.0.2",
     "@capacitor/cli": "^7.4.3",
@@ -40,6 +41,7 @@
     "maska": "^2.1.10",
     "moment": "^2.29.4",
     "prismjs": "^1.29.0",
+    "pusher-js": "^8.4.0",
     "sass": "1.77.6",
     "sass-loader": "^13.3.2",
     "simplebar": "^6.2.5",

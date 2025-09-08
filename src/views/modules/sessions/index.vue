@@ -17,7 +17,7 @@
                     <b-list-group-item  class="d-flex justify-content-between align-items-center ribbon-box right" style="cursor: pointer;" >
                         
                         <div class="card border shadow-none bg-light-subtle w-100 card-height-100 mb-2 mt-2">
-                            <div v-if="list.has_registered" class="ribbon-two ribbon-two-secondary" style="z-index:50;"><span style="font-size: 9px; ">Registered</span></div>
+                            <div v-if="list.has_registered" class="ribbon-two ribbon-two-secondary" style="z-index:50;"><span style="font-size: 8px; ">Registered</span></div>
                             <div class="card-body">
                                 <div class="d-flex flex-column h-100">
                                     <!-- <div class="d-flex">

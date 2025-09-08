@@ -38,7 +38,7 @@
                                             <div v-if="list.has_voted" class="avatar-title bg-warning-subtle rounded-circle">
                                                 <i class="fs-20 ri-trophy-fill text-warning bx-tada"></i>
                                             </div>
-                                            <div v-else class="avatar-title bg-light rounded-circle"><i class="fs-20 ri-trophy-fill text-primary"></i></div>
+                                            <div v-else class="avatar-title bg-light rounded-circle"><i class="fs-20 ri-trophy-line text-primary"></i></div>
                                         </div>
                                     </div>
                                 </div>

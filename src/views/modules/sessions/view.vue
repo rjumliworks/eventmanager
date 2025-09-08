@@ -65,7 +65,7 @@
                             <button class="nav-link fs-10 p-3" :class="(index == 0) ? 'active' : ''" 
                                 :id="menu+'-tab'" data-bs-toggle="pill" :data-bs-target="'#'+menu" 
                                 type="button" role="tab" :aria-controls="menu" aria-selected="true">
-                                {{menu}}
+                                {{menu}} {{ (index == 2) ? '('+session.questions.length+')' : ''}}
                             </button>
                         </li>
                     </ul>
@@ -127,7 +127,8 @@
                                         </template>
 
                                         <template v-if="menu == 'Questions'">
-                                            <template v-if="session.status.name == 'Ongoing'">
+                                            <!-- v-if="session.status.name == 'Ongoing -->
+                                            
                                                 <div class="col mt-2">
                                                     <input type="text" v-model="form.question" class="form-control form-control-sm chat-input bg-light border-light" 
                                                     style="font-size: 10px;" id="chat-input" 
@@ -152,12 +153,11 @@
                                                         </div>
                                                     </b-list-group-item>
                                                 </b-list-group>
-                                            </template>
-                                            <template v-else>
+                                            <!-- <template v-else>
                                                 <div class="alert alert-danger mb-xl-0 text-center material-shadow fs-10 mt-2" role="alert">
                                                     Questioning is still closed.
                                                 </div>
-                                            </template>
+                                            </template> -->
                                         </template>
 
                                     </div>
@@ -195,6 +195,7 @@ import dayjs from "dayjs";
 import Cancel from './cancel.vue';
 import Register from './register.vue';
 import relativeTime from "dayjs/plugin/relativeTime";
+import Pusher from 'pusher-js';
 dayjs.extend(relativeTime);
 export default {
     components: { Layout, Csf, Register, Cancel },
@@ -224,6 +225,8 @@ export default {
         this.interval = setInterval(() => {
             this.now = dayjs(); 
         }, 60000);
+
+        this.initPusher();
     },
     beforeUnmount() {
         clearInterval(this.interval);
@@ -232,6 +235,29 @@ export default {
         this.fetch();
     },
     methods: { 
+        initPusher() {
+            const pusher = new Pusher("dws2rpb0uczmrhwzmoya", {
+                cluster: "mt1",                
+                wsHost: "rstwhanda.dost9.ph",
+                wsPort: 443,
+                wssPort: 443,
+                forceTLS: true,
+                enabledTransports: ["ws", "wss"],
+                disableStats: true,
+                wsPath: "/ws"                
+            });
+            const channel = pusher.subscribe("session");
+            channel.bind("App\\Events\\SessionEvent", (data) => {
+                console.log("Maintenance event:", data);
+                if (data.data.id != this.$store.state.auth.user.data.id) {
+                    switch(data.type){
+                        case 'question':
+                            this.session.questions.unshift(data.data);
+                        break;
+                    }
+                }
+            });      
+        },
         fetch(){
             axios.get('/sessions/view/'+this.$route.params.id,{ params : {participant_id : this.$store.state.auth.user.data.id}})
             .then(response => {
@@ -247,6 +273,7 @@ export default {
             .then(response => {
                 if (response.data.status) {
                     this.status = false;
+                    this.form.question = null;
                     this.session.questions.unshift(response.data.data);
                 } 
             }).catch(({response})=>{

@@ -11,25 +11,28 @@
                         <p class="fs-11 text-muted mb-0">{{ participant.email }}</p>
                         <p class="fs-11 text-muted">{{ participant.contact_no }}</p>
                     </div>
-                    <img :src="participant.qr" class="img-fluid mt-2" style="width: 180px;" alt="QR Code" v-if="!showScanner" />
+                    <img :src="participant.qr" class="img-fluid mt-2" style="width: 220px;" alt="QR Code" v-if="!showScanner" />
                     <button type="button" class="btn btn-soft-secondary rounded-pill btn-sm waves-effect material-shadow-none fs-10 mt-2">Enlarge QR <i class="ri-qr-code-line"></i></button>
                     <!-- Switch Button -->
-                    <b-form-group class="mt-3 fs-11">
+                   
+
+                    <!-- QR Scanner (if enabled) -->
+                    <div v-if="showScanner" style="width: 250px; height: auto;" class="mt-2">
+                        <div id="qr-reader" style="width: 100%; height: auto;"></div>
+                    </div>
+
+                    <b-form-group class="mt-4 fs-14">
                         <b-form-checkbox switch v-model="showScanner">
                             {{ showScanner ? 'Switch to My QR Code' : 'Switch to Scanner' }}
                         </b-form-checkbox>
                     </b-form-group>
-
-                    <!-- QR Scanner (if enabled) -->
-                    <div v-if="showScanner" style="width: 250px; height: 250px;" class="mt-2">
-                        <div id="qr-reader" style="width: 100%; height: 100%;"></div>
-                    </div>
                 </div>
             </b-container>
             
     </Layout>
 </template>
 <script>
+import axios from 'axios';
 import Layout from "@/layouts/main.vue";
 import { Html5Qrcode } from "html5-qrcode";
 export default {
@@ -39,6 +42,7 @@ export default {
             participant: this.$store.state.auth.user.data,
             showScanner: false,
             qrScanner: null,
+            session: null
         }
     },
     watch: {
@@ -60,10 +64,28 @@ export default {
                     { facingMode: "environment" },
                     config,
                     (decodedText) => {
-                        alert("Scanned QR: " + decodedText);
-                        // You can redirect, emit event, or store this
-                        this.stopScanner();
-                        this.showScanner = false;
+                        // alert("Scanned QR: " + decodedText);
+                        axios.post('/sessions/attendance', {
+                            participant_id: this.participant.id,
+                            session: decodedText
+                        }).then(response => {
+                            if (response.data.status) {
+                                
+                                this.showScanner = false;
+                                this.stopScanner();
+                            } 
+                        }).catch(({response})=>{
+                            if(response.status===422){
+                                this.validationErrors = response.data.errors
+                            }else{
+                                this.validationErrors = {};
+                                this.error = response.data.message;
+                            }
+                            this.sub = false;
+                        }).finally(()=>{
+                            this.processing = false
+                        });
+                        
                     },
                     (errorMessage) => {
                         console.warn("QR Scan Error", errorMessage);
@@ -85,7 +107,7 @@ export default {
         },
     },
     beforeUnmount() {
-        this.stopScanner();
+        this.stopScan();
     },
 };
 </script>
