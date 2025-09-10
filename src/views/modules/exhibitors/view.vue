@@ -7,10 +7,6 @@
             </ol>
         </div>
         <br/><br/>
-
-        <!-- <div class="alert alert-secondary border-1 bg-body-light fade show material-shadow fs-10 text-center mt-1 mb-3" role="alert">
-            STATUS : <strong class="text-uppercase">{{session.status.name}}</strong>
-        </div> -->
         <div class="card border shadow-none bg-white-subtle w-100 card-height-100 mb-2 mt-2">
             <div class="card-body">
                 <div class="d-flex flex-column h-100">
@@ -56,12 +52,80 @@
                 </div>
             </div>
         </div>
+
+        <div class="card border shadow-none bg-light-subtle w-100 card-height-100 mt-n3" style="margin-bottom: 50px;">
+           <div class="card bg-white rounded-bottom shadow-none mb-0">
+                <div class="step-arrow-nav mt-0">
+                    <ul class="nav nav-pills nav-justified custom-nav" role="tablist">
+                        <li class="nav-item" role="presentation" v-for="(menu, index) in menus" v-bind:key="index">
+                            <button class="nav-link fs-10 p-3" :class="(index == 0) ? 'active' : ''" 
+                                :id="menu+'-tab'" data-bs-toggle="pill" :data-bs-target="'#'+menu" 
+                                type="button" role="tab" :aria-controls="menu" aria-selected="true">
+                                {{menu}} {{ (index == 2) ? '('+session.questions.length+')' : ''}}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body bg-white rounded-bottom">
+                <div class="tab-content">
+                    <div class="tab-pane" :class="(index == 0) ? 'show active' : ''" :id="menu" role="tabpanel" :aria-labelledby="menu+'-tab'" v-for="(menu, index) in menus" v-bind:key="index">
+                        
+                        <div class="carousel-container">
+                            <div class="carousel-content">
+                                <transition mode="out-in">
+                                    <div :key="index" class="tab-content mt-n2 mb-n2">
+                                        <template v-if="menu == 'Activities'">
+                                            
+                                        </template>
+
+                                        <template v-if="menu == 'Comments'">
+                                            
+                                        </template>
+
+                                        <template v-if="menu == 'Reviews'">
+                                            <template v-if="exhibitor.reviews.length > 0">
+                                                <b-list-group flush class="mt-0" style="margin-left: -16px; margin-right: -16px;">
+                                                    <b-list-group-item v-for="(list,index) in exhibitor.reviews" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
+                                                        <div class="d-flex mb-n3">
+                                                            <div class="flex-shrink-0">
+                                                                <img :src="list.avatar" alt="" class="avatar-xs rounded-circle material-shadow">
+                                                            </div>
+                                                            <div class="flex-grow-1 ms-3">
+                                                                <h5 class="fs-10 mb-1">{{list.name}}<small class="text-muted ms-2">({{timeAgo(list.created_at)}})</small></h5>
+                                                                <p class="text-muted fs-10">{{list.comment}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </b-list-group-item>
+                                                </b-list-group>
+                                            </template>
+                                            <template v-else>
+                                                <div class="alert alert-danger mb-xl-0 text-center material-shadow fs-10 mt-2" role="alert">
+                                                    No reviews submitted.
+                                                </div>
+                                            </template>
+                                        </template>
+
+                                    </div>
+                                </transition>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     
         <Csf ref="csf"/>
         <footer class="footer p-2">
              <div class="p-3 mt-n1">
-                <!-- <button type="button" class="btn w-100 btn-danger waves-effect waves-light fs-11">Cancel Registration</button> -->
-                <button class="btn w-100 btn-danger btn-label">
+                <div v-if="exhibitor.has_voted">
+                    <div class="alert alert-warning alert-dismissible alert-label-icon label-arrow fs-12 mt-n1" role="alert">
+                        <i class="ri-trophy-fill fs-20 bx-tada label-icon"></i><strong>Thank you!</strong> Your vote has been successfully submitted. 
+                        <button @click="vote()" type="button" class="btn-close"></button>
+                    </div>
+                </div>
+                <button v-else @click="vote()" class="btn w-100 btn-danger btn-label">
                     <div class="d-flex">
                         <div class="flex-shrink-0">
                             <i class="ri-trophy-fill label-icon align-middle fs-16 me-2"></i>
@@ -72,17 +136,6 @@
                     </div>
                 </button>
             </div>
-            <!-- <template v-if="session.status.name == 'Waiting' || session.status.name == 'Open'">
-                <div class="p-3 mt-n1" v-if="!session.has_registered">
-                    <button @click="openRegister()" type="button" class="btn w-100 btn-warning waves-effect waves-light fs-11">Register Now</button>
-                </div>
-                <div class="p-3 mt-n1" v-else>
-                    <button @click="openCancel()" type="button" class="btn w-100 btn-danger waves-effect waves-light fs-11">Cancel Registration</button>
-                </div>
-            </template>
-            <template v-else>
-                
-            </template> -->
         </footer>
     </Layout>
 </template>
@@ -92,6 +145,7 @@ import axios from 'axios';
 import Layout from "@/layouts/main.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import Pusher from 'pusher-js';
 dayjs.extend(relativeTime);
 export default {
     components: { Layout, Csf },
@@ -99,14 +153,13 @@ export default {
         return {
             exhibitor: {
                 contact: {},
+                reviews: []
             },
             form: {
-                question: null,
                 participant_id: this.$store.state.auth.user.data.id,
-                session_id: this.$route.params.id,
+                exhibitor_id: this.$route.params.id,
             },
-            question: null,
-            menus: ['Activities','Comments','Questions'],
+            menus: ['Activities','Reviews'],
             now: dayjs()
         }
     },
@@ -114,6 +167,7 @@ export default {
         this.interval = setInterval(() => {
             this.now = dayjs(); 
         }, 60000);
+        this.initPusher();
     },
     beforeUnmount() {
         clearInterval(this.interval);
@@ -122,6 +176,29 @@ export default {
         this.fetch();
     },
     methods: { 
+        initPusher() {
+            const pusher = new Pusher("dws2rpb0uczmrhwzmoya", {
+                cluster: "mt1",                
+                wsHost: "rstwhanda.dost9.ph",
+                wsPort: 443,
+                wssPort: 443,
+                forceTLS: true,
+                enabledTransports: ["ws", "wss"],
+                disableStats: true,
+                wsPath: "/ws"                
+            });
+            const channel = pusher.subscribe("session");
+            channel.bind("App\\Events\\ExhibitorEvent", (data) => {
+                console.log("Maintenance event:", data);
+                if (data.data.id != this.$store.state.auth.user.data.id) {
+                    switch(data.type){
+                        case 'review':
+                            this.exhibitor.reviews.unshift(data.data);
+                        break;
+                    }
+                }
+            });      
+        },
         fetch(){
             axios.get('/exhibitors/view/'+this.$route.params.id,{ params : {participant_id : this.$store.state.auth.user.data.id}})
             .then(response => {
@@ -173,11 +250,21 @@ export default {
                 ? formatDate(start)
                 : `${formatDate(start)} - ${formatDate(end)}`;
         },
+        vote(){
+            axios.post('/exhibitors/vote',{
+                participant_id: this.form.participant_id,
+                exhibitor_id: this.$route.params.id
+            }).then(response => {
+                this.exhibitor.has_voted = response.data.data;
+            }).catch(({response})=>{
+                console.log(response);
+            });
+        },
         updateRegister(status){
             this.exhibitor.has_visited = status;
         },
         openCsf(){
-            this.$refs.csf.show();
+            this.$refs.csf.show(this.form.participant_id,this.exhibitor.id);
         },
         timeAgo(date) {
             return dayjs(date).from(this.now);

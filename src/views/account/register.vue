@@ -8,7 +8,7 @@
         <div class="modal-body p-4 mt-4">
             <form class="customform" v-if="!completed">
                 <BRow class="g-3" style="margin-top: -35px;">
-                    <div class="p-2 mt-1">
+                    <div class="p-4 mt-1">
                         <div class="row g-2">
                             <div class="col-6 mt-1">
                                 <label class="form-label">First Name</label>
@@ -29,11 +29,11 @@
                             <!-- <div class="col-12 mt-n1 mb-0">
                                 <hr class="text-mtued"/>
                             </div> -->
-                            <div class="col-6 mt-1 mb-0">
+                            <div class="col-12 mt-1 mb-0">
                                 <label class="form-label">Email Address</label>
                                 <input id="name" v-model="form.email" type="text"  class="form-control" placeholder="Please enter email" style="text-transform: lowercase; background-color: white;" />
                             </div>
-                            <div class="col-6 mt-1 mb-0">
+                            <div class="col-12 mt-1 mb-0">
                                 <label class="form-label">Contact no.</label>
                                 <input id="contact" v-model="form.contact_no" type="text"  class="form-control" placeholder="Please enter contact no." style="text-transform: lowercase; background-color: white;" />
                             </div>
@@ -45,23 +45,20 @@
                                 <label>Sex</label>
                                 <Multiselect :options="['Male','Female']" label="name" v-model="form.sex" ref="test" placeholder="Select Sex"/>
                             </div>
-                            <div class="col-6 mt-1">
+                            <div class="col-12 mt-1">
                                 <label class="form-label">Affiliation</label>
                                 <input id="name" v-model="form.affiliation" type="text"  class="form-control" placeholder="Enter affiliation" style="background-color: white;" />
                             </div>
-                            <div class="col-6 mt-1">
+                            <div class="col-12 mt-1">
                                 <label class="form-label">Designation</label>
                                 <input id="name" v-model="form.designation" type="text"  class="form-control" placeholder="Enter designation" style="background-color: white;" />
                             </div>
                             <div class="col-12 mb-2">
-                                <div class="signin-other-title text-white text-center"></div>
+                                <!-- <div class="signin-other-title text-white text-center"></div> -->
                             </div>
                         </div>
                         <div class="mt-4">
-                            <BButton variant="primary" class="w-100 mt-n1" type="button" @click="submit" :disabled="sub">Submit</BButton>
-                            <router-link to="/login">
-                                <BButton variant="white" class="w-100 mt-2 bg-primary-subtle" type="button">Cancel</BButton>
-                            </router-link>
+                           
                         </div>
                     </div>
                 </BRow>
@@ -83,6 +80,14 @@
             </div>
         </div>
     </div>
+    <footer class="footer p-2">
+        <div class="p-3 mt-0">
+            <BButton variant="primary" class="w-100 mt-n1" type="button" @click="submit" :disabled="sub">Submit</BButton>
+            <router-link to="/login">
+                <BButton variant="white" class="w-100 mt-2 bg-primary-subtle" type="button">Cancel</BButton>
+            </router-link>
+        </div>
+    </footer>
 </template>
 <script>
     import Lottie from "@/components/widgets/lottie.vue";
@@ -150,5 +155,14 @@ input::placeholder {
 .multiselect-placeholder {
   font-size: 11px;   /* adjust size */
   color: #999;       /* optional */
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 125px;
+    border-top: 0.1rem solid #e4e2e2;
+    background-color: #fff;
+    z-index: 10;
 }
 </style>

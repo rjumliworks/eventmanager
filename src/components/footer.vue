@@ -28,8 +28,8 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/settings" class="nav-link">
-                    <i class='fs-20 ri-settings-4-fill'></i>
+                <router-link to="/hotels" class="nav-link">
+                    <i class='fs-20 ri-hotel-line'></i>
                 </router-link>
             </li>
         </ul>

@@ -66,6 +66,24 @@ const routes = [
         }
     },
     {
+        path: "/hotels",
+        name: "hotels",
+        component: () => import('@/views/modules/hotels/index.vue'),
+        meta: {
+            middleware: "auth",
+            title: `Hotels`
+        }
+    },
+    {
+        path: "/hotel/:id",
+        name: "hotel/view",
+        component: () => import('@/views/modules/hotels/view.vue'),
+        meta: {
+            middleware: "auth",
+            title: `Hotel View`
+        }
+    },
+    {
         path: "/qrcode",
         name: "qrcode",
         component: () => import('@/views/modules/qrcode/index.vue'),

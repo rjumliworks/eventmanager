@@ -51,7 +51,7 @@
                                 </span>
                             </span>
                         </template>
-                        <h6 class="dropdown-header fs-11">Welcome {{ $store.state.auth.user.data.firstname}}!</h6>
+                        <h6 v-if="$store.state.auth.user.data" class="dropdown-header fs-11">Welcome {{ $store.state.auth.user.data.firstname}}!</h6>
                         <router-link to="/profile" class="dropdown-item">
                             <i class="mdi mdi-account-circle text-muted fs-14 align-middle me-1"></i>
                             <span class="align-middle fs-12"> Profile</span>
@@ -164,6 +164,7 @@ export default {
                 /^\/session\/\d+$/,   // session detail pages
                 /^\/exhibitor\/\d+$/,   // session detail pages
                 /^\/information$/,          // login page
+                /^\/hotel\/\d+$/,   // session detail pages
             ];
 
             // If current route matches one of these → return true (show hamburger instead of arrow)

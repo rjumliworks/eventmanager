@@ -34,7 +34,7 @@
                                             <h5 class="mb-1 fs-12 fw-semibold text-primary">{{list.title}}</h5>
                                             <p class="text-muted fs-10 text-truncate-two-lines mb-3">{{list.area}}</p>
                                         </div>
-                                        <div class="flex-shrink-0 avatar-sm mt-n2" @click="vote(list.id,index)">
+                                        <div class="flex-shrink-0 avatar-sm mt-n2">
                                             <div v-if="list.has_voted" class="avatar-title bg-warning-subtle rounded-circle">
                                                 <i class="fs-20 ri-trophy-fill text-warning bx-tada"></i>
                                             </div>
@@ -90,7 +90,7 @@ export default {
     data(){
         return {
             lists: [],
-            participant_id: this.$store.state.auth.user.id,
+            participant_id: this.$store.state.auth.user.data.id,
             load: false,
             index: null
         }
@@ -101,7 +101,7 @@ export default {
     methods: { 
         fetch(){
             this.load = false;
-            axios.get('/exhibitors',{ params : {id : this.participant_id}})
+            axios.get('/exhibitors',{ params : {participant_id : this.participant_id}})
             .then(response => {
                 if(response){
                     this.lists = response.data.data;     
