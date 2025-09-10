@@ -10,10 +10,10 @@
         <b-list-group class="list-group-fill-success mt-3">
             <BListGroupItem >
                 <div class="text-center mt-3 mb-3">
-                    <div class="profile-user position-relative d-inline-block mx-auto mb-3">
-                        <img  class="rounded-circle avatar-lg img-thumbnail user-profile-image material-shadow">
+                    <div class="profile-user position-relative d-inline-block mx-auto mb-3" @click="ClickImage()">
+                        <img :src="imageUrl" class="rounded-circle avatar-lg img-thumbnail user-profile-image material-shadow">
                         <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                            <input id="profile-img-file-input" type="file" class="profile-img-file-input" @change="previewImage"/>
+                            <!-- <input id="profile-img-file-input" type="file" class="profile-img-file-input" @change="previewImage"/> -->
                             <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
                                 <span class="avatar-title rounded-circle bg-light text-body">
                                 <i class="ri-camera-fill"></i>
@@ -49,15 +49,57 @@
     </Layout>
 </template>
 <script>
+import axios from 'axios';
 import Layout from "@/layouts/main.vue";
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 export default {
     components: { Layout },
     data(){
         return {
             lists: [],
             participant_id: this.$store.state.auth.user.data.id,
-            load: false
+            load: false,
+            imageUrl: '',
+            render: false,
         }
+    }, 
+    methods: { 
+        async ClickImage() {
+            await Camera.getPhoto({
+                quality: 90,
+                allowEditing: false,
+                source: CameraSource.Camera,
+                resultType: CameraResultType.Base64,
+                }).then((image) => {
+                this.render = true;
+                this.imageUrl = String(image.base64String)
+                this.imageUrl = 'data:image/jpeg;base64,'+this.imageUrl;
+
+                let data = new FormData()
+                data.append('id', this.$store.state.auth.user.data.id);
+                data.append('image', this.imageUrl)
+                
+                let config = {
+                    header : {
+                    'Content-Type' : 'multipart/form-data'
+                    }
+                }
+                axios.post('/avatar',data,config).then(response => {
+                    if (response.data.status) {
+                        console.log('wew');
+                    }
+                }).catch(({response})=>{
+                    if(response.status===422){
+                        this.validationErrors = response.data.errors
+                    }else{
+                        this.validationErrors = {}
+                        alert(response.data.message)
+                    }
+                }).finally(()=>{
+                    
+                })
+            });
+        },
     }
 };
 </script>

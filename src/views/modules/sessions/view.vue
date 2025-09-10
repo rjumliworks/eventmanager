@@ -127,7 +127,9 @@
                                                 <b-list-group-item v-else v-for="(list,index) in session.feedbacks" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
                                                     <div class="d-flex mb-n3">
                                                         <div class="flex-shrink-0">
-                                                            <img :src="list.avatar" alt="" class="avatar-xs rounded-circle material-shadow">
+                                                           <img :src="list.avatar === 'avatar.jpg' 
+                                                                        ? require('@/assets/images/avatars/avatar.jpg') 
+                                                                        : `${list.avatar}`" class="avatar-xs rounded-circle material-shadow"/>
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h5 class="fs-11 mb-1">{{list.name}} <small class="text-muted ms-2">({{timeAgo(list.created_at)}})</small></h5>
@@ -155,7 +157,9 @@
                                                     <b-list-group-item v-else v-for="(list,index) in session.questions" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
                                                         <div class="d-flex mb-n3">
                                                             <div class="flex-shrink-0">
-                                                                <img :src="list.avatar" alt="" class="avatar-xs rounded-circle material-shadow">
+                                                                <img :src="list.avatar === 'avatar.jpg' 
+                                                                        ? require('@/assets/images/avatars/avatar.jpg') 
+                                                                        : `${list.avatar}`" class="avatar-xs rounded-circle material-shadow"/>
                                                             </div>
                                                             <div class="flex-grow-1 ms-3">
                                                                 <h5 class="fs-10 mb-1">{{list.name}}<small class="text-muted ms-2">({{timeAgo(list.created_at)}})</small></h5>
