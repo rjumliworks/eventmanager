@@ -17,6 +17,7 @@ import { vMaska } from "maska"
 
 import VueFeather from 'vue-feather';
 
+import 'vue-loading-overlay/dist/css/index.css';
 import '@/assets/scss/config/default/app.scss';
 import "leaflet/dist/leaflet.css";
 import '@/assets/scss/mermaid.min.css';

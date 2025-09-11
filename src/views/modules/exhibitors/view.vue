@@ -38,16 +38,23 @@
             <div class="bg-white px-3 py-2 rounded-2 ">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <div class="fs-16 align-middle text-warning">
+                        <div class="fs-16 align-middle text-warning" v-if="!exhibitor.feedback">
                             <i class="ri-star-line"></i>
                             <i class="ri-star-line"></i>
                             <i class="ri-star-line"></i>
                             <i class="ri-star-line"></i>
                             <i class="ri-star-line"></i>
                         </div>
+                        <div class="fs-16 align-middle text-warning" v-else>
+                            <template v-for="i in 5" :key="i">
+                                <i v-if="exhibitor.feedback && exhibitor.feedback.rate >= i" class="ri-star-fill"></i>
+                                <i v-else-if="exhibitor.feedback && exhibitor.feedback.rate >= i - 0.5" class="ri-star-half-fill"></i>
+                                <i v-else class="ri-star-line"></i>
+                            </template>
+                        </div>
                     </div>
                     <div class="flex-shrink-0">
-                        <h6 class="mb-0 fs-10">0 out of 5</h6>
+                        <h6 class="mb-0 fs-10">{{(exhibitor.feedback) ? exhibitor.feedback.rate : 0 }} out of 5</h6>
                     </div>
                 </div>
             </div>
@@ -80,30 +87,24 @@
                                         </template>
 
                                         <template v-if="menu == 'Comments'">
-                                            
-                                        </template>
-
-                                        <template v-if="menu == 'Reviews'">
-                                            <template v-if="exhibitor.reviews.length > 0">
-                                                <b-list-group flush class="mt-0" style="margin-left: -16px; margin-right: -16px;">
-                                                    <b-list-group-item v-for="(list,index) in exhibitor.reviews" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
-                                                        <div class="d-flex mb-n3">
-                                                            <div class="flex-shrink-0">
-                                                                <img :src="list.avatar" alt="" class="avatar-xs rounded-circle material-shadow">
-                                                            </div>
-                                                            <div class="flex-grow-1 ms-3">
-                                                                <h5 class="fs-10 mb-1">{{list.name}}<small class="text-muted ms-2">({{timeAgo(list.created_at)}})</small></h5>
-                                                                <p class="text-muted fs-10">{{list.comment}}</p>
-                                                            </div>
+                                            <b-list-group flush class="mt-n3" style="margin-left: -16px; margin-right: -16px;">
+                                                <b-list-group-item class="text-center mt-1" style="cursor: pointer;"  v-if="exhibitor.feedbacks.length == 0">
+                                                    <span class="text-muted text-center fs-10">No comments found</span>
+                                                </b-list-group-item>
+                                                <b-list-group-item v-else v-for="(list,index) in exhibitor.feedbacks" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
+                                                    <div class="d-flex mb-n3">
+                                                        <div class="flex-shrink-0">
+                                                           <img :src="list.avatar === 'avatar.jpg' 
+                                                                        ? require('@/assets/images/avatars/avatar.jpg') 
+                                                                        : `${list.avatar}`" class="avatar-xs rounded-circle material-shadow"/>
                                                         </div>
-                                                    </b-list-group-item>
-                                                </b-list-group>
-                                            </template>
-                                            <template v-else>
-                                                <div class="alert alert-danger mb-xl-0 text-center material-shadow fs-10 mt-2" role="alert">
-                                                    No reviews submitted.
-                                                </div>
-                                            </template>
+                                                        <div class="flex-grow-1 ms-3">
+                                                            <h5 class="fs-11 mb-1">{{list.name}} <small class="text-muted ms-2">({{timeAgo(list.created_at)}})</small></h5>
+                                                            <p class="text-muted fs-10">{{ list.comment }}</p>
+                                                        </div>
+                                                    </div>
+                                                </b-list-group-item>
+                                            </b-list-group>
                                         </template>
 
                                     </div>
@@ -125,7 +126,7 @@
                         <button @click="vote()" type="button" class="btn-close"></button>
                     </div>
                 </div>
-                <button v-else @click="vote()" class="btn w-100 btn-danger btn-label">
+                <button v-else @click="vote()" class="btn w-100 btn-danger btn-label" :disabled="loading">
                     <div class="d-flex">
                         <div class="flex-shrink-0">
                             <i class="ri-trophy-fill label-icon align-middle fs-16 me-2"></i>
@@ -137,9 +138,16 @@
                 </button>
             </div>
         </footer>
+        <loading v-model:active="isLoading" background-color="black" :can-cancel="false" :is-full-page="fullPage">
+            <div class="text-center">
+                <img src="@/assets/images/logo-sm.png" class="heartbeat-spin" style="width: 40px; height: auto;" alt="loading..." />
+                <br /><br /><span class="text-white fw-semibold fs-10">Good things take time…</span>
+            </div>
+        </loading>
     </Layout>
 </template>
 <script>
+import Loading from 'vue-loading-overlay';
 import Csf from './csf.vue';
 import axios from 'axios';
 import Layout from "@/layouts/main.vue";
@@ -148,19 +156,23 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Pusher from 'pusher-js';
 dayjs.extend(relativeTime);
 export default {
-    components: { Layout, Csf },
+    components: { Layout, Csf, Loading },
     data(){
         return {
             exhibitor: {
                 contact: {},
-                reviews: []
+                feedback: {},
+                feedbacks: []
             },
             form: {
                 participant_id: this.$store.state.auth.user.data.id,
-                exhibitor_id: this.$route.params.id,
+                exhibitor_id: this.$route.params.id
             },
-            menus: ['Activities','Reviews'],
-            now: dayjs()
+            menus: ['Comments'],
+            now: dayjs(),
+            isLoading: false,
+            fullPage: true,
+            loading: false
         }
     },
     mounted() {
@@ -200,10 +212,12 @@ export default {
             });      
         },
         fetch(){
+            this.isLoading = true;
             axios.get('/exhibitors/view/'+this.$route.params.id,{ params : {participant_id : this.$store.state.auth.user.data.id}})
             .then(response => {
                 if(response){
-                    this.exhibitor = response.data.data;     
+                    this.exhibitor = response.data.data;  
+                    this.isLoading = false;   
                 }
             })
             .catch(err => console.log(err));
@@ -251,11 +265,13 @@ export default {
                 : `${formatDate(start)} - ${formatDate(end)}`;
         },
         vote(){
+            this.loading = true;
             axios.post('/exhibitors/vote',{
                 participant_id: this.form.participant_id,
                 exhibitor_id: this.$route.params.id
             }).then(response => {
                 this.exhibitor.has_voted = response.data.data;
+                this.loading = false;
             }).catch(({response})=>{
                 console.log(response);
             });
@@ -264,7 +280,7 @@ export default {
             this.exhibitor.has_visited = status;
         },
         openCsf(){
-            this.$refs.csf.show(this.form.participant_id,this.exhibitor.id);
+            this.$refs.csf.show(this.$route.params.id,this.exhibitor.feedback);
         },
         timeAgo(date) {
             return dayjs(date).from(this.now);

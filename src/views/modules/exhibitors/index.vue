@@ -80,19 +80,28 @@
                 </b-list-group-item>
             </template>
         </b-list-group> -->
+        <loading v-model:active="isLoading" background-color="black" :can-cancel="false" :is-full-page="fullPage">
+            <div class="text-center">
+                <img src="@/assets/images/logo-sm.png" class="heartbeat-spin" style="width: 40px; height: auto;" alt="loading..." />
+                <br /><br /><span class="text-white fw-semibold fs-10">Good things take time…</span>
+            </div>
+        </loading>
     </Layout>
 </template>
 <script>
 import axios from 'axios';
+import Loading from 'vue-loading-overlay';
 import Layout from "@/layouts/main.vue";
 export default {
-    components: { Layout },
+    components: { Layout, Loading },
     data(){
         return {
             lists: [],
             participant_id: this.$store.state.auth.user.data.id,
             load: false,
-            index: null
+            index: null,
+            isLoading: false,
+            fullPage: true
         }
     },
     created(){
@@ -101,11 +110,13 @@ export default {
     methods: { 
         fetch(){
             this.load = false;
+            this.isLoading = true;
             axios.get('/exhibitors',{ params : {participant_id : this.participant_id}})
             .then(response => {
                 if(response){
                     this.lists = response.data.data;     
                     this.load = true;
+                    this.isLoading = false;
                 }
             })
             .catch(err => console.log(err));

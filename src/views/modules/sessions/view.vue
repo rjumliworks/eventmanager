@@ -141,7 +141,7 @@
                                         </template>
 
                                         <template v-if="menu == 'Questions'">
-                                            <template v-if="session.status.name == 'Waiting'">
+                                            <template v-if="session.status.name == 'Ongoing' || session.status.name == 'Closed'">
                                                 <div class="col mt-2">
                                                     <input type="text" v-model="form.question" class="form-control form-control-sm chat-input bg-light border-light" 
                                                     style="font-size: 10px;" id="chat-input" 
@@ -189,7 +189,12 @@
         <Cancel @cancel="updateRegister" ref="cancel"/>
         <Register @success="updateRegister" ref="register"/>
         <footer class="footer p-2">
-            <template v-if="session.status.name == 'Waiting' || session.status.name == 'Open'">
+            <template v-if="session.status.name == 'Waiting'">
+                <div class="p-3 mt-n1" v-if="!session.has_registered">
+                    <button class="btn w-100 btn-outline-danger  waves-effect waves-light fs-11" type="button" disabled>Registration is still closed</button>
+                </div>
+            </template>
+            <template v-else-if="session.status.name == 'Open'">
                 <div class="p-3 mt-n1" v-if="!session.has_registered">
                     <button @click="openRegister()" type="button" class="btn w-100 btn-warning waves-effect waves-light fs-11">Register Now</button>
                 </div>
@@ -197,13 +202,47 @@
                     <button @click="openCancel()" type="button" class="btn w-100 btn-danger waves-effect waves-light fs-11">Cancel Registration</button>
                 </div>
             </template>
+            <template v-else-if="session.status.name == 'Ongoing'">
+                <div class="d-flex mb-n3">
+                    <div class="flex-shrink-0 me-3 ms-3 mt-2">
+                        <div style="height:2.5rem;width:2.5rem;">
+                           <lottie trigger="hover" :options="defaultOptions5" :height="50" :width="50" />
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 mt-3">
+                        <h5 class="mb-0 fs-12"><span class="text-body">Explore, Learn, and Innovate</span></h5>
+                        <p v-if="session.has_registered" class="text-muted text-truncate-two-lines fs-10">This session is currently ongoing.</p>
+                        <p v-else class="text-muted text-truncate-two-lines fs-10">You are not registered for this session.</p>
+                    </div>
+                </div>
+            </template>
             <template v-else>
-                
+                <!-- <lottie trigger="hover" :options="defaultOptions5" :height="50" :width="50" /> Thank you for attending the session -->
+                <div class="d-flex mb-n3">
+                    <div class="flex-shrink-0 me-3 ms-3 mt-2">
+                        <div style="height:2.5rem;width:2.5rem;">
+                           <lottie trigger="hover" :options="defaultOptions5" :height="50" :width="50" />
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 mt-3">
+                        <h5 class="mb-0 fs-12"><span class="text-body">Explore, Learn, and Innovate</span></h5>
+                        <p v-if="session.has_registered" class="text-muted text-truncate-two-lines fs-10">Thank you for attending the session.</p>
+                        <p v-else class="text-muted text-truncate-two-lines fs-10">Thank you for viewing the session.</p>
+                    </div>
+                </div>
             </template>
         </footer>
+        
+        <loading v-model:active="isLoading" background-color="black" :can-cancel="false" :is-full-page="fullPage">
+            <div class="text-center">
+                <img src="@/assets/images/logo-sm.png" class="heartbeat-spin" style="width: 40px; height: auto;" alt="loading..." />
+                <br /><br /><span class="text-white fw-semibold fs-10">Good things take time…</span>
+            </div>
+        </loading>
     </Layout>
 </template>
 <script>
+import Loading from 'vue-loading-overlay';
 import axios from 'axios';
 import Layout from "@/layouts/main.vue";
 import Csf from './csf.vue';
@@ -212,9 +251,11 @@ import Cancel from './cancel.vue';
 import Register from './register.vue';
 import relativeTime from "dayjs/plugin/relativeTime";
 import Pusher from 'pusher-js';
+import Lottie from "@/components/widgets/lottie.vue";
+import animationData5 from "@/components/widgets/tqywkdcz.json";
 dayjs.extend(relativeTime);
 export default {
-    components: { Layout, Csf, Register, Cancel },
+    components: { Layout, Csf, Register, Cancel, lottie: Lottie, Loading },
     data(){
         return {
             session: {
@@ -235,7 +276,12 @@ export default {
             },
             question: null,
             menus: ['Activities','Comments','Questions'],
-            now: dayjs()
+            now: dayjs(),
+            defaultOptions5: {
+                animationData: animationData5
+            },
+            isLoading: false,
+            fullPage: true
         }
     },
     mounted() {
@@ -269,20 +315,31 @@ export default {
                 if (data.data.id != this.$store.state.auth.user.data.id) {
                     switch(data.type){
                         case 'question':
-                            this.session.questions.unshift(data.data);
+                            if(this.session.id == data.data.session_id){
+                                this.session.questions.unshift(data.data);
+                            }
                         break;
                         case 'rating':
-                            this.session.feedbacks.unshift(data.data);
+                            if(this.session.id == data.data.session_id){
+                                this.session.feedbacks.unshift(data.data);
+                            }
+                        break;
+                        case 'status':
+                            if(this.session.id == data.data.id){
+                                this.session.status = data.data.status;
+                            }
                         break;
                     }
                 }
             });      
         },
         fetch(){
+            this.isLoading = true;
             axios.get('/sessions/view/'+this.$route.params.id,{ params : {participant_id : this.$store.state.auth.user.data.id}})
             .then(response => {
                 if(response){
-                    this.session = response.data.data;     
+                    this.session = response.data.data; 
+                    this.isLoading = false;    
                 }
             })
             .catch(err => console.log(err));
@@ -337,7 +394,7 @@ export default {
             this.$refs.cancel.show(this.session.id,this.$store.state.auth.user.data.id);
         },
         openCsf(){
-            (this.session.feedback) ? '' : this.$refs.csf.show(this.$route.params.id);
+            (this.session.feedback) ? '' : this.$refs.csf.show(this.$route.params.id,this.session.status);
         },
         updateRegister(status){
             this.session.has_registered = status;

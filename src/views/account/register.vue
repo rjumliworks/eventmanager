@@ -12,15 +12,15 @@
                         <div class="row g-2">
                             <div class="col-6 mt-1">
                                 <label class="form-label">First Name</label>
-                                <input id="name" v-model="form.firstname" type="text"  class="form-control" placeholder="Enter first name" style="background-color: white;" />
+                                <input id="name" v-model="form.firstname" type="text"  class="form-control" placeholder="Enter first name" style="background-color: white;" :class="{ 'is-invalid': validationErrors && validationErrors.firstname }" />
                             </div>
                             <div class="col-6 mt-1">
                                 <label class="form-label">Middle Name</label>
-                                <input id="name" v-model="form.middlename" type="text"  class="form-control" placeholder="Enter middle name" style="background-color: white;" />
+                                <input id="name" v-model="form.middlename" type="text"  class="form-control" placeholder="Enter middle name" style="background-color: white;" :class="{ 'is-invalid': validationErrors && validationErrors.middlename }" />
                             </div>
                                 <div class="col-6 mt-1">
                                 <label class="form-label">Last Name</label>
-                                <input id="name" v-model="form.lastname" type="text"  class="form-control" placeholder="Enter last name" style="background-color: white;" />
+                                <input id="name" v-model="form.lastname" type="text"  class="form-control" placeholder="Enter last name" style="background-color: white;" :class="{ 'is-invalid': validationErrors && validationErrors.lastname }" />
                             </div>
                             <div class="col-6 mt-1">
                                 <label class="form-label">Suffix</label>
@@ -31,15 +31,15 @@
                             </div> -->
                             <div class="col-12 mt-1 mb-0">
                                 <label class="form-label">Email Address</label>
-                                <input id="name" v-model="form.email" type="text"  class="form-control" placeholder="Please enter email" style="text-transform: lowercase; background-color: white;" />
+                                <input id="name" v-model="form.email" type="text"  class="form-control" placeholder="Please enter email" style="text-transform: lowercase; background-color: white;" :class="{ 'is-invalid': validationErrors && validationErrors.email }" />
                             </div>
                             <div class="col-12 mt-1 mb-0">
                                 <label class="form-label">Contact no.</label>
-                                <input id="contact" v-model="form.contact_no" type="text"  class="form-control" placeholder="Please enter contact no." style="text-transform: lowercase; background-color: white;" />
+                                <input id="contact" v-model="form.contact_no" type="text"  class="form-control" placeholder="Please enter contact no." style="text-transform: lowercase; background-color: white;" :class="{ 'is-invalid': validationErrors && validationErrors.contact_no }" />
                             </div>
                             <div class="col-6 mt-1 mb-0">
                                 <label class="form-label">Birthdate</label>
-                                <input id="date" v-model="form.birthdate" type="date"  class="form-control" placeholder="Please enter contact no." style="background-color: white;" />
+                                <input id="date" v-model="form.birthdate" type="date"  class="form-control" placeholder="Please enter contact no." style="background-color: white;"  :class="{ 'is-invalid': validationErrors && validationErrors.birthdate }" />
                             </div>
                             <div class="col-6 mt-1 mb-0">
                                 <label>Sex</label>
@@ -47,11 +47,12 @@
                             </div>
                             <div class="col-12 mt-1">
                                 <label class="form-label">Affiliation</label>
-                                <input id="name" v-model="form.affiliation" type="text"  class="form-control" placeholder="Enter affiliation" style="background-color: white;" />
+                                <input id="name" v-model="form.affiliation" type="text"  class="form-control" placeholder="Enter affiliation" style="background-color: white;" :class="{ 'is-invalid': validationErrors && validationErrors.affiliation }" />
                             </div>
                             <div class="col-12 mt-1">
                                 <label class="form-label">Designation</label>
-                                <input id="name" v-model="form.designation" type="text"  class="form-control" placeholder="Enter designation" style="background-color: white;" />
+                                <input id="name" v-model="form.designation" type="text"  class="form-control" placeholder="Enter designation" style="background-color: white;"
+                                :class="{ 'is-invalid': validationErrors && validationErrors.designation }" />
                             </div>
                             <div class="col-12 mb-2">
                                 <!-- <div class="signin-other-title text-white text-center"></div> -->
@@ -80,23 +81,30 @@
             </div>
         </div>
     </div>
-    <footer class="footer p-2">
+    <footer class="footer p-2" v-if="!completed">
         <div class="p-3 mt-0">
             <BButton variant="primary" class="w-100 mt-n1" type="button" @click="submit" :disabled="sub">Submit</BButton>
             <router-link to="/login">
-                <BButton variant="white" class="w-100 mt-2 bg-primary-subtle" type="button">Cancel</BButton>
+                <BButton variant="white" class="w-100 mt-2 bg-primary-subtle" type="button">Login</BButton>
             </router-link>
         </div>
     </footer>
+    <loading v-model:active="isLoading" background-color="black" :can-cancel="false" :is-full-page="fullPage">
+        <div class="text-center">
+            <img src="@/assets/images/logo-sm.png" class="heartbeat-spin" style="width: 40px; height: auto;" alt="loading..." />
+            <br /><br /><span class="text-white fw-semibold fs-10">Good things take time…</span>
+        </div>
+    </loading>
 </template>
 <script>
+    import Loading from 'vue-loading-overlay';
     import Lottie from "@/components/widgets/lottie.vue";
     import axios from 'axios';
     import Multiselect from "@vueform/multiselect";
     import "@vueform/multiselect/themes/default.css";
     import animationData5 from "@/components/widgets/tqywkdcz.json";
     export default {
-        components: { Multiselect, lottie: Lottie, },
+        components: { Multiselect, lottie: Lottie, Loading },
         data() {
             return {
                 form: {
@@ -118,17 +126,21 @@
                 showModal: false,
                 completed: false,
                 validationErrors:{},
-                error: ''
+                error: '',
+                isLoading: false,
+                fullPage: true
             }
         },
         methods: {
             async submit() {
                 this.sub = true;
+                this.isLoading = true;
                 await axios.post('register', this.form).then(response => {
                     if (response.data.status) {
                         this.sub = false;
                         this.completed = true;
                     } 
+                    this.isLoading = false;
                 }).catch(({response})=>{
                     if(response.status===422){
                         this.validationErrors = response.data.errors
@@ -137,6 +149,7 @@
                         this.error = response.data.message;
                     }
                     this.sub = false;
+                    this.isLoading = false;
                 }).finally(()=>{
                     this.processing = false
                 });

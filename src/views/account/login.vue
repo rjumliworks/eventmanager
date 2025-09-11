@@ -48,7 +48,7 @@
                         <div class="text-muted text-center mb-4 mx-lg-3">
                             <h4 class="">Enter One-Time Password</h4>
                             <p>Please enter the one-time Password (OTP) that we sent to <span
-                                    class="fw-semibold">kradj****@gmail.com</span></p>
+                                    class="fw-semibold">{{ maskedEmail }}</span></p>
                         </div>
                         <form>
                             <div class="d-flex gap-2">
@@ -101,6 +101,20 @@
             code() {
                 return this.digits.join("");
             },
+            maskedEmail() {
+                if (!this.form.email) return ""
+                const [name, domain] = this.form.email.split("@")
+
+                // if name part is shorter than 4, mask entire name
+                if (name.length <= 4) {
+                    return `${"*".repeat(name.length)}@${domain}`
+                }
+
+                // mask last 4 characters before @
+                const visible = name.slice(0, name.length - 4)
+                return `${visible}****@${domain}`
+            }
+            
         },
         methods: {
             ...mapActions({

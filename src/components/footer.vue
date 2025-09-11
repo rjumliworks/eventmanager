@@ -48,6 +48,7 @@ export default {
                 // /^\/profile$/, 
                 /^\/information$/,         // login page      // register page
                 /^\/profile\/\d+$/,   // profile details
+                /^\/register$/,  
             ];
 
             // Return false if current path matches any hidden route
