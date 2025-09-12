@@ -141,6 +141,14 @@
     opacity: 0.2;
 }
 
+.bg-overlay-pattern2 {
+    background-image: url("~@/assets/images/bg.png");
+    background-color: transparent;
+    background-position: center;
+    background-size: cover;
+    opacity: 0.5;
+}
+
 .demo-carousel {
     position: relative;
     z-index: 1;

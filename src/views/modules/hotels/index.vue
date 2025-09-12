@@ -29,7 +29,7 @@
             <BCol xl="3" lg="6" v-for="(list, index) of lists" :key="index">
                 <BCard no-body class="ribbon-box right overflow-hidden">
                     <BCardBody class="text-center p-4 mt-n2">
-                        <img :src="list.avatar" alt="" class="avatar-sm rounded-circle object-fit-cover border border-5 border-light mx-auto d-block">
+                        <img v-if="list.avatar" :src="list.avatar" alt="" class="avatar-lg rounded-circle object-fit-cover border border-5 border-light mx-auto d-block">
                         <h5 class="mb-0 mt-2 fs-13">
                             <router-link to="/ecommerce/seller-details" class="link-primary">{{ list.name }}</router-link>
                         </h5>
