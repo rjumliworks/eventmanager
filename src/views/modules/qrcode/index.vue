@@ -107,7 +107,7 @@ export default {
         },
     },
     beforeUnmount() {
-        this.stopScan();
+        this.stopScanner();
     },
 };
 </script>

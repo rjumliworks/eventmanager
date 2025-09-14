@@ -4,11 +4,13 @@
             <li class="nav-item">
                 <router-link to="/" class="nav-link">
                     <i class="fs-20 ri-home-wifi-line"></i>
+                    <!-- <img src="@/assets/images/icons/home.png" alt="" class="mb-3" style="width: 25px; height: 25px;"> -->
                 </router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/sessions" class="nav-link">
                     <i class="fs-20 ri-calendar-event-line"></i>
+                    <!-- <img src="@/assets/images/icons/session.png" alt="" class="mb-3" style="width: 25px; height: 25px;"> -->
                 </router-link>
             </li>
             <li class="nav-item">

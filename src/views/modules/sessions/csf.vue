@@ -124,7 +124,7 @@ export default {
                 this.sub = false;
                 return;
             }
-            await axios.post('/csf/save',{
+            await axios.post('/csf/session',{
                 questions: this.questions,
                 participant_id: this.$store.state.auth.user.data.id,
                 session_id: this.session_id,

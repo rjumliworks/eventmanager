@@ -1,45 +1,49 @@
 <template>
     <div class="layout-wrapper landing ">
        
-        <section class="section login-modal" style="height: 100px;">
+        <section class="section login-modal" style="height: 170px;">
             <BContainer>
-                <div class="card" style="margin-bottom: -160px; height: 200px; z-index: 100;">
+                <img src="@/assets/images/dost.png" alt="" class="mb-3 me-1" style="width: 40px; height: 40px; margin-top: -40px">
+                <div class="card" style="margin-bottom: -160px; height: 190px; z-index: 100;">
                     <div class="card-body d-flex flex-column justify-content-between p-0" style="height: 100%;">
                         <div class="flex-fill border-bottom">
-                           <div class="d-flex align-items-center p-3 mb-n3">
+                           <div class="d-flex align-items-center p-3 mb-n2">
                                 <div class="avatar-sm me-3">
                                     <div class="avatar-title rounded bg-transparent">
                                         <img  class="avatar-sm rounded-circle material-shadow" :src="require('@/assets/images/avatars/avatar.jpg')" />
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="mb-0 fs-14 fw-semibold text-uppercase text-primary"> {{ $store.state.auth.user.data.firstname}}  {{ $store.state.auth.user.data.lastname}}</h5>
-                                    <p class="text-muted mb-0 fs-12">{{ $store.state.auth.user.data.email }}</p>
+                                    <h5 class="mb-0 fs-13 fw-semibold text-uppercase text-primary"> {{ $store.state.auth.user.data.firstname}}  {{ $store.state.auth.user.data.lastname}}</h5>
+                                    <p class="text-muted mb-0 fs-11">{{ $store.state.auth.user.data.email }}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="flex-fill d-flex">
-                            <div class="flex-fill border-end mt-2" style="width: 33.3%">
-                                <div class="text-center position-relative d-inline-block chart-wrapper">
-                                    <apexchart class="apex-charts" height="70" dir="ltr" :series="[calcPercent(points, selected.points)]" :options="{ ...chartOptions }"></apexchart>
+                            <div class="flex-fill border-end" style="width: 33.3%">
+                                <div class="text-center position-relative d-inline-block chart-wrapper mt-2">
+                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(points, selected.points)]" :options="{ ...chartOptions }"></apexchart>
                                     <i class="ri-trophy-fill center-icon text-secondary"></i>
-                                    <span class="text-primary fw-semibold fs-10">Points Collected</span>
+                                    <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">0</p>
+                                    <span class="text-primary fw-semibold" style="font-size: 9px;">Points Collected</span>
                                 </div>
                             </div>
 
-                            <div class="flex-fill border-end mt-2" style="width: 33.3%">
-                                <div class="text-center position-relative d-inline-block chart-wrapper">
-                                    <apexchart class="apex-charts" height="70" dir="ltr" :series="[calcPercent(sessions, selected.sessions)]" :options="{ ...chartOptions }"></apexchart>
+                            <div class="flex-fill border-end" style="width: 33.3%">
+                                <div class="text-center position-relative d-inline-block chart-wrapper mt-2">
+                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(sessions, selected.sessions)]" :options="{ ...chartOptions }"></apexchart>
                                     <i class="ri-calendar-todo-fill center-icon text-secondary"></i>
-                                    <span class="text-primary fw-semibold fs-10">Session Attended</span>
+                                    <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">0</p>
+                                    <span class="text-primary fw-semibold" style="font-size: 9px;">Session Attended</span>
                                 </div>
                             </div>
 
-                            <div class="flex-fill mt-2" style="width: 33.3%">
-                                <div class="text-center position-relative d-inline-block chart-wrapper">
-                                    <apexchart class="apex-charts" height="70" dir="ltr" :series="[calcPercent(exhibits, selected.exhibits)]" :options="{ ...chartOptions }"></apexchart>
+                            <div class="flex-fill" style="width: 33.3%">
+                                <div class="text-center position-relative d-inline-block chart-wrapper  mt-2">
+                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(exhibits, selected.exhibits)]" :options="{ ...chartOptions }"></apexchart>
                                     <i class="ri-store-2-fill center-icon text-secondary"></i>
-                                    <span class="text-primary fw-semibold fs-10">Exhibit Visited</span>
+                                    <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">0</p>
+                                    <span class="text-primary fw-semibold" style="font-size: 9px;">Exhibit Visited</span>
                                 </div>
                             </div>
                         </div>
@@ -49,15 +53,59 @@
             </BContainer>
         </section>
 
-        <section class="section bg-light" id="plans">
-            <div class="bg-overlay bg-overlay-pattern"></div>
+
+
+         <section class="section bg-light" id="plans" style="margin-top: 15px; height: 235px;">
             <BContainer>
-                <hr class="text-muted"/>
+               <BCard no-body class="bg-primary pattern mt-5">
+                    <BCardBody class="p-4">
+                        <img class="img-fluid" :src="require('@/assets/images/rstwhanda/banner.png')"/>
+                    </BCardBody>
+                </BCard>
+                
             </BContainer>
         </section>
 
         <section class="section">
-            <BContainer></BContainer>
+            <BContainer>
+                <div class="card border shadow-none bg-white p-4 mt-n4 mb-n4">
+                    <div class="d-flex justify-content-center gap-5 text-center">
+                        <div>
+                            <div class="avatar-sm flex-shrink-0 mx-auto">
+                                <span class="avatar-title bg-light text-primary rounded-circle fs-3 material-shadow">
+                                    <i class="ri-money-dollar-circle-fill align-middle" style="font-size: 30px;"></i>
+                                </span>
+                            </div>
+                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Points</div>
+                        </div>
+                        <div>
+                            <div class="avatar-sm flex-shrink-0 mx-auto">
+                                <span class="avatar-title bg-light text-success rounded-circle fs-3 material-shadow">
+                                    <i class="ri-bank-card-fill align-middle"></i>
+                                </span>
+                            </div>
+                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Sessions</div>
+                        </div>
+                        <div>
+                            <div class="avatar-sm flex-shrink-0 mx-auto">
+                                <span class="avatar-title bg-light text-danger rounded-circle fs-3 material-shadow">
+                                    <i class="ri-wallet-3-fill align-middle"></i>
+                                </span>
+                            </div>
+                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Exhibits</div>
+                        </div>
+                        <div>
+                            <div class="avatar-sm flex-shrink-0 mx-auto">
+                                <span class="avatar-title bg-light text-warning rounded-circle fs-3 material-shadow">
+                                    <i class="ri-download-cloud-fill align-middle"></i>
+                                </span>
+                            </div>
+                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Materials</div>
+                        </div>
+                    </div>
+                </div>
+
+            </BContainer>
         </section>
 
         <section class="section bg-primary" id="reviews">
@@ -66,10 +114,7 @@
                 <BRow class="justify-content-center">
                     <BCol lg="10">
                         <div class="text-center">
-                            <div>
-                                <i class="ri-double-quotes-l text-success display-3"></i>
-                            </div>
-                            <h4 class="text-white mb-5"><span class="text-success">2025</span> RSTW & HANDA</h4>
+                            <h4 class="text-white mb-3 fs-12"><span class="text-success">2025</span> RSTW & HANDA</h4>
 
                             <div class="client-review-swiper rounded">
                                 <swiper class="navigation-swiper rounded" :loop="true"
@@ -85,8 +130,8 @@
                                                         <p class="fs-12 ff-secondary mb-4">"A flagship celebration showcasing how science, technology, and innovation (STI) empower communities and drive national progress. Aligned with the call “Handa Pilipinas sa Bagong Pilipinas,” RSTW promotes awareness, preparedness, and resilience through science-based solutions. It brings together researchers, innovators, local governments, and the public to highlight how STI can address regional challenges, support disaster readiness, improve livelihoods, and build a more inclusive, forward-looking nation."</p>
 
                                                         <div>
-                                                            <h5 class="text-white">Regional Science, Technology, and Innovation Week</h5>
-                                                            <p>RSTW</p>
+                                                            <h5 class="text-white fs-12 mb-0">Regional Science, Technology, and Innovation Week</h5>
+                                                            <p class="fs-11">RSTW</p>
                                                         </div>
                                                     </div>
                                                 </BCol>
@@ -102,8 +147,8 @@
                                                         <p class="fs-12 ff-secondary mb-4">"A unified call to action for a more resilient, responsive, and forward-looking nation. Rooted in the spirit of preparedness and innovation, this movement embodies the collective efforts of government, communities, and individuals in building a safer, more progressive Philippines under the vision of "Bagong Pilipinas." It highlights proactive disaster risk reduction, good governance, sustainable development, and inclusive growth to ensure that every Filipino is ready for the challenges and opportunities of a new era."</p>
 
                                                         <div>
-                                                            <h5 class="text-white">Handa Pilipinas sa Bagong Pilipinas</h5>
-                                                            <p>Mindanao Leg</p>
+                                                            <h5 class="text-white fs-12 mb-0">Handa Pilipinas sa Bagong Pilipinas</h5>
+                                                            <p class="fs-11">Mindanao Leg</p>
                                                         </div>
                                                     </div>
                                                 </BCol>
@@ -123,14 +168,106 @@
         </section>
 
         <section class="py-5 position-relative bg-light">
-            <BContainer></BContainer>
+            <BContainer>
+                <BCardBody>
+                    <BRow class="g-1 mt-n4 mb-3">
+                        <BCol cols="6">
+                            <img src="@/assets/images/nft/img-06.png" alt=""
+                                class="img-fluid rounded">
+                            <img src="https://img.themesbrand.com/velzon/images/img-2.gif" alt=""
+                                class="img-fluid rounded mt-1">
+                        </BCol>
+                        <BCol cols="6">
+                            <img src="https://img.themesbrand.com/velzon/images/img-5.gif" alt=""
+                                class="img-fluid rounded mb-1">
+                            <img src="@/assets/images/nft/img-03.jpg" alt=""
+                                class="img-fluid rounded">
+                        </BCol>
+                    </BRow>
+                </BCardBody>
+                <hr class="text-muted"/>  
+                <img src="@/assets/images/rstwhanda/rate.png" class="img-fluid rounded" style="height: auto; width: 100%; margin-bottom:-25px" alt="Responsive image">
+            </BContainer>
         </section>
 
-        <section class="section">
-            <BContainer></BContainer>
+        <section class="section" style="height: 170px;">
+            <BContainer>
+                <div class="text-center mb-5 mt-n4">
+                    <h3 class="mb-1 fw-semibold fs-12">Participating Agencies</h3>
+                    <p class="text-muted mb-4 fs-10">Working together to bring innovation and progress.</p>
+
+                    <div class="text-center mt-0 mb-n5">
+                        <div class="trusted-client-slider mt-sm-5 mt-4 mb-sm-5 mb-4">
+                            <swiper class="swiper responsive-swiper rounded gallery-light pb-4" :loop="true"
+                                :autoplay="true" :modules="[Autoplay]" :slidesPerView="1" :spaceBetween="10"
+                                :breakpoints="{ 640: { slidesPerView: 2, spaceBetween: 20 }, 768: { slidesPerView: 3, spaceBetween: 40 }, 1200: { slidesPerView: 4, spaceBetween: 50 }, }">
+                                <swiper-slide>
+                                    <div class="swiper-slide">
+                                        <div class="client-images">
+                                            <img src="@/assets/images/rstwhanda/logo/dost.png" alt="client-img"
+                                                class="mx-auto img-fluid d-block">
+                                        </div>
+                                    </div>
+                                </swiper-slide>
+
+                                <swiper-slide>
+                                    <div class="swiper-slide">
+                                        <div class="client-images">
+                                            <img src="@/assets/images/rstwhanda/logo/bagongpilipinas.png" alt="client-img"
+                                                class="mx-auto img-fluid d-block">
+                                        </div>
+                                    </div>
+                                </swiper-slide>
+
+                                <swiper-slide>
+                                    <div class="swiper-slide">
+                                        <div class="client-images">
+                                            <img src="@/assets/images/rstwhanda/logo/tapi.png" alt="client-img"
+                                                class="mx-auto img-fluid d-block">
+                                        </div>
+                                    </div>
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <div class="swiper-slide">
+                                        <div class="client-images">
+                                            <img src="@/assets/images/rstwhanda/logo/phivolcs.png" alt="client-img"
+                                                class="mx-auto img-fluid d-block">
+                                        </div>
+                                    </div>
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <div class="swiper-slide">
+                                        <div class="client-images">
+                                            <img src="@/assets/images/rstwhanda/logo/pagasa.png" alt="client-img"
+                                                class="mx-auto img-fluid d-block">
+                                        </div>
+                                    </div>
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <div class="swiper-slide">
+                                        <div class="client-images">
+                                            <img src="@/assets/images/rstwhanda/logo/rrd.png" alt="client-img"
+                                                class="mx-auto img-fluid d-block">
+                                        </div>
+                                    </div>
+                                </swiper-slide>
+                                 <swiper-slide>
+                                    <div class="swiper-slide">
+                                        <div class="client-images">
+                                            <img src="@/assets/images/rstwhanda/logo/logos.png" alt="client-img"
+                                                class="mx-auto img-fluid d-block">
+                                        </div>
+                                    </div>
+                                </swiper-slide>
+
+                            </swiper>
+                        </div>
+                    </div>
+                </div>
+            </BContainer>
         </section>
 
-        <section class="py-5 bg-primary position-relative">
+        <section class="py-5 bg-primary position-relative" style="margin-bottom: 80px">
             <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
             <BContainer></BContainer>
         </section>
@@ -304,10 +441,13 @@ export default {
 }
 .center-icon {
   position: absolute;
-  top: 37%;
+  top: 28%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 18px;  /* adjust icon size as needed */
+  font-size: 14px;  /* adjust icon size as needed */
   pointer-events: none; /* avoid interfering with chart hover */
+}
+.pattern{
+    background-image: url('../assets/images/nft/bg-pattern.png');
 }
 </style>
