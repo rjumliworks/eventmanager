@@ -96,7 +96,7 @@ export default {
     components: { Layout, Loading },
     data(){
         return {
-            lists: [],
+            lists: this.$store.state.data.exhibitors,
             participant_id: this.$store.state.auth.user.data.id,
             load: false,
             index: null,
@@ -104,23 +104,9 @@ export default {
             fullPage: true
         }
     },
-    created(){
-        this.fetch();
-    },
+
     methods: { 
-        fetch(){
-            this.load = false;
-            this.isLoading = true;
-            axios.get('/exhibitors',{ params : {participant_id : this.participant_id}})
-            .then(response => {
-                if(response){
-                    this.lists = response.data.data;     
-                    this.load = true;
-                    this.isLoading = false;
-                }
-            })
-            .catch(err => console.log(err));
-        },
+
         vote(id,index){
             this.index = index;
             axios.post('/exhibitors/vote',{

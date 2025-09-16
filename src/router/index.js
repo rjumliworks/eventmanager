@@ -102,6 +102,15 @@ const routes = [
         }
     },
     {
+        path: "/security",
+        name: "security",
+        component: () => import('@/views/modules/profiles/security.vue'),
+        meta: {
+            middleware: "auth",
+            title: `Security`
+        }
+    },
+    {
         path: "/information",
         name: "information",
         component: () => import('@/views/modules/profiles/information.vue'),
@@ -119,20 +128,40 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    document.title = to.meta.title
-    if (to.meta.middleware == "guest") {
-        if (store.state.auth.authenticated) {
-          next({ name: "dashboard" })
-        }
-        next()
-    } else {
-        if (store.state.auth.authenticated) {
-            next()
-        } else {
-            next({ name: "login" })
-        }
-    }
-})
+    document.title = to.meta.title || 'App';
 
+    const isAuth = store.state.auth.authenticated;
+    const user   = store.state.auth.user?.data || {};
+    const isCompleted = user.is_completed == 1;
+
+    // 1️⃣ Allow unauthenticated pages (guest)
+    if (to.meta.middleware === "guest") {
+        if (isAuth) {
+            // ✅ Authenticated guests
+            if (!isCompleted && to.name !== "security") {
+                // force profile if incomplete
+                return next({ name: "security" });
+            }
+            return next({ name: "dashboard" });
+        }
+        return next();
+    }
+
+    // 2️⃣ Protected routes (need auth)
+    if (!isAuth) {
+        return next({ name: "login" });
+    }
+
+    // 3️⃣ Check profile completion for ALL authenticated routes
+    //    Allow profile & logout pages to prevent redirect loop
+    const allowList = ["security", "logout"];
+    if (!isCompleted && !allowList.includes(to.name)) {
+        return next({ name: "security" });
+    }
+
+    next();
+});
+
+console.log(store.state.auth);
 
 export default router

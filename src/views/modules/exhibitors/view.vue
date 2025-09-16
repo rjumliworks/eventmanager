@@ -68,7 +68,8 @@
                             <button class="nav-link fs-10 p-3" :class="(index == 0) ? 'active' : ''" 
                                 :id="menu+'-tab'" data-bs-toggle="pill" :data-bs-target="'#'+menu" 
                                 type="button" role="tab" :aria-controls="menu" aria-selected="true">
-                                {{menu}} {{ (index == 2) ? '('+session.questions.length+')' : ''}}
+                                {{menu}} 
+                                <!-- {{ (index == 2) ? '('+session.questions.length+')' : ''}} -->
                             </button>
                         </li>
                     </ul>
@@ -86,7 +87,7 @@
                                             
                                         </template>
 
-                                        <template v-if="menu == 'Comments'">
+                                        <!-- <template v-if="menu == 'Comments'">
                                             <b-list-group flush class="mt-n3" style="margin-left: -16px; margin-right: -16px;">
                                                 <b-list-group-item class="text-center mt-1" style="cursor: pointer;"  v-if="exhibitor.feedbacks.length == 0">
                                                     <span class="text-muted text-center fs-10">No comments found</span>
@@ -105,7 +106,7 @@
                                                     </div>
                                                 </b-list-group-item>
                                             </b-list-group>
-                                        </template>
+                                        </template> -->
 
                                     </div>
                                 </transition>
@@ -159,11 +160,11 @@ export default {
     components: { Layout, Csf, Loading },
     data(){
         return {
-            exhibitor: {
-                contact: {},
-                feedback: {},
-                feedbacks: []
-            },
+            // exhibitor: {
+            //     contact: {},
+            //     feedback: {},
+            //     feedbacks: []
+            // },
             form: {
                 participant_id: this.$store.state.auth.user.data.id,
                 exhibitor_id: this.$route.params.id
@@ -175,6 +176,12 @@ export default {
             loading: false
         }
     },
+    computed: {
+        exhibitor() {
+            return this.$store.state.data.exhibitors
+                .find(e => e.id === Number(this.$store.state.auth.user.data.id))
+            }
+    },
     mounted() {
         this.interval = setInterval(() => {
             this.now = dayjs(); 
@@ -184,9 +191,9 @@ export default {
     beforeUnmount() {
         clearInterval(this.interval);
     },
-    created(){
-        this.fetch();
-    },
+    // created(){
+    //     this.fetch();
+    // },
     methods: { 
         initPusher() {
             const pusher = new Pusher("dws2rpb0uczmrhwzmoya", {
@@ -211,17 +218,17 @@ export default {
                 }
             });      
         },
-        fetch(){
-            this.isLoading = true;
-            axios.get('/exhibitors/view/'+this.$route.params.id,{ params : {participant_id : this.$store.state.auth.user.data.id}})
-            .then(response => {
-                if(response){
-                    this.exhibitor = response.data.data;  
-                    this.isLoading = false;   
-                }
-            })
-            .catch(err => console.log(err));
-        },
+        // fetch(){
+        //     this.isLoading = true;
+        //     axios.get('/exhibitors/view/'+this.$route.params.id,{ params : {participant_id : this.$store.state.auth.user.data.id}})
+        //     .then(response => {
+        //         if(response){
+        //             this.exhibitor = response.data.data;  
+        //             this.isLoading = false;   
+        //         }
+        //     })
+        //     .catch(err => console.log(err));
+        // },
         async submit() {
             this.status = true;
             await axios.post('sessions/question', this.form)

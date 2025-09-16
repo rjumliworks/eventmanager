@@ -311,25 +311,27 @@ export default {
             });
             const channel = pusher.subscribe("session");
             channel.bind("App\\Events\\SessionEvent", (data) => {
-                console.log("Maintenance event:", data);
-                if (data.data.id != this.$store.state.auth.user.data.id) {
-                    switch(data.type){
-                        case 'question':
+                // console.log("Maintenance event:", data);
+                switch(data.type){
+                    case 'question':
+                        if (data.data.id != this.$store.state.auth.user.data.id) {
                             if(this.session.id == data.data.session_id){
                                 this.session.questions.unshift(data.data);
                             }
-                        break;
-                        case 'rating':
+                        }
+                    break;
+                    case 'rating':
+                        if (data.data.id != this.$store.state.auth.user.data.id) {
                             if(this.session.id == data.data.session_id){
                                 this.session.feedbacks.unshift(data.data);
                             }
-                        break;
-                        case 'status':
-                            if(this.session.id == data.data.id){
-                                this.session.status = data.data.status;
-                            }
-                        break;
-                    }
+                        }
+                    break;
+                    case 'status':
+                        if(this.session.id == data.data.id){
+                            this.session.status = data.data.status;
+                        }
+                    break;
                 }
             });      
         },

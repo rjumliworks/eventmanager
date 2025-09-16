@@ -22,30 +22,49 @@ export default {
         SET_USER (state, value) {
             state.user = value
         },
-        UPDATE_IMG (state, value) {
-            state.user = value;
-        }
+        updateAvatar(state, newAvatarUrl) {
+            if (state.user && state.user.data) {
+                state.user.data.avatar = newAvatarUrl
+            }
+        },
+        updateSignature(state, data) {
+            if (state.user && state.user.data) {
+                state.user.data.signature = data;
+            }
+        },
+        updateCompleted(state, data) {
+            if (state.user && state.user.data) {
+                state.user.data.is_completed = data;
+            }
+        },
     },
     actions:{
-        login({commit}){
+        login({commit, dispatch}){
             const config = {
                 headers:{
                   Authorization: `Bearer `+localStorage.getItem('token'),
                 }
               };
-            return axios.get('/participant',config).then(({data})=>{
-                commit('SET_USER',data)
-                commit('SET_AUTHENTICATED',true)
-                router.push({name:'dashboard'})
-            }).catch(({response:{data}})=>{
-                console.log(data);
-                commit('SET_USER',{})
-                commit('SET_AUTHENTICATED',false)
+            return axios.get('/participant', config)
+            .then(async ({ data }) => {
+                commit('SET_USER', data);
+                commit('SET_AUTHENTICATED', true);
+
+                // 🔹 Load other datasets in parallel
+                await dispatch('data/loadInitialData', null, { root: true });
+
+                router.push({ name: 'dashboard' });
             })
+            .catch(({ error }) => {
+                console.log('Login error:', error.response || error);
+                commit('SET_USER', {});
+                commit('SET_AUTHENTICATED', false);
+            });
         },
         logout({commit}){
             commit('SET_USER',{})
             commit('SET_AUTHENTICATED',false)
+            commit('data/RESET_STATE', null, { root: true })
             localStorage.removeItem("token"); 
         },
         update({commit}){

@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import auth from '@/state/auth'
+import data from '@/state/data'
 import modules from './modules'
 
 
@@ -10,7 +11,8 @@ const store = createStore({
     ],
     modules: {
         ...modules, 
-        auth        
+        auth,
+        data    
     },
     strict: process.env.NODE_ENV !== 'production',
 })

@@ -362,7 +362,7 @@ export default {
     },
     components: { Swiper, SwiperSlide, Loading },
     created(){
-        this.fetch();
+        // this.fetch();
     },
     methods: {
         calcPercent(value, max) {
