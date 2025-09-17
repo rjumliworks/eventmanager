@@ -45,31 +45,14 @@
     </Layout>
 </template>
 <script>
-import axios from 'axios';
 import Layout from "@/layouts/main.vue";
 export default {
     components: { Layout },
     data(){
         return {
-            lists: [],
+            lists: this.$store.state.data.hotels,
             participant_id: this.$store.state.auth.user.data.id,
             load: false
-        }
-    },
-    created(){
-        this.fetch();
-    },
-    methods: { 
-        fetch(){
-            this.load = false;
-            axios.get('/hotels',{ params : {id : this.participant_id}})
-            .then(response => {
-                if(response){
-                    this.lists = response.data.data;     
-                    this.load = true;
-                }
-            })
-            .catch(err => console.log(err));
         }
     }
 };

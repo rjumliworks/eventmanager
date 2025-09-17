@@ -83,7 +83,7 @@ export default {
                 { icon: 'bx bxs-sad', active: false, score: 2, color: '#ff8f01', text: 'Disagree' },
                 { icon: 'bx bxs-angry', active: false, score: 1, color: '#dd0000', text: 'Strongly -' }
             ],
-            questions: [],
+            questions: this.$store.state.data.csfs,
             incomplete: false,
             session_id: null,
             validationErrors: null,
@@ -93,9 +93,6 @@ export default {
             showModal: false
         }
     },
-    created(){
-        this.fetch();
-    },
     methods: { 
         show(id,status){
             this.status = status;
@@ -104,15 +101,6 @@ export default {
         }, 
         hasError(field) {
             return this.validationErrors[field] && this.validationErrors[field].length > 0;
-        },
-        fetch(){
-            axios.get('/csf')
-            .then(response => {
-                if(response){
-                    this.questions = response.data.data;     
-                }
-            })
-            .catch(err => console.log(err));
         },
         async submit() {
             this.sub = true;
@@ -160,27 +148,27 @@ export default {
 }
 </script>
 <style>
-.smiley-container {
-  display: inline-block;
-  text-align: center;
-  width: 40px;
-  cursor: pointer;
-}
-.smiley-container2 {
-  display: inline-block;
-  text-align: center;
-  width: 55px;
-}
-.smiley-container i:hover {
-    transform: scale(1.3);
-    color: var(--hover-color);
-}
-.smiley-text {
-  display: block;
-  margin-top: 5px;
-}
-.modal-80 {
-  max-width: 90% !important;  /* set the width */
-  margin: auto;               /* keep it centered */
-}
+    .smiley-container {
+    display: inline-block;
+    text-align: center;
+    width: 40px;
+    cursor: pointer;
+    }
+    .smiley-container2 {
+    display: inline-block;
+    text-align: center;
+    width: 55px;
+    }
+    .smiley-container i:hover {
+        transform: scale(1.3);
+        color: var(--hover-color);
+    }
+    .smiley-text {
+    display: block;
+    margin-top: 5px;
+    }
+    .modal-80 {
+    max-width: 90% !important;  
+    margin: auto;              
+    }
 </style>

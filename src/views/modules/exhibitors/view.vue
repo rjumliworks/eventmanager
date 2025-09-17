@@ -11,13 +11,6 @@
             <div class="card-body">
                 <div class="d-flex flex-column h-100">
                     <div class="d-flex mb-n3">
-                        <!-- <div class="flex-shrink-0 me-3">
-                            <div class="avatar-sm">
-                                <span class="avatar-title bg-subtle rounded p-2 bg-warning-subtle">
-                                    <img src="@/assets/images/logo-sm.png" alt="" class="img-fluid p-1">
-                                </span>
-                            </div>
-                        </div> -->
                         <div class="flex-grow-1">
                             <h5 class="mb-1 fs-12 fw-semibold text-primary">{{exhibitor.title}}</h5>
                             <p class="text-muted fs-10 mb-3">{{exhibitor.description}}</p>
@@ -25,20 +18,13 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="card-footer bg-transparent border-top-dashed py-2 mb-1">
-                <div class="fs-11">
-                    <i class="ri-account-circle-fill text-success fs-14 me-2"></i>{{session.managers[0]?.user.profile.firstname}} {{session.managers[0]?.user.profile.lastname}}<br/>
-                    <i class="ri-map-pin-fill text-danger fs-14 me-2"></i>{{session.venue.name}}, {{ session.venue.establishment }}<br/>
-                    <i class="ri-calendar-event-fill text-info fs-14 me-2"></i>{{dateRangeText(session.schedules)}}
-                </div>
-            </div> -->
         </div>
 
         <div class="card border shadow-none bg-white-subtle w-100 card-height-100" style="cursor: pointer;" @click="openCsf()">
             <div class="bg-white px-3 py-2 rounded-2 ">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <div class="fs-16 align-middle text-warning" v-if="!exhibitor.feedback">
+                        <div class="fs-16 align-middle text-warning" v-if="!myFeedback">
                             <i class="ri-star-line"></i>
                             <i class="ri-star-line"></i>
                             <i class="ri-star-line"></i>
@@ -47,14 +33,14 @@
                         </div>
                         <div class="fs-16 align-middle text-warning" v-else>
                             <template v-for="i in 5" :key="i">
-                                <i v-if="exhibitor.feedback && exhibitor.feedback.rate >= i" class="ri-star-fill"></i>
-                                <i v-else-if="exhibitor.feedback && exhibitor.feedback.rate >= i - 0.5" class="ri-star-half-fill"></i>
+                                <i v-if="myFeedback.rate >= i" class="ri-star-fill"></i>
+                                <i v-else-if="myFeedback.rate >= i - 0.5" class="ri-star-half-fill"></i>
                                 <i v-else class="ri-star-line"></i>
                             </template>
                         </div>
                     </div>
                     <div class="flex-shrink-0">
-                        <h6 class="mb-0 fs-10">{{(exhibitor.feedback) ? exhibitor.feedback.rate : 0 }} out of 5</h6>
+                        <h6 class="mb-0 fs-10">{{(myFeedback) ? myFeedback.rate : 0 }} out of 5</h6>
                     </div>
                 </div>
             </div>
@@ -87,17 +73,18 @@
                                             
                                         </template>
 
-                                        <!-- <template v-if="menu == 'Comments'">
+                                        <template v-if="menu == 'Comments'">
                                             <b-list-group flush class="mt-n3" style="margin-left: -16px; margin-right: -16px;">
-                                                <b-list-group-item class="text-center mt-1" style="cursor: pointer;"  v-if="exhibitor.feedbacks.length == 0">
+                                                <b-list-group-item class="text-center mt-1" style="cursor: pointer;"  v-if="(exhibitor?.feedbackable?.length ?? 0) === 0">
                                                     <span class="text-muted text-center fs-10">No comments found</span>
                                                 </b-list-group-item>
-                                                <b-list-group-item v-else v-for="(list,index) in exhibitor.feedbacks" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
+                                                <b-list-group-item v-else v-for="(list,index) in exhibitor.feedbackable" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
                                                     <div class="d-flex mb-n3">
                                                         <div class="flex-shrink-0">
-                                                           <img :src="list.avatar === 'avatar.jpg' 
-                                                                        ? require('@/assets/images/avatars/avatar.jpg') 
-                                                                        : `${list.avatar}`" class="avatar-xs rounded-circle material-shadow"/>
+                                                            <img :src="!list.avatar || list.avatar === 'avatar.jpg'
+                                                                ? require('@/assets/images/avatars/avatar.jpg')
+                                                                : list.avatar" class="avatar-xs rounded-circle material-shadow"
+                                                            />
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h5 class="fs-11 mb-1">{{list.name}} <small class="text-muted ms-2">({{timeAgo(list.created_at)}})</small></h5>
@@ -106,7 +93,7 @@
                                                     </div>
                                                 </b-list-group-item>
                                             </b-list-group>
-                                        </template> -->
+                                        </template>
 
                                     </div>
                                 </transition>
@@ -122,12 +109,12 @@
         <footer class="footer p-2">
              <div class="p-3 mt-n1">
                 <div v-if="exhibitor.has_voted">
-                    <div class="alert alert-warning alert-dismissible alert-label-icon label-arrow fs-12 mt-n1" role="alert">
-                        <i class="ri-trophy-fill fs-20 bx-tada label-icon"></i><strong>Thank you!</strong> Your vote has been successfully submitted. 
+                    <div class="alert alert-warning alert-dismissible alert-label-icon label-arrow fs-11 mt-n1" role="alert">
+                        <i class="ri-trophy-fill fs-20 bx-tada label-icon"></i>Your vote has been successfully submitted. 
                         <button @click="vote()" type="button" class="btn-close"></button>
                     </div>
                 </div>
-                <button v-else @click="vote()" class="btn w-100 btn-danger btn-label" :disabled="loading">
+                <button v-else @click="vote()" class="btn w-100 btn-danger btn-label">
                     <div class="d-flex">
                         <div class="flex-shrink-0">
                             <i class="ri-trophy-fill label-icon align-middle fs-16 me-2"></i>
@@ -154,17 +141,11 @@ import axios from 'axios';
 import Layout from "@/layouts/main.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import Pusher from 'pusher-js';
 dayjs.extend(relativeTime);
 export default {
     components: { Layout, Csf, Loading },
     data(){
         return {
-            // exhibitor: {
-            //     contact: {},
-            //     feedback: {},
-            //     feedbacks: []
-            // },
             form: {
                 participant_id: this.$store.state.auth.user.data.id,
                 exhibitor_id: this.$route.params.id
@@ -179,107 +160,34 @@ export default {
     computed: {
         exhibitor() {
             return this.$store.state.data.exhibitors
-                .find(e => e.id === Number(this.$store.state.auth.user.data.id))
-            }
+            .find(e => e.id === Number(this.$route.params.id))
+        },
+        myFeedback() {
+            const myId = this.$store.state.auth.user.data.id
+            return this.exhibitor.feedbackable.find(f => f.participant_id === myId) || null
+        }
     },
     mounted() {
         this.interval = setInterval(() => {
             this.now = dayjs(); 
         }, 60000);
-        this.initPusher();
     },
     beforeUnmount() {
         clearInterval(this.interval);
     },
-    // created(){
-    //     this.fetch();
-    // },
     methods: { 
-        initPusher() {
-            const pusher = new Pusher("dws2rpb0uczmrhwzmoya", {
-                cluster: "mt1",                
-                wsHost: "rstwhanda.dost9.ph",
-                wsPort: 443,
-                wssPort: 443,
-                forceTLS: true,
-                enabledTransports: ["ws", "wss"],
-                disableStats: true,
-                wsPath: "/ws"                
-            });
-            const channel = pusher.subscribe("session");
-            channel.bind("App\\Events\\ExhibitorEvent", (data) => {
-                console.log("Maintenance event:", data);
-                if (data.data.id != this.$store.state.auth.user.data.id) {
-                    switch(data.type){
-                        case 'review':
-                            this.exhibitor.reviews.unshift(data.data);
-                        break;
-                    }
-                }
-            });      
-        },
-        // fetch(){
-        //     this.isLoading = true;
-        //     axios.get('/exhibitors/view/'+this.$route.params.id,{ params : {participant_id : this.$store.state.auth.user.data.id}})
-        //     .then(response => {
-        //         if(response){
-        //             this.exhibitor = response.data.data;  
-        //             this.isLoading = false;   
-        //         }
-        //     })
-        //     .catch(err => console.log(err));
-        // },
-        async submit() {
-            this.status = true;
-            await axios.post('sessions/question', this.form)
-            .then(response => {
-                if (response.data.status) {
-                    this.status = false;
-                    this.session.questions.unshift(response.data.data);
-                } 
-            }).catch(({response})=>{
-                if(response.status===422){
-                    this.validationErrors = response.data.errors
-                }else{
-                    this.validationErrors = {};
-                    this.error = response.data.message;
-                }
-                this.status = false;
-            }).finally(()=>{
-                this.processing = false
-            });
-        },
-        dateRangeText(schedules) {
-            let start = schedules[0]?.date;
-            let end = schedules[0]?.date;
-
-            schedules.forEach(s => {
-                if (s.date < start) start = s.date;
-                if (s.date > end) end = s.date;
-            });
-
-            const formatDate = (dateStr) => {
-                const date = new Date(dateStr);
-                return date.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-            };
-
-            return start === end
-                ? formatDate(start)
-                : `${formatDate(start)} - ${formatDate(end)}`;
-        },
         vote(){
             this.loading = true;
+            this.isLoading = true;
             axios.post('/exhibitors/vote',{
                 participant_id: this.form.participant_id,
                 exhibitor_id: this.$route.params.id
             }).then(response => {
                 this.exhibitor.has_voted = response.data.data;
                 this.loading = false;
+                this.isLoading = false;
             }).catch(({response})=>{
+                this.isLoading = false;
                 console.log(response);
             });
         },

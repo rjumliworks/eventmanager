@@ -66,6 +66,7 @@ export default {
             attribute: null,
             progressbarvalue: 0,
             activeTab: 1,
+            questions: this.$store.state.data.csfs,
             smileys: [
                 { icon: 'bx bxs-happy-beaming', active: false, score: 5, color: '#ee9f03', text: 'Strongly +'},
                 { icon: 'bx bxs-smile', active: false, score: 4, color: '#feea1a', text: 'Agree' },
@@ -73,7 +74,6 @@ export default {
                 { icon: 'bx bxs-sad', active: false, score: 2, color: '#ff8f01', text: 'Disagree' },
                 { icon: 'bx bxs-angry', active: false, score: 1, color: '#dd0000', text: 'Strongly -' }
             ],
-            questions: [],
             incomplete: false,
             exhibitor_id: null,
             validationErrors: null,
@@ -83,9 +83,6 @@ export default {
             showModal: false
         }
     },
-    created(){
-        this.fetch();
-    },
     methods: { 
         show(id,status){
             this.status = status;
@@ -94,15 +91,6 @@ export default {
         }, 
         hasError(field) {
             return this.validationErrors[field] && this.validationErrors[field].length > 0;
-        },
-        fetch(){
-            axios.get('/csf')
-            .then(response => {
-                if(response){
-                    this.questions = response.data.data;     
-                }
-            })
-            .catch(err => console.log(err));
         },
         async submit() {
             this.sub = true;

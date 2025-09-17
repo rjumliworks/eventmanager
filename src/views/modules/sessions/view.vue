@@ -38,11 +38,12 @@
             </div>
         </div>
 
+        
         <div class="card border shadow-none bg-white-subtle w-100 card-height-100" style="cursor: pointer;" @click="openCsf()">
             <div class="bg-white px-3 py-2 rounded-2 ">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <div class="fs-16 align-middle text-warning" v-if="!session.feedback">
+                        <div class="fs-16 align-middle text-warning" v-if="!myFeedback">
                             <i class="ri-star-line"></i>
                             <i class="ri-star-line"></i>
                             <i class="ri-star-line"></i>
@@ -51,14 +52,14 @@
                         </div>
                         <div class="fs-16 align-middle text-warning" v-else>
                             <template v-for="i in 5" :key="i">
-                                <i v-if="session.feedback && session.feedback.rate >= i" class="ri-star-fill"></i>
-                                <i v-else-if="session.feedback && session.feedback.rate >= i - 0.5" class="ri-star-half-fill"></i>
+                                <i v-if="myFeedback.rate >= i" class="ri-star-fill"></i>
+                                <i v-else-if="myFeedback.rate >= i - 0.5" class="ri-star-half-fill"></i>
                                 <i v-else class="ri-star-line"></i>
                             </template>
                         </div>
                     </div>
                     <div class="flex-shrink-0">
-                        <h6 class="mb-0 fs-10">{{(session.feedback) ? session.feedback.rate : 0 }} out of 5</h6>
+                        <h6 class="mb-0 fs-10">{{(myFeedback) ? myFeedback.rate : 0 }} out of 5</h6>
                     </div>
                 </div>
             </div>
@@ -73,8 +74,8 @@
                                 :id="menu+'-tab'" data-bs-toggle="pill" :data-bs-target="'#'+menu" 
                                 type="button" role="tab" :aria-controls="menu" aria-selected="true">
                                 {{menu}} 
-                                {{ (index == 2) ? (session.questions.length > 0) ? '('+session.questions.length+')' : '' : ''}} 
-                                {{ (index == 1) ? (session.feedbacks.length > 0) ? '('+session.feedbacks.length+')' : '' : ''}}
+                                {{ (index == 2) ? (session?.questions?.length > 0 ? '(' + session.questions.length + ')' : '') : '' }}
+                                {{ (index == 1) ? (session?.feedbackable?.length > 0 ? '(' + session.feedbackable.length + ')' : '') : '' }}
                             </button>
                         </li>
                     </ul>
@@ -121,15 +122,16 @@
 
                                         <template v-if="menu == 'Comments'">
                                             <b-list-group flush class="mt-n3" style="margin-left: -16px; margin-right: -16px;">
-                                                <b-list-group-item class="text-center mt-1" style="cursor: pointer;"  v-if="session.feedbacks.length == 0">
+                                                <b-list-group-item class="text-center mt-1" style="cursor: pointer;"  v-if="(session?.feedbackable?.length ?? 0) === 0">
                                                     <span class="text-muted text-center fs-10">No comments found</span>
                                                 </b-list-group-item>
-                                                <b-list-group-item v-else v-for="(list,index) in session.feedbacks" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
+                                                <b-list-group-item v-else v-for="(list,index) in session.feedbackable" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
                                                     <div class="d-flex mb-n3">
                                                         <div class="flex-shrink-0">
-                                                           <img :src="list.avatar === 'avatar.jpg' 
-                                                                        ? require('@/assets/images/avatars/avatar.jpg') 
-                                                                        : `${list.avatar}`" class="avatar-xs rounded-circle material-shadow"/>
+                                                            <img :src="!list.avatar || list.avatar === 'avatar.jpg'
+                                                                ? require('@/assets/images/avatars/avatar.jpg')
+                                                                : list.avatar" class="avatar-xs rounded-circle material-shadow"
+                                                            />
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h5 class="fs-11 mb-1">{{list.name}} <small class="text-muted ms-2">({{timeAgo(list.created_at)}})</small></h5>
@@ -151,7 +153,7 @@
                                                 </div>
                                                 <hr class="text-muted mb-1" style="margin-left: -16px; margin-right: -16px;"/>
                                                 <b-list-group flush class="mt-0" style="margin-left: -16px; margin-right: -16px;">
-                                                    <b-list-group-item class="text-center" style="cursor: pointer;" v-if="session.questions.length == 0">
+                                                    <b-list-group-item class="text-center" style="cursor: pointer;" v-if="(session?.questions?.length ?? 0) === 0">
                                                         <span class="text-muted text-center fs-10">No questions asked</span>
                                                     </b-list-group-item>
                                                     <b-list-group-item v-else v-for="(list,index) in session.questions" v-bind:key="index" class="d-flex justify-content-between align-items-center ribbon-box right mt-1" style="cursor: pointer;" >
@@ -185,9 +187,9 @@
                 </div>
             </div>
         </div>
-        <Csf @success="updateFeedback" ref="csf"/>
-        <Cancel @cancel="updateRegister" ref="cancel"/>
-        <Register @success="updateRegister" ref="register"/>
+        <Csf ref="csf"/>
+        <Cancel ref="cancel"/>
+        <Register ref="register"/>
         <footer class="footer p-2">
             <template v-if="session.status.name == 'Waiting'">
                 <div class="p-3 mt-n1" v-if="!session.has_registered">
@@ -250,7 +252,6 @@ import dayjs from "dayjs";
 import Cancel from './cancel.vue';
 import Register from './register.vue';
 import relativeTime from "dayjs/plugin/relativeTime";
-import Pusher from 'pusher-js';
 import Lottie from "@/components/widgets/lottie.vue";
 import animationData5 from "@/components/widgets/tqywkdcz.json";
 dayjs.extend(relativeTime);
@@ -258,17 +259,6 @@ export default {
     components: { Layout, Csf, Register, Cancel, lottie: Lottie, Loading },
     data(){
         return {
-            session: {
-                detail: {},
-                venue: {},
-                status: {},
-                feedback: {},
-                schedules: [],
-                managers: [],
-                activities: [],
-                questions: [],
-                feedbacks: []
-            },
             form: {
                 question: null,
                 participant_id: this.$store.state.auth.user.data.id,
@@ -284,77 +274,47 @@ export default {
             fullPage: true
         }
     },
+    computed: {
+        session() {
+            return (
+                this.$store.state.data.sessions.find(
+                    e => e.id === Number(this.$route.params.id)
+                ) || {
+                    detail: {},
+                    venue: {},
+                    status: {},
+                    feedbackable: [],
+                    schedules: [],
+                    managers: [],
+                    activities: [],
+                    questions: [],
+                }
+            );
+        },
+        myFeedback() {
+            const myId = this.$store.state.auth.user.data.id
+            return this.session.feedbackable.find(f => f.participant_id === myId) || null
+        }
+    },
     mounted() {
         this.interval = setInterval(() => {
             this.now = dayjs(); 
         }, 60000);
-
-        this.initPusher();
     },
     beforeUnmount() {
         clearInterval(this.interval);
     },
-    created(){
-        this.fetch();
-    },
     methods: { 
-        initPusher() {
-            const pusher = new Pusher("dws2rpb0uczmrhwzmoya", {
-                cluster: "mt1",                
-                wsHost: "rstwhanda.dost9.ph",
-                wsPort: 443,
-                wssPort: 443,
-                forceTLS: true,
-                enabledTransports: ["ws", "wss"],
-                disableStats: true,
-                wsPath: "/ws"                
-            });
-            const channel = pusher.subscribe("session");
-            channel.bind("App\\Events\\SessionEvent", (data) => {
-                // console.log("Maintenance event:", data);
-                switch(data.type){
-                    case 'question':
-                        if (data.data.id != this.$store.state.auth.user.data.id) {
-                            if(this.session.id == data.data.session_id){
-                                this.session.questions.unshift(data.data);
-                            }
-                        }
-                    break;
-                    case 'rating':
-                        if (data.data.id != this.$store.state.auth.user.data.id) {
-                            if(this.session.id == data.data.session_id){
-                                this.session.feedbacks.unshift(data.data);
-                            }
-                        }
-                    break;
-                    case 'status':
-                        if(this.session.id == data.data.id){
-                            this.session.status = data.data.status;
-                        }
-                    break;
-                }
-            });      
-        },
-        fetch(){
-            this.isLoading = true;
-            axios.get('/sessions/view/'+this.$route.params.id,{ params : {participant_id : this.$store.state.auth.user.data.id}})
-            .then(response => {
-                if(response){
-                    this.session = response.data.data; 
-                    this.isLoading = false;    
-                }
-            })
-            .catch(err => console.log(err));
-        },
         async submit() {
             this.status = true;
+            this.isLoading = true;
             await axios.post('sessions/question', this.form)
             .then(response => {
                 if (response.data.status) {
                     this.status = false;
                     this.form.question = null;
-                    this.session.questions.unshift(response.data.data);
                 } 
+                this.isLoading = false;
             }).catch(({response})=>{
                 if(response.status===422){
                     this.validationErrors = response.data.errors
@@ -362,6 +322,7 @@ export default {
                     this.validationErrors = {};
                     this.error = response.data.message;
                 }
+                this.isLoading = false;
                 this.status = false;
             }).finally(()=>{
                 this.processing = false
@@ -397,12 +358,6 @@ export default {
         },
         openCsf(){
             (this.session.feedback) ? '' : this.$refs.csf.show(this.$route.params.id,this.session.status);
-        },
-        updateRegister(status){
-            this.session.has_registered = status;
-        },
-        updateFeedback(data){
-            this.session.feedback = data;
         },
         timeAgo(date) {
             return dayjs(date).from(this.now);

@@ -20,40 +20,40 @@
                             </div>
                         </div>
                         <div class="flex-fill d-flex">
+
                             <div class="flex-fill border-end" style="width: 33.3%">
                                 <div class="text-center position-relative d-inline-block chart-wrapper mt-2">
-                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(points, selected.points)]" :options="{ ...chartOptions }"></apexchart>
+                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(points, total)]" :options="{ ...chartOptions }"></apexchart>
                                     <i class="ri-trophy-fill center-icon text-secondary"></i>
-                                    <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">0</p>
+                                    <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">{{ $store.state.data.points }}</p>
                                     <span class="text-primary fw-semibold" style="font-size: 9px;">Points Collected</span>
                                 </div>
                             </div>
 
                             <div class="flex-fill border-end" style="width: 33.3%">
-                                <div class="text-center position-relative d-inline-block chart-wrapper mt-2">
-                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(sessions, selected.sessions)]" :options="{ ...chartOptions }"></apexchart>
-                                    <i class="ri-calendar-todo-fill center-icon text-secondary"></i>
-                                    <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">0</p>
-                                    <span class="text-primary fw-semibold" style="font-size: 9px;">Session Attended</span>
+                                <div class="text-center position-relative d-inline-block chart-wrapper  mt-2">
+                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(visited, $store.state.data.exhibitors.length)]" :options="{ ...chartOptions }"></apexchart>
+                                    <i class="ri-store-2-fill center-icon text-secondary"></i>
+                                    <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">{{visited}} of {{ $store.state.data.exhibitors.length }}</p>
+                                    <span class="text-primary fw-semibold" style="font-size: 9px;">Exhibit Visited</span>
                                 </div>
                             </div>
 
                             <div class="flex-fill" style="width: 33.3%">
-                                <div class="text-center position-relative d-inline-block chart-wrapper  mt-2">
-                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(exhibits, selected.exhibits)]" :options="{ ...chartOptions }"></apexchart>
-                                    <i class="ri-store-2-fill center-icon text-secondary"></i>
-                                    <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">0</p>
-                                    <span class="text-primary fw-semibold" style="font-size: 9px;">Exhibit Visited</span>
+                                <div class="text-center position-relative d-inline-block chart-wrapper mt-2">
+                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(attended, registered)]" :options="{ ...chartOptions }"></apexchart>
+                                    <i class="ri-calendar-todo-fill center-icon text-secondary"></i>
+                                    <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">{{ attended }} of {{ registered }}</p>
+                                    <span class="text-primary fw-semibold" style="font-size: 9px;">Session Attended</span>
                                 </div>
                             </div>
+
                         </div>
 
                     </div>
                 </div>
             </BContainer>
         </section>
-
-
 
          <section class="section bg-light" id="plans" style="margin-top: 15px; height: 235px;">
             <BContainer>
@@ -321,7 +321,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import Loading from 'vue-loading-overlay';
@@ -333,7 +332,7 @@ import 'swiper/css/pagination';
 export default {
     data() {
         return {
-            points: 90,      
+            points: 0,      
             sessions: 4,
             exhibits: 1,
             Autoplay, Navigation, Pagination,
@@ -353,17 +352,35 @@ export default {
                 colors: ["#007aff"],
             },
             selected: {       // ✅ safe defaults
-            points: 0,
-            sessions: 0,
-            exhibits: 0
+                points: 0,
+                sessions: 0,
+                exhibits: 0
             },
             isLoading: false
         };
     },
-    components: { Swiper, SwiperSlide, Loading },
-    created(){
-        // this.fetch();
+    computed: {
+        total() {
+            const count = this.$store.state.data.exhibitors.length;
+            return (count * 3) + (count * 2) + (count * 1); // commenting + visiting + voting
+        },
+        registered(){
+            return this.$store.state.data.sessions.filter(
+                s => s.has_registered === true
+            ).length;
+        },
+        attended(){
+            return this.$store.state.data.sessions.filter(
+                s => s.has_attended === true
+            ).length;
+        },
+        visited(){
+            return this.$store.state.data.exhibitors.filter(
+                s => s.has_visited === true
+            ).length;
+        }
     },
+    components: { Swiper, SwiperSlide, Loading },
     methods: {
         calcPercent(value, max) {
             return Math.round((value / max) * 100);
@@ -375,19 +392,7 @@ export default {
         scrollToSection(sectionId) {
             const element = document.getElementById(sectionId);
             if (element) element.scrollIntoView({ behavior: 'smooth' });
-        },
-        fetch(){
-            this.isLoading = true;
-            axios.get('/dashboard',{ params : {participant_id : this.$store.state.auth.user.data.id}})
-            .then(response => {
-                if(response){
-                    this.selected = response.data; 
-                    console.log(this.selected);
-                    this.isLoading = false;    
-                }
-            })
-            .catch(err => console.log(err));
-        },
+        }
     },
     unmounted() {
         window.removeEventListener('scroll', this.setActiveSection);

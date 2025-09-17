@@ -10,16 +10,25 @@
             </BCol>
         </BRow>
     </BModal>
+    <loading v-model:active="isLoading" background-color="black" :can-cancel="false" :is-full-page="fullPage">
+        <div class="text-center">
+            <img src="@/assets/images/logo-sm.png" class="heartbeat-spin" style="width: 40px; height: auto;" alt="loading..." />
+            <br /><br /><span class="text-white fw-semibold fs-10">Good things take time…</span>
+        </div>
+    </loading>
 </template>
 <script>
 import axios from 'axios';
+import Loading from 'vue-loading-overlay';
 export default {
+    components: { Loading },
     data(){
         return {
             form: { 
                 participant_id: null,
                 session_id: null
             },
+            isLoading: false,
             showModal: false
         }
     },
@@ -31,9 +40,10 @@ export default {
         },  
         async submit() {
             this.sub = true;
+            this.isLoading = true;
             await axios.post('sessions/cancel', this.form).then(response => {
                 if (response.data.status) {
-                    this.$emit('cancel',false);
+                    this.isLoading = false;
                     this.hide();
                 } 
             }).catch(({response})=>{

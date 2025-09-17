@@ -82,63 +82,46 @@
 </template>
 <script>
 import Loading from 'vue-loading-overlay';
-import axios from 'axios';
-import Pusher from 'pusher-js';
+// import Pusher from 'pusher-js';
 import Layout from "@/layouts/main.vue";
 export default {
     components: { Layout, Loading },
     data(){
         return {
-            lists: [],
+            lists: this.$store.state.data.sessions,
             participant_id: this.$store.state.auth.user.data.id,
             load: false,
             isLoading: false,
             fullPage: true
         }
     },
-    mounted() {
-        this.initPusher();
-    },
-    created(){
-        this.fetch();
-    },
+    // mounted() {
+    //     this.initPusher();
+    // },
     methods: { 
-        initPusher() {
-            const pusher = new Pusher("dws2rpb0uczmrhwzmoya", {
-                cluster: "mt1",                
-                wsHost: "rstwhanda.dost9.ph",
-                wsPort: 443,
-                wssPort: 443,
-                forceTLS: true,
-                enabledTransports: ["ws", "wss"],
-                disableStats: true,
-                wsPath: "/ws"                
-            });
-            const channel = pusher.subscribe("session");
-            channel.bind("App\\Events\\SessionEvent", (data) => {
-                console.log("Maintenance event:", data);
-                if (data.data.id != this.$store.state.auth.user.data.id) {
-                    switch(data.type){
-                        case 'status':
-                            // this.session.status = data.data;
-                        break;
-                    }
-                }
-            });      
-        },
-        fetch(){
-            this.load = false;
-            this.isLoading = true;
-            axios.get('/sessions',{ params : {id : this.participant_id}})
-            .then(response => {
-                if(response){
-                    this.lists = response.data.data;     
-                    this.load = true;
-                }
-                this.isLoading = false;
-            })
-            .catch(err => console.log(err));
-        },
+        // initPusher() {
+        //     const pusher = new Pusher("dws2rpb0uczmrhwzmoya", {
+        //         cluster: "mt1",                
+        //         wsHost: "rstwhanda.dost9.ph",
+        //         wsPort: 443,
+        //         wssPort: 443,
+        //         forceTLS: true,
+        //         enabledTransports: ["ws", "wss"],
+        //         disableStats: true,
+        //         wsPath: "/ws"                
+        //     });
+        //     const channel = pusher.subscribe("session");
+        //     channel.bind("App\\Events\\SessionEvent", (data) => {
+        //         console.log("Maintenance event:", data);
+        //         if (data.data.id != this.$store.state.auth.user.data.id) {
+        //             switch(data.type){
+        //                 case 'status':
+        //                     // this.session.status = data.data;
+        //                 break;
+        //             }
+        //         }
+        //     });      
+        // },
         dateRangeText(schedules) {
             let start = schedules[0].date;
             let end = schedules[0].date;
