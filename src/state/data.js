@@ -63,8 +63,13 @@ export default {
             const exhibit = state.exhibitors.find(s => s.id === exhibitorId)
             if (exhibit) exhibit.has_voted = status
         },
-        UPDATE_POINTS(state, { points }) {
-            state.points = points
+        MINUS_POINTS(state, points) {
+            const val = Number(points) || 0 
+            state.points = Math.max(0, Number(state.points) - val)
+        },
+        PLUS_POINTS(state, points) {
+            const val = Number(points) || 0  
+            state.points = Number(state.points) + val
         },
         ADD_EXHIBIT_RATING(state, { exhibitorId, rate}) {
             const exhibit = state.exhibitors.find(e => e.id === exhibitorId)
@@ -165,11 +170,14 @@ export default {
                             })
                         }
                     break;
-                    case 'points':
-                        if (data.participant_id == currentUserId) {
-                            commit('UPDATE_POINTS', {
-                                points: data.points
-                            })
+                    case 'minus':
+                        if (data.data.participant_id == currentUserId) {
+                            commit('MINUS_POINTS', data.data.points)
+                        }
+                    break;
+                    case 'plus':
+                        if (data.data.participant_id == currentUserId) {
+                            commit('PLUS_POINTS', data.data.points)
                         }
                     break;
                 }

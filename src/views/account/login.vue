@@ -73,12 +73,20 @@
             </form>
         </div>
     </div>
+    <loading v-model:active="isLoading" background-color="black" :can-cancel="false" :is-full-page="fullPage">
+        <div class="text-center">
+            <img src="@/assets/images/logo-sm.png" class="heartbeat-spin" style="width: 40px; height: auto;" alt="loading..." />
+            <br /><br /><span class="text-white fw-semibold fs-10">Good things take time…</span>
+        </div>
+    </loading>
 </template>
 <script>
     import axios from 'axios';
     import { mapActions } from 'vuex';
     import { nextTick } from 'vue';
+    import Loading from 'vue-loading-overlay';
     export default {
+        components: { Loading },
         data() {
             return {
                 form: {
@@ -94,6 +102,7 @@
                 validationErrors:{},
                 error: '',
                 showModal: false,
+                isLoading: false,
                 res: null
             }
         },
@@ -143,6 +152,7 @@
             },
             submit() {
                 this.sub = true;
+                this.isLoading = true;
                 this.form.code = this.code;
                 axios.post('verify', this.form).then(response => {
                     if (response.data.status) {
@@ -151,6 +161,7 @@
                         this.signIn();
                     } 
                     this.res = response;
+                    this.isLoading = false;
                 }).catch(({response})=>{
                     if(response.status===422){
                         this.validationErrors = response.data.errors
@@ -161,6 +172,7 @@
                     }
                     this.sub = false
                     this.res = response;
+                    this.isLoading = false;
                 })
             },
             focusInput(idx) {
