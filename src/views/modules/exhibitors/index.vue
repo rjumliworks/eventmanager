@@ -32,7 +32,7 @@
                                         </div> -->
                                         <div class="flex-grow-1">
                                             <h5 class="mb-1 fs-12 fw-semibold text-primary">{{list.title}}</h5>
-                                            <p class="text-muted fs-10 text-truncate-two-lines mb-3">{{list.area}}</p>
+                                            <p class="text-muted fs-10 text-truncate-two-lines mb-3">{{list.description}}</p>
                                         </div>
                                         <div class="flex-shrink-0 avatar-sm mt-n2">
                                             <div v-if="list.has_voted" class="avatar-title bg-warning-subtle rounded-circle">
