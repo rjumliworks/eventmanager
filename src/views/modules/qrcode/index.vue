@@ -58,34 +58,48 @@ export default {
         async startScanner() {
             await this.$nextTick();
             const config = { fps: 10, qrbox: { width: 200, height: 200 } };
+
+            // Helper to restart the scanner
+            const restartScanner = async () => {
+                try {
+                    await this.qrScanner.start({ facingMode: "environment" }, config);
+                } catch (e) {
+                    console.error("Failed to restart scanner", e);
+                }
+            };
+
             this.qrScanner = new Html5Qrcode("qr-reader");
+
             try {
                 await this.qrScanner.start(
                     { facingMode: "environment" },
                     config,
-                    (decodedText) => {
-                        // alert("Scanned QR: " + decodedText);
-                        axios.post('/sessions/attendance', {
-                            participant_id: this.participant.id,
-                            session: decodedText
-                        }).then(response => {
+                    async (decodedText) => {
+                        // Stop immediately to avoid duplicate reads
+                        await this.qrScanner.stop();
+
+                        try {
+                            const response = await axios.post('/sessions/attendance', {
+                                participant_id: this.participant.id,
+                                session: decodedText
+                            });
+
                             if (response.data.status) {
-                                
-                                this.showScanner = false;
-                                this.stopScanner();
-                            } 
-                        }).catch(({response})=>{
-                            if(response.status===422){
-                                this.validationErrors = response.data.errors
-                            }else{
-                                this.validationErrors = {};
-                                this.error = response.data.message;
+                                this.showScanner = false;  // ✅ success, keep stopped
+                            } else {
+                                // If backend says no, restart
+                                await restartScanner();
                             }
-                            this.sub = false;
-                        }).finally(()=>{
-                            this.processing = false
-                        });
-                        
+                        } catch ({ response }) {
+                            // Network / validation error → restart scanner
+                            if (response?.status === 422) {
+                                this.validationErrors = response.data.errors;
+                            } else {
+                                this.validationErrors = {};
+                                this.error = response?.data?.message || 'Error occurred';
+                            }
+                            await restartScanner();      // 🔄 retry automatically
+                        }
                     },
                     (errorMessage) => {
                         console.warn("QR Scan Error", errorMessage);
