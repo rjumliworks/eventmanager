@@ -124,7 +124,7 @@ export default {
     formData.append('id', this.$store.state.auth.user.data.id);
     formData.append('image', blob, 'avatar.jpg');
 
-    const res = await axios.post('https://your-api.com/avatar', formData, {
+    const res = await axios.post('/avatar', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
 
