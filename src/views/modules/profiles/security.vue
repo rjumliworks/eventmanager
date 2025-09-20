@@ -103,26 +103,11 @@ export default {
                 alert('Camera permission is required to take a photo.');
                 return;
             }
-            let photo;
-
-            try {
-                // Try rear camera first (works reliably on iOS)
-                photo = await Camera.getPhoto({
+            const photo = await Camera.getPhoto({
                 quality: 90,
                 source: CameraSource.Camera,
-                resultType: CameraResultType.Uri,
-                direction: 'rear',
-                });
-            } catch (err) {
-                console.warn('Rear camera failed, trying front camera...', err);
-                // Fallback to front camera (some Android devices require this)
-                photo = await Camera.getPhoto({
-                quality: 90,
-                source: CameraSource.Camera,
-                resultType: CameraResultType.Uri,
-                direction: 'front',
-                });
-            }
+                resultType: CameraResultType.Uri
+            });
             
             this.isLoading = true;
 
