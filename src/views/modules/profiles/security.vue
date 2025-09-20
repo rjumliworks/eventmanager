@@ -108,9 +108,10 @@ export default {
                 source: CameraSource.Camera,
                 resultType: CameraResultType.Uri
             });
-            this.isLoading = true;
             const response = await fetch(photo.webPath);
             const blob = await response.blob();
+
+            this.isLoading = true;
 
             let data = new FormData();
             data.append('id', this.$store.state.auth.user.data.id);
