@@ -51,6 +51,12 @@
                 </button>
             </div>
         </footer>
+        <loading v-model:active="isLoading" background-color="black" :can-cancel="false" :is-full-page="fullPage">
+            <div class="text-center">
+                <img src="@/assets/images/logo-sm.png" class="heartbeat-spin" style="width: 40px; height: auto;" alt="loading..." />
+                <br /><br /><span class="text-white fw-semibold fs-10">Good things take time…</span>
+            </div>
+        </loading>
     </Layout>
 </template>
 <script>
@@ -58,9 +64,10 @@ import axios from 'axios';
 import { mapActions } from 'vuex';
 import Layout from "@/layouts/main.vue";
 import Vue3SignaturePad from "vue3-signature-pad";
+import Loading from 'vue-loading-overlay';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 export default {
-    components: { Layout, Vue3SignaturePad },
+    components: { Layout, Vue3SignaturePad, Loading },
     data(){
         return {
             lists: [],
@@ -70,6 +77,7 @@ export default {
             render: false,
             profile: (this.$store.state.auth.user.avatar) ? true : false,
             signature: (this.$store.state.auth.user.signature) ? true : false,
+            isLoading: false
         }
     }, 
     computed: {
@@ -90,35 +98,78 @@ export default {
             updateImg:'auth/update'
         }),
         async ClickImage() {
-            const permissionStatus = await Camera.requestPermissions();
-            if (permissionStatus.camera !== 'granted') {
-                alert('Camera permission is required to take a photo.');
-                return;
-            }
-            const photo = await Camera.getPhoto({
+    try {
+        const permissionStatus = await Camera.requestPermissions();
+        if (permissionStatus.camera !== 'granted') {
+            alert('Camera permission is required to take a photo.');
+            return;
+        }
+
+        let photo;
+
+        try {
+            // Try rear camera first (iOS-friendly)
+            photo = await Camera.getPhoto({
                 quality: 90,
                 source: CameraSource.Camera,
-                resultType: CameraResultType.Uri
+                resultType: CameraResultType.Uri,
+                direction: 'rear',
             });
-            const response = await fetch(photo.webPath);
-            const blob = await response.blob();
+        } catch (err) {
+            console.warn('Rear camera failed, trying front camera...', err);
+            // Fallback to front camera (Android-friendly)
+            photo = await Camera.getPhoto({
+                quality: 90,
+                source: CameraSource.Camera,
+                resultType: CameraResultType.Uri,
+                direction: 'front',
+            });
+        }
 
-            let data = new FormData();
-            data.append('id', this.$store.state.auth.user.data.id);
-            data.append('image', blob, 'avatar.jpg');
-            axios.post('/avatar', data, { headers: { 'Content-Type': 'multipart/form-data' } })
-            .then(response => {
-                if (response.data.status) {
-                    this.profile = true;
-                    const newUrl = response.data.data;
-                    this.$store.commit('auth/updateAvatar', newUrl); 
-                }
-            });
-        },
+        // Start loading
+        this.isLoading = true;
+
+        // Convert photo to blob
+        const response = await fetch(photo.webPath);
+        const blob = await response.blob();
+
+        // Prepare form data
+        let data = new FormData();
+        data.append('id', this.$store.state.auth.user.data.id);
+        data.append('image', blob, 'avatar.jpg');
+
+        // Upload using await
+        const res = await axios.post('/avatar', data, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+
+        if (res.data.status) {
+            this.profile = true;
+            const newUrl = res.data.data;
+            this.$store.commit('auth/updateAvatar', newUrl);
+        }
+
+    } catch (err) {
+        console.error('Failed to take or upload photo:', err);
+        alert('Please try using the other camera.');
+    } finally {
+        // Always reset loading state
+        this.isLoading = false;
+    }
+}
+,
         async submitSignature() {
             try {
+                this.isLoading = true;
                 const pad = this.$refs.signaturePad;
                 if (!pad) return;
+
+                if (pad.isEmpty()) {
+                    console.log('Please add your signature first.');
+                    this.signature = false;
+                    this.isLoading = false;
+                    return;
+                }
 
                 const canvas = pad.$el.querySelector('canvas');
                 if (!canvas) return;
@@ -137,6 +188,7 @@ export default {
                     }).then(response => {
                         if (response.data.status) {
                             this.signature = true;
+                            this.isLoading = false;
                             this.$store.commit('auth/updateSignature', response.data.data); 
                         }
                     });
