@@ -137,7 +137,7 @@ export default {
 
     } catch (err) {
         console.error('Failed to take or upload photo:', err);
-        alert('Please try using the other camera.');
+        alert(err);
     } finally {
         // Always reset loading state
         this.isLoading = false;
