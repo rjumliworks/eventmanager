@@ -13,7 +13,7 @@
                            <div class="d-flex align-items-center p-3 mb-n2">
                                 <div class="avatar-sm me-3">
                                     <div class="avatar-title rounded bg-transparent">
-                                        <img  class="avatar-sm rounded-circle material-shadow" :src="require('@/assets/images/avatars/avatar.jpg')" />
+                                        <img  class="avatar-sm rounded-circle material-shadow" :src="$store.state.auth.user.data.avatar" />
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">

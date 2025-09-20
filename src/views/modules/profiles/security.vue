@@ -9,7 +9,7 @@
             <BListGroupItem >
                 <div class="text-center mt-3 mb-3">
                     <div class="profile-user position-relative d-inline-block mx-auto mb-3" @click="ClickImage()">
-                        <img :src="this.$store.state.auth.user.data.avatar" class="rounded-circle avatar-lg img-thumbnail user-profile-image material-shadow">
+                        <img :src="$store.state.auth.user.data.avatar" class="rounded-circle avatar-lg img-thumbnail user-profile-image material-shadow">
                         <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
                             <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
                                 <span class="avatar-title rounded-circle bg-light text-body">
@@ -39,7 +39,7 @@
         </b-list-group>
         <footer class="footer p-2">
              <div class="p-3 mt-n1">
-                <button @click="submit()" class="btn w-100 btn-success btn-label" :disabled="loading">
+                <button @click="submit()" class="btn w-100 btn-label" :class="(loading || !(signature && profile)) ? 'btn-light' : 'btn-success'" :disabled="loading || !(signature && profile)">
                     <div class="d-flex">
                         <div class="flex-shrink-0">
                             <i class="ri-save-fill label-icon align-middle fs-16 me-2"></i>
@@ -98,8 +98,7 @@ export default {
             const photo = await Camera.getPhoto({
                 quality: 90,
                 source: CameraSource.Camera,
-                resultType: CameraResultType.Uri,
-                direction: 'rear'
+                resultType: CameraResultType.Uri
             });
             const response = await fetch(photo.webPath);
             const blob = await response.blob();
@@ -111,10 +110,7 @@ export default {
             .then(response => {
                 if (response.data.status) {
                     this.profile = true;
-                    const filename = this.$store.state.auth.user.data.avatar; 
-                    const base = filename.split('?')[0];
-                    const newUrl = `${base}?v=${Date.now()}`;
-                    console.log(newUrl);
+                    const newUrl = response.data.data;
                     this.$store.commit('auth/updateAvatar', newUrl); 
                 }
             });
