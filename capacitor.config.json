@@ -1,10 +1,19 @@
 {
-  "appId": "com.dost9.myapp",
-  "appName": "DOST-IX",
-  "webDir": "dist",
-  "server": {
-    "allowNavigation": [
-      "rstwhanda.dost9.ph"  
-    ]
-  }
+    "appId": "com.dost9.myapp",
+    "appName": "DOST-IX",
+    "webDir": "dist",
+    "server": {
+        "allowNavigation": [
+            "rstwhanda.dost9.ph"
+        ]
+    },
+    "plugins": {
+        "SplashScreen": {
+            "launchShowDuration": 3000,
+            "launchAutoHide": true,
+            "backgroundColor": "#ffffff",
+            "androidScaleType": "CENTER_CROP",
+            "showSpinner": false
+        }
+    }
 }

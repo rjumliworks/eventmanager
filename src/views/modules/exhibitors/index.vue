@@ -12,7 +12,7 @@
             Label icon arrow alert
         </div> -->
         <div class="alert alert-success alert-dismissible alert-label-icon label-arrow fade show material-shadow mt-1" role="alert" style="margin-left: -6px; margin-right: -6px;">
-            <i class="ri-checkbox-circle-fill fs-18 label-icon"></i><span style="font-size: 11px;">Visited Exhibits</span> <b style="font-size: 11px;" class="float-end me-n4">0 / {{ lists.length }}</b>
+            <i class="ri-checkbox-circle-fill fs-18 label-icon"></i><span style="font-size: 11px;">Visited Exhibits</span> <b style="font-size: 11px;" class="float-end me-n4">{{visited}} / {{ lists.length }}</b>
         </div>
         <b-list-group flush style="margin-left: -22px; margin-right: -22px; margin-bottom: 40px;">
             <template v-for="(list,index) in lists" v-bind:key="index">
@@ -104,7 +104,13 @@ export default {
             fullPage: true
         }
     },
-
+    computed: {
+        visited(){
+            return this.$store.state.data.exhibitors.filter(
+                s => s.has_visited === true
+            ).length;
+        }
+    },
     methods: { 
 
         vote(id,index){

@@ -75,6 +75,15 @@ const routes = [
         }
     },
     {
+        path: "/schedule",
+        name: "schedule",
+        component: () => import('@/views/modules/schedules/index.vue'),
+        meta: {
+            middleware: "auth",
+            title: `Schedule`
+        }
+    },
+    {
         path: "/hotel/:id",
         name: "hotel/view",
         component: () => import('@/views/modules/hotels/view.vue'),

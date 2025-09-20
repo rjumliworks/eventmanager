@@ -9,13 +9,36 @@
         <br/><br/>
         <div class="card border shadow-none bg-white-subtle w-100 card-height-100 mb-2 mt-2">
             <div class="card-body">
+                <div class="p-3 mt-n3 mx-n3 rounded-top" :class="exhibitor.type.color">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-0 fs-11" :class="exhibitor.type.others"><i class="fs-12 me-1" :class="exhibitor.type.type"></i>{{exhibitor.type.name}}</h5>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <div class="d-flex gap-1 align-items-center my-n2">
+                                <button type="button" class="btn avatar-xs p-0 favourite-btn material-shadow-none active" v-if="exhibitor.has_voted">
+                                    <span class="avatar-title bg-transparent fs-15">
+                                        <i class="text-warning fs-23 bx-tada ri-trophy-fill"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="d-flex flex-column h-100">
-                    <div class="d-flex mb-n3">
+                    <div class="d-flex mb-n3 mt-3">
                         <div class="flex-grow-1">
                             <h5 class="mb-1 fs-12 fw-semibold text-primary">{{exhibitor.title}}</h5>
                             <p class="text-muted fs-10 mb-3">{{exhibitor.description}}</p>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-top-dashed py-2 mb-1">
+                <div class="fs-11">
+                    <i class="ri-account-circle-fill text-success fs-14 me-2"></i>{{exhibitor.institution}}<br/>
+                    <i v-if="exhibitor.area" class="ri-shield-fill text-danger fs-14 me-2"></i>{{exhibitor.area }}
+                    <!-- <i class="ri-calendar-event-fill text-info fs-14 me-2"></i>{{dateRangeText(session.schedules)}} -->
                 </div>
             </div>
         </div>
@@ -208,7 +231,7 @@ export default {
         position: fixed;
         bottom: 0;
         width: 100%;
-        height: 80px;
+        height: 90px;
         border-top: 0.1rem solid #e4e2e2;
         background-color: #fff;
         z-index: 10;

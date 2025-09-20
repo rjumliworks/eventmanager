@@ -3,7 +3,7 @@
        
         <section class="section login-modal" id="space"  
             :style="isIos 
-            ? { height: '230px', paddingTop: '100px' } 
+            ? { height: '220px', paddingTop: '100px' } 
             : { height: '170px' }">
             <BContainer>
                 <img src="@/assets/images/dost.png" alt="" class="mb-3 me-1" style="width: 40px; height: 40px; margin-top: -40px">
@@ -312,9 +312,9 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/hotels" class="nav-link nav-icon">
-                    <i class='fs-20 ri-hotel-line'></i>
-                    <span class="nav-label">Hotels</span>
+                <router-link to="/schedule" class="nav-link nav-icon">
+                    <i class="fs-20 ri-calendar-2-line"></i>
+                    <span class="nav-label">Schedule</span>
                 </router-link>
             </li>
         </ul>

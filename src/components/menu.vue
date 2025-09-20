@@ -1,129 +1,122 @@
 <script>
-import {
-  layoutComputed
-} from "@/state/helpers";
-
+import { layoutComputed } from "@/state/helpers";
 export default {
-  data() {
-    return {
-      settings: {
-        minScrollbarLength: 60,
-      },
-    };
-  },
-  computed: {
-    ...layoutComputed,
-    layoutType: {
-      get() {
-        return this.$store ? this.$store.state.layout.layoutType : {} || {};
-      },
+    data() {
+        return {
+            settings: {
+                minScrollbarLength: 60,
+            },
+        };
     },
-  },
-
-  watch: {
-    $route: {
-      handler: "onRoutechange",
-      immediate: true,
-      deep: true,
+    computed: {
+        ...layoutComputed,
+        layoutType: {
+            get() {
+                return this.$store ? this.$store.state.layout.layoutType : {} || {};
+            },
+        },
     },
-  },
+    watch: {
+        $route: {
+            handler: "onRoutechange",
+            immediate: true,
+            deep: true,
+        },
+    },
 
 
-  mounted() {
-    this.initActiveMenu();
-    if (this.rmenu == 'vertical' && this.layoutType == 'twocolumn') {
-      document.documentElement.setAttribute("data-layout", "vertical");
-    }
-    // document.getElementById('overlay').addEventListener('click', () => {
-    //   document.body.classList.remove('vertical-sidebar-enable');
-    // });
-
-    window.addEventListener("resize", () => {
-      if (this.layoutType == 'twocolumn') {
-        var windowSize = document.documentElement.clientWidth;
-        if (windowSize < 767) {
-          document.documentElement.setAttribute("data-layout", "vertical");
-          this.rmenu = 'vertical';
-          localStorage.setItem('rmenu', 'vertical');
-        } else {
-          document.documentElement.setAttribute("data-layout", "vertical");
-          this.rmenu = 'twocolumn';
-          localStorage.setItem('rmenu', 'twocolumn');
-          setTimeout(() => {
-            this.initActiveMenu();
-          }, 50);
-
+    mounted() {
+        this.initActiveMenu();
+        if (this.rmenu == 'vertical' && this.layoutType == 'twocolumn') {
+            document.documentElement.setAttribute("data-layout", "vertical");
         }
-      }
-    });
-    if (document.querySelectorAll(".navbar-nav .collapse")) {
-      let collapses = document.querySelectorAll(".navbar-nav .collapse");
+ 
+        window.addEventListener("resize", () => {
+        if (this.layoutType == 'twocolumn') {
+            var windowSize = document.documentElement.clientWidth;
+            if (windowSize < 767) {
+            document.documentElement.setAttribute("data-layout", "vertical");
+            this.rmenu = 'vertical';
+            localStorage.setItem('rmenu', 'vertical');
+            } else {
+            document.documentElement.setAttribute("data-layout", "vertical");
+            this.rmenu = 'twocolumn';
+            localStorage.setItem('rmenu', 'twocolumn');
+            setTimeout(() => {
+                this.initActiveMenu();
+            }, 50);
 
-      collapses.forEach((collapse) => {
-        // Hide sibling collapses on `show.bs.collapse`
-        collapse.addEventListener("show.bs.collapse", (e) => {
-          e.stopPropagation();
-          let closestCollapse = collapse.parentElement.closest(".collapse");
-          if (closestCollapse) {
-            let siblingCollapses =
-              closestCollapse.querySelectorAll(".collapse");
-            siblingCollapses.forEach((siblingCollapse) => {
-              if (siblingCollapse.classList.contains("show")) {
-                siblingCollapse.classList.remove("show");
-                siblingCollapse.parentElement.firstChild.setAttribute("aria-expanded", "false");
-              }
-            });
-          } else {
-            let getSiblings = (elem) => {
-              // Setup siblings array and get the first sibling
-              let siblings = [];
-              let sibling = elem.parentNode.firstChild;
-              // Loop through each sibling and push to the array
-              while (sibling) {
-                if (sibling.nodeType === 1 && sibling !== elem) {
-                  siblings.push(sibling);
-                }
-                sibling = sibling.nextSibling;
-              }
-              return siblings;
-            };
-            let siblings = getSiblings(collapse.parentElement);
-            siblings.forEach((item) => {
-              if (item.childNodes.length > 2) {
-                item.firstElementChild.setAttribute("aria-expanded", "false");
-                item.firstElementChild.classList.remove("active");
-              }
-              let ids = item.querySelectorAll("*[id]");
-              ids.forEach((item1) => {
-                item1.classList.remove("show");
-                item1.parentElement.firstChild.setAttribute("aria-expanded", "false");
-                item1.parentElement.firstChild.classList.remove("active");
-                if (item1.childNodes.length > 2) {
-                  let val = item1.querySelectorAll("ul li a");
-
-                  val.forEach((subitem) => {
-                    if (subitem.hasAttribute("aria-expanded"))
-                      subitem.setAttribute("aria-expanded", "false");
-                  });
-                }
-              });
-            });
-          }
+            }
+        }
         });
+        if (document.querySelectorAll(".navbar-nav .collapse")) {
+        let collapses = document.querySelectorAll(".navbar-nav .collapse");
 
-        // Hide nested collapses on `hide.bs.collapse`
-        collapse.addEventListener("hide.bs.collapse", (e) => {
-          e.stopPropagation();
-          let childCollapses = collapse.querySelectorAll(".collapse");
-          childCollapses.forEach((childCollapse) => {
-            let childCollapseInstance = childCollapse;
-            childCollapseInstance.classList.remove("show");
-            childCollapseInstance.parentElement.firstChild.setAttribute("aria-expanded", "false");
-          });
+        collapses.forEach((collapse) => {
+            // Hide sibling collapses on `show.bs.collapse`
+            collapse.addEventListener("show.bs.collapse", (e) => {
+            e.stopPropagation();
+            let closestCollapse = collapse.parentElement.closest(".collapse");
+            if (closestCollapse) {
+                let siblingCollapses =
+                closestCollapse.querySelectorAll(".collapse");
+                siblingCollapses.forEach((siblingCollapse) => {
+                if (siblingCollapse.classList.contains("show")) {
+                    siblingCollapse.classList.remove("show");
+                    siblingCollapse.parentElement.firstChild.setAttribute("aria-expanded", "false");
+                }
+                });
+            } else {
+                let getSiblings = (elem) => {
+                // Setup siblings array and get the first sibling
+                let siblings = [];
+                let sibling = elem.parentNode.firstChild;
+                // Loop through each sibling and push to the array
+                while (sibling) {
+                    if (sibling.nodeType === 1 && sibling !== elem) {
+                    siblings.push(sibling);
+                    }
+                    sibling = sibling.nextSibling;
+                }
+                return siblings;
+                };
+                let siblings = getSiblings(collapse.parentElement);
+                siblings.forEach((item) => {
+                if (item.childNodes.length > 2) {
+                    item.firstElementChild.setAttribute("aria-expanded", "false");
+                    item.firstElementChild.classList.remove("active");
+                }
+                let ids = item.querySelectorAll("*[id]");
+                ids.forEach((item1) => {
+                    item1.classList.remove("show");
+                    item1.parentElement.firstChild.setAttribute("aria-expanded", "false");
+                    item1.parentElement.firstChild.classList.remove("active");
+                    if (item1.childNodes.length > 2) {
+                    let val = item1.querySelectorAll("ul li a");
+
+                    val.forEach((subitem) => {
+                        if (subitem.hasAttribute("aria-expanded"))
+                        subitem.setAttribute("aria-expanded", "false");
+                    });
+                    }
+                });
+                });
+            }
+            });
+
+            // Hide nested collapses on `hide.bs.collapse`
+            collapse.addEventListener("hide.bs.collapse", (e) => {
+            e.stopPropagation();
+            let childCollapses = collapse.querySelectorAll(".collapse");
+            childCollapses.forEach((childCollapse) => {
+                let childCollapseInstance = childCollapse;
+                childCollapseInstance.classList.remove("show");
+                childCollapseInstance.parentElement.firstChild.setAttribute("aria-expanded", "false");
+            });
+            });
         });
-      });
-    }
-  },
+        }
+    },
 
   methods: {
     onRoutechange(ele) {
@@ -222,32 +215,21 @@ export default {
     <div id="two-column-menu"></div>
 
     <template v-if="layoutType === 'vertical' || layoutType === 'semibox'">
-      <ul class="navbar-nav h-100" id="navbar-nav">
-        <li class="menu-title">
-          <span data-key="t-menu"> {{ $t("t-menu") }}</span>
-        </li>
-        <li class="nav-item">
-          <BLink class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="sidebarDashboards">
-            <i class="ri-dashboard-2-line"></i>
-            <span data-key="t-dashboards"> {{ $t("t-dashboards") }}</span>
-          </BLink>
-          <div class="collapse menu-dropdown" id="sidebarDashboards">
-            <ul class="nav nav-sm flex-column">
-              <li class="nav-item">
-                <router-link to="/" class="nav-link" data-key="t-ecommerce">
-                  {{ $t("t-ecommerce") }}
+        <ul class="navbar-nav h-100" id="navbar-nav">
+            <li class="menu-title">
+                <span data-key="t-menu"> Main</span>
+            </li>
+            <li class="nav-item">
+                <router-link to="/" class="nav-link menu-link" href="/">
+                    <i class="ri-dashboard-2-line"></i>
+                    <span data-key="t-dashboards"> Dashboard</span>
                 </router-link>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <!-- end Dashboard Menu -->
+            </li>
 
-        <li class="menu-title">
-          <i class="ri-more-fill"></i>
-          <span data-key="t-pages">{{ $t("t-pages") }}</span>
-        </li>
+            <li class="menu-title">
+                <i class="ri-more-fill"></i>
+                <span data-key="t-pages">Lists</span>
+            </li>
 
         <li class="nav-item">
           <BLink class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
@@ -353,62 +335,7 @@ export default {
           </div>
         </li>
 
-        <li class="menu-title">
-          <i class="ri-more-fill"></i>
-          <span data-key="t-components">{{ $t("t-components") }}</span>
-        </li>
         
-        <li class="nav-item">
-          <BLink class="nav-link menu-link" href="#sidebarMultilevel" data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="sidebarMultilevel">
-            <i class="ri-share-line"></i>
-            <span data-key="t-multi-level">{{ $t("t-multi-level") }}</span>
-          </BLink>
-          <div class="collapse menu-dropdown" id="sidebarMultilevel">
-            <ul class="nav nav-sm flex-column">
-              <li class="nav-item">
-                <BLink class="nav-link" data-key="t-level-1.1">
-                  {{ $t("t-level-1.1") }}
-                </BLink>
-              </li>
-              <li class="nav-item">
-                <BLink class="nav-link" href="#sidebarAccount" data-bs-toggle="collapse" role="button"
-                  aria-expanded="false" aria-controls="sidebarAccount" data-key="t-level-1.2">
-                  {{ $t("t-level-1.2") }}
-                </BLink>
-                <div class="collapse menu-dropdown" id="sidebarAccount">
-                  <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                      <BLink class="nav-link" data-key="t-level-2.1">
-                        {{ $t("t-level-2.1") }}
-                      </BLink>
-                    </li>
-                    <li class="nav-item">
-                      <BLink class="nav-link" href="#sidebarlevel" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarlevel" data-key="t-level-2.2">
-                        {{ $t("t-level-2.2") }}
-                      </BLink>
-                      <div class="collapse menu-dropdown" id="sidebarlevel">
-                        <ul class="nav nav-sm flex-column">
-                          <li class="nav-item">
-                            <BLink class="nav-link" data-key="t-level-3.1">
-                              {{ $t("t-level-3.1") }}
-                            </BLink>
-                          </li>
-                          <li class="nav-item">
-                            <BLink class="nav-link" data-key="t-level-3.2">
-                              {{ $t("t-level-3.2") }}
-                            </BLink>
-                          </li>
-                        </ul>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </li>
       </ul>
     </template>
   </BContainer>

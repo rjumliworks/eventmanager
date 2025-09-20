@@ -30,6 +30,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap-vue-next": "^0.15.5",
     "click-outside-vue3": "^4.0.1",
+    "cordova-res": "^0.15.4",
     "core-js": "^3.37.0",
     "dayjs": "^1.11.18",
     "echarts": "^5.5.0",

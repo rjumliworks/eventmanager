@@ -32,9 +32,9 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/hotels" class="nav-link nav-icon">
-                    <i class="fs-20 ri-hotel-line"></i>
-                    <span class="nav-label">Hotels</span>
+                <router-link to="/schedule" class="nav-link nav-icon">
+                    <i class="fs-20 ri-calendar-2-line"></i>
+                    <span class="nav-label">Schedule</span>
                 </router-link>
             </li>
         </ul>

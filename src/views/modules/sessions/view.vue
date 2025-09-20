@@ -370,7 +370,7 @@ export default {
         position: fixed;
         bottom: 0;
         width: 100%;
-        height: 80px;
+        height: 90px;
         border-top: 0.1rem solid #e4e2e2;
         background-color: #fff;
         z-index: 10;
