@@ -1,7 +1,7 @@
 <template>
     <header id="page-topbar">
-        <div class="layout-width">
-            <div class="navbar-header login-modal">
+        <div class="layout-width login-modal" :class="{ 'safe-area': isIos }">
+            <div class="navbar-header">
                 <div class="d-flex">
                     <div class="navbar-brand-box horizontal-logo">
                         <router-link to="/" class="logo logo-dark">
@@ -80,9 +80,12 @@
 <script>
 import { layoutMethods } from "@/state/helpers";
 import { mapActions} from 'vuex'
+import { Capacitor } from '@capacitor/core'
 export default {
-    data() {
-        return {};
+     data() {
+        return {
+            isIos: Capacitor.getPlatform() === 'ios'
+        }
     },
     methods: {
         ...layoutMethods,
@@ -173,3 +176,15 @@ export default {
     }
 };
 </script>
+<style>
+.safe-area {
+  /* Add safe area on iOS automatically */
+  padding-top: calc(30px + env(safe-area-inset-top));
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+
+  /* Fallback for older iOS */
+  padding-top: calc(30px + constant(safe-area-inset-top));
+}
+</style>
