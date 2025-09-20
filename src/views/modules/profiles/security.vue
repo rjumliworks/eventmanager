@@ -65,7 +65,7 @@ import { mapActions } from 'vuex';
 import Layout from "@/layouts/main.vue";
 import Vue3SignaturePad from "vue3-signature-pad";
 import Loading from 'vue-loading-overlay';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Camera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera';
 export default {
     components: { Layout, Vue3SignaturePad, Loading },
     data(){
@@ -108,7 +108,8 @@ export default {
          const photo = await Camera.getPhoto({
                 quality: 90,
                 source: CameraSource.Camera,
-                resultType: CameraResultType.Uri
+                resultType: CameraResultType.Uri,
+                direction: CameraDirection.Front
             });
 
         // Start loading
