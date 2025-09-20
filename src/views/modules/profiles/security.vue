@@ -152,7 +152,7 @@ export default {
         }
     } catch (axiosError) {
         console.error('Error uploading image:', axiosError);
-        alert('Try another camera.');
+        alert(axiosError);
     } finally {
         this.isLoading = false;
     }
@@ -160,7 +160,7 @@ export default {
 ,
         async submitSignature() {
             try {
-                this.isLoading = false;
+                this.isLoading = true;
                 const pad = this.$refs.signaturePad;
                 if (!pad) return;
 
