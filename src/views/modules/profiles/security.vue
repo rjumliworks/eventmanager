@@ -98,46 +98,31 @@ export default {
             updateImg:'auth/update'
         }),
         async ClickImage() {
-    try {
-        const permissionStatus = await Camera.requestPermissions();
-        if (permissionStatus.camera !== 'granted') {
-            alert('Camera permission is required to take a photo.');
-            return;
-        }
+            const permissionStatus = await Camera.requestPermissions();
+            if (permissionStatus.camera !== 'granted') {
+                alert('Camera permission is required to take a photo.');
+                return;
+            }
+            const photo = await Camera.getPhoto({
+                quality: 90,
+                source: CameraSource.Camera,
+                resultType: CameraResultType.Uri
+            });
+            const response = await fetch(photo.webPath);
+            const blob = await response.blob();
 
-        const photo = await Camera.getPhoto({
-            quality: 90,
-            source: CameraSource.Camera,
-            resultType: CameraResultType.Uri
-        });
-
-        // fetch blob first
-        const response = await fetch(photo.webPath);
-        const blob = await response.blob();
-
-        // now show loading overlay for upload
-       
-
-        const data = new FormData();
-        data.append('id', this.$store.state.auth.user.data.id);
-        data.append('image', blob, 'avatar.jpg');
-
-        const uploadResponse = await axios.post('/avatar', data, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        });
-
-        if (uploadResponse.data.status) {
-            this.profile = true;
-            const newUrl = uploadResponse.data.data;
-            this.$store.commit('auth/updateAvatar', newUrl);
-        }
-
-    } catch (error) {
-        console.error('Upload failed:', error);
-        alert('Try the other camera.');
-    } 
-}
-,
+            let data = new FormData();
+            data.append('id', this.$store.state.auth.user.data.id);
+            data.append('image', blob, 'avatar.jpg');
+            axios.post('/avatar', data, { headers: { 'Content-Type': 'multipart/form-data' } })
+            .then(response => {
+                if (response.data.status) {
+                    this.profile = true;
+                    const newUrl = response.data.data;
+                    this.$store.commit('auth/updateAvatar', newUrl); 
+                }
+            });
+        },
         async submitSignature() {
             try {
                 this.isLoading = false;
