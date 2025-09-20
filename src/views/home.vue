@@ -1,7 +1,10 @@
 <template>
     <div class="layout-wrapper landing ">
        
-        <section class="section login-modal" style="height: 170px;">
+        <section class="section login-modal" id="space"  
+            :style="isIos 
+            ? { height: '230px', paddingTop: '100px' } 
+            : { height: '170px' }">
             <BContainer>
                 <img src="@/assets/images/dost.png" alt="" class="mb-3 me-1" style="width: 40px; height: 40px; margin-top: -40px">
                 <div class="card" style="margin-bottom: -160px; height: 190px; z-index: 100;">
@@ -23,7 +26,7 @@
 
                             <div class="flex-fill border-end" style="width: 33.3%">
                                 <div class="text-center position-relative d-inline-block chart-wrapper mt-2">
-                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(points, total)]" :options="{ ...chartOptions }"></apexchart>
+                                    <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent($store.state.data.points, total)]" :options="{ ...chartOptions }"></apexchart>
                                     <i class="ri-trophy-fill center-icon text-secondary"></i>
                                     <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">{{ $store.state.data.points }}</p>
                                     <span class="text-primary fw-semibold" style="font-size: 9px;">Points Collected</span>
@@ -325,6 +328,7 @@
 </template>
 
 <script>
+import { Capacitor } from '@capacitor/core';
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import Loading from 'vue-loading-overlay';
@@ -336,6 +340,7 @@ import 'swiper/css/pagination';
 export default {
     data() {
         return {
+            isIos: Capacitor.getPlatform() === 'ios',
             points: 0,      
             sessions: 4,
             exhibits: 1,
@@ -438,7 +443,7 @@ export default {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 80px;
+    height: 90px;
     border-top: 0.1rem solid #e4e2e2;
     background-color: #fff;
     z-index: 10;

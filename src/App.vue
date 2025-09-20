@@ -1,19 +1,11 @@
 <template>
-    <div id="app" :class="{ 'safe-area': isIos }">
-        <router-view></router-view>
-    </div>
+    <router-view></router-view>
 </template>
 
 <script>
     import { mapActions } from 'vuex'
-    import { Capacitor } from '@capacitor/core'
     export default {
         name: 'App',
-        data() {
-            return {
-                isIos: Capacitor.getPlatform() === 'ios'
-            }
-        },
         async created() {
             const token = localStorage.getItem('token');
             if (token) {
@@ -33,16 +25,3 @@
         }
     }
 </script>
-
-<style>
-.safe-area {
-  /* Add safe area on iOS automatically */
-  padding-top: calc(16px + env(safe-area-inset-top));
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-  padding-bottom: env(safe-area-inset-bottom);
-
-  /* Fallback for older iOS */
-  padding-top: calc(16px + constant(safe-area-inset-top));
-}
-</style>

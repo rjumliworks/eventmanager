@@ -65,7 +65,7 @@
 </script>
 <style scoped>
     .footer {
-        height: 80px;
+        height: 90px;
         left: 0;
         position: fixed;
         border-top: .1rem solid;
