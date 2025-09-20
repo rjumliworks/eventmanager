@@ -1,6 +1,8 @@
 <template>
     <div>
-        <div class="modal-body login-modal p-5">
+        <div class="modal-body login-modal p-5" :style="isIos 
+            ? { paddingTop: '100px' } 
+            : ''">
             <div class="col-lg-12">
                 <div class="text-center mt-n4 mb-n4 p-0">
                     <img src="@/assets/images/logo-sm.png" alt="" class="mb-3" style="width: 70px; height: 70px;">
@@ -81,6 +83,7 @@
     </loading>
 </template>
 <script>
+    import { Capacitor } from '@capacitor/core';
     import axios from 'axios';
     import { mapActions } from 'vuex';
     import { nextTick } from 'vue';
@@ -89,6 +92,7 @@
         components: { Loading },
         data() {
             return {
+                isIos: Capacitor.getPlatform() === 'ios',
                 form: {
                     email: null,
                     code: null
