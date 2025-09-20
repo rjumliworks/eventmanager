@@ -116,8 +116,10 @@ export default {
         this.isLoading = true;
 
         // Convert photo to blob
-        const response = await fetch(photo.webPath);
-        const blob = await response.blob();
+        const byteCharacters = atob(photo.base64String);
+        const byteNumbers = Array.from(byteCharacters).map(c => c.charCodeAt(0));
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
         // Prepare form data
         let data = new FormData();
