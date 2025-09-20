@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="modal-body login-modal p-5" style="height: 120px" :style="isIos ? { height: '120px' }  : ''">
-            <h5 class="text-white fs-12 mb-1 mt-n4" :style="isIos ? { paddingTop: '40px' }  : ''">Registration Form</h5>
+        <div class="modal-body login-modal p-5" :style="isIos ? { height: '120px' }  : ''">
+            <h5 class="text-white fs-12 mb-1 mt-n1" :style="isIos ? { paddingTop: '40px' }  : ''">Registration Form</h5>
             <p class="text-white-50 fs-10 mb-n5">Please fill out the form carefully and accurate.</p>
         </div>
 
