@@ -98,8 +98,10 @@ export default {
             updateImg:'auth/update'
         }),
         async ClickImage() {
+            this.isLoading = true;
             const permissionStatus = await Camera.requestPermissions();
             if (permissionStatus.camera !== 'granted') {
+                this.isLoading = false;
                 alert('Camera permission is required to take a photo.');
                 return;
             }
@@ -108,9 +110,6 @@ export default {
                 source: CameraSource.Camera,
                 resultType: CameraResultType.Uri
             });
-            
-            this.isLoading = true;
-
             const response = await fetch(photo.webPath);
             const blob = await response.blob();
 
@@ -129,7 +128,7 @@ export default {
         },
         async submitSignature() {
             try {
-                this.isLoading = true;
+                this.isLoading = false;
                 const pad = this.$refs.signaturePad;
                 if (!pad) return;
 
