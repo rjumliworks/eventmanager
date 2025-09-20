@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="modal-body login-modal p-5">
-            <h5 class="text-white fs-16 mb-1 mt-n4">Registration Form</h5>
-            <p class="text-white-50 fs-11 mb-n5">Please fill out the form carefully and accurate.</p>
+        <div class="modal-body login-modal p-5" style="height: 120px" :style="isIos ? { height: '120px' }  : ''">
+            <h5 class="text-white fs-12 mb-1 mt-n4" :style="isIos ? { paddingTop: '40px' }  : ''">Registration Form</h5>
+            <p class="text-white-50 fs-10 mb-n5">Please fill out the form carefully and accurate.</p>
         </div>
 
         <div class="modal-body p-4 mt-4">
@@ -97,6 +97,7 @@
     </loading>
 </template>
 <script>
+    import { Capacitor } from '@capacitor/core';
     import Loading from 'vue-loading-overlay';
     import Lottie from "@/components/widgets/lottie.vue";
     import axios from 'axios';
@@ -107,6 +108,7 @@
         components: { Multiselect, lottie: Lottie, Loading },
         data() {
             return {
+                isIos: Capacitor.getPlatform() === 'ios',
                 form: {
                     firstname: null,
                     middlename: null,
