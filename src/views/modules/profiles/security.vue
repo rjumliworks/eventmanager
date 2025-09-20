@@ -98,66 +98,50 @@ export default {
             updateImg:'auth/update'
         }),
         async ClickImage() {
-    try {
-        const permissionStatus = await Camera.requestPermissions();
-        if (permissionStatus.camera !== 'granted') {
-            alert('Camera permission is required to take a photo.');
-            return;
-        }
+            const permissionStatus = await Camera.requestPermissions();
+            if (permissionStatus.camera !== 'granted') {
+                alert('Camera permission is required to take a photo.');
+                return;
+            }
+            let photo;
 
-        let photo;
-
-        try {
-            // Try rear camera first (iOS-friendly)
-            photo = await Camera.getPhoto({
+            try {
+                // Try rear camera first (works reliably on iOS)
+                photo = await Camera.getPhoto({
                 quality: 90,
                 source: CameraSource.Camera,
                 resultType: CameraResultType.Uri,
                 direction: 'rear',
-            });
-        } catch (err) {
-            console.warn('Rear camera failed, trying front camera...', err);
-            // Fallback to front camera (Android-friendly)
-            photo = await Camera.getPhoto({
+                });
+            } catch (err) {
+                console.warn('Rear camera failed, trying front camera...', err);
+                // Fallback to front camera (some Android devices require this)
+                photo = await Camera.getPhoto({
                 quality: 90,
                 source: CameraSource.Camera,
                 resultType: CameraResultType.Uri,
                 direction: 'front',
+                });
+            }
+            
+            this.isLoading = true;
+
+            const response = await fetch(photo.webPath);
+            const blob = await response.blob();
+
+            let data = new FormData();
+            data.append('id', this.$store.state.auth.user.data.id);
+            data.append('image', blob, 'avatar.jpg');
+            axios.post('/avatar', data, { headers: { 'Content-Type': 'multipart/form-data' } })
+            .then(response => {
+                if (response.data.status) {
+                    this.profile = true;
+                    const newUrl = response.data.data;
+                    this.$store.commit('auth/updateAvatar', newUrl); 
+                    this.isLoading = false;
+                }
             });
-        }
-
-        // Start loading
-        this.isLoading = true;
-
-        // Convert photo to blob
-        const response = await fetch(photo.webPath);
-        const blob = await response.blob();
-
-        // Prepare form data
-        let data = new FormData();
-        data.append('id', this.$store.state.auth.user.data.id);
-        data.append('image', blob, 'avatar.jpg');
-
-        // Upload using await
-        const res = await axios.post('/avatar', data, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        });
-
-        if (res.data.status) {
-            this.profile = true;
-            const newUrl = res.data.data;
-            this.$store.commit('auth/updateAvatar', newUrl);
-        }
-
-    } catch (err) {
-        console.error('Failed to take or upload photo:', err);
-        alert('Please try using the other camera.');
-    } finally {
-        // Always reset loading state
-        this.isLoading = false;
-    }
-}
-,
+        },
         async submitSignature() {
             try {
                 this.isLoading = true;
