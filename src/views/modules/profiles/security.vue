@@ -105,11 +105,26 @@ export default {
             return;
         }
 
-         const photo = await Camera.getPhoto({
+        let photo;
+
+        try {
+            // Try rear camera first (iOS-friendly)
+            photo = await Camera.getPhoto({
                 quality: 90,
                 source: CameraSource.Camera,
-                resultType: CameraResultType.Uri
+                resultType: CameraResultType.Uri,
+                direction: 'rear',
             });
+        } catch (err) {
+            console.warn('Rear camera failed, trying front camera...', err);
+            // Fallback to front camera (Android-friendly)
+            photo = await Camera.getPhoto({
+                quality: 90,
+                source: CameraSource.Camera,
+                resultType: CameraResultType.Uri,
+                direction: 'front',
+            });
+        }
 
         // Start loading
         this.isLoading = true;
