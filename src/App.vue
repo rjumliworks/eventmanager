@@ -18,7 +18,7 @@ export default {
   computed: {
     applySafeArea() {
       const path = this.$route.path;
-       return this.isIos && (path !== '/' || path !== '/login' || path !== '/register');
+  return this.isIos && path !== '/' && path !== '/login' && path !== '/register';
     }
   },
   async created() {
