@@ -1,10 +1,8 @@
 <template>
     <div>
-        <div class="modal-body login-modal p-5" :style="isIos 
-            ? { paddingTop: '100px' } 
-            : ''">
+        <div class="modal-body login-modal p-5" :style="isIos ? { height: '250px' }  : ''">
             <div class="col-lg-12">
-                <div class="text-center mt-n4 mb-n4 p-0">
+                <div class="text-center mt-n4 mb-n4" :style="isIos ? { paddingTop: '70px' }  : ''">
                     <img src="@/assets/images/logo-sm.png" alt="" class="mb-3" style="width: 70px; height: 70px;">
                     <h1 class="mb-0 ff-secondary fw-semibold text-capitalize lh-base fs-13"><span
                             class="text-white">DEPARTMENT OF SCIENCE AND TECHNOLOGY</span></h1>
