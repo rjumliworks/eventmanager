@@ -17,7 +17,8 @@ export default {
   },
   computed: {
     applySafeArea() {
-      return this.isIos && this.$route.path !== '/'
+      const path = this.$route.path;
+       return this.isIos && (path !== '/' || path === '/login' || path === '/register');
     }
   },
   async created() {
