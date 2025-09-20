@@ -36,10 +36,13 @@
 
 <style>
 .safe-area {
-  padding-top: env(safe-area-inset-top);
+  /* Add safe area on iOS automatically */
+  padding-top: calc(16px + env(safe-area-inset-top));
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
   padding-bottom: env(safe-area-inset-bottom);
-  padding-top: constant(safe-area-inset-top); /* fallback old iOS */
+
+  /* Fallback for older iOS */
+  padding-top: calc(16px + constant(safe-area-inset-top));
 }
 </style>
