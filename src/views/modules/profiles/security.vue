@@ -116,10 +116,18 @@ export default {
         this.isLoading = true;
 
         // Convert photo to blob
-        const byteCharacters = atob(photo.base64String);
-        const byteNumbers = Array.from(byteCharacters).map(c => c.charCodeAt(0));
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'image/jpeg' });
+        let base64Data = photo.base64String;
+        if (base64Data.startsWith('data:image')) {
+            base64Data = base64Data.split(',')[1];
+            }
+       // Now convert to blob
+const byteCharacters = atob(base64Data);
+const byteNumbers = new Array(byteCharacters.length);
+for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+}
+const byteArray = new Uint8Array(byteNumbers);
+const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
         // Prepare form data
         let data = new FormData();
