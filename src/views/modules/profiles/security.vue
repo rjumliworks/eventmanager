@@ -65,7 +65,7 @@ import { mapActions } from 'vuex';
 import Layout from "@/layouts/main.vue";
 import Vue3SignaturePad from "vue3-signature-pad";
 import Loading from 'vue-loading-overlay';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Camera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera';
 export default {
     components: { Layout, Vue3SignaturePad, Loading },
     data(){
@@ -110,7 +110,8 @@ export default {
         photo = await Camera.getPhoto({
             quality: 90,
             source: CameraSource.Camera,
-            resultType: CameraResultType.Uri
+            resultType: CameraResultType.Uri,
+            direction: CameraDirection.Front
         });
     } catch (cameraError) {
         console.warn('First camera failed, trying alternate camera...', cameraError);
@@ -120,7 +121,7 @@ export default {
                 quality: 90,
                 source: CameraSource.Camera,
                 resultType: CameraResultType.Uri,
-                direction: 'front' // Use front camera
+                direction: CameraDirection.Rear
             });
         } catch (altCameraError) {
             alert('Unable to take photo. Please try again.');
