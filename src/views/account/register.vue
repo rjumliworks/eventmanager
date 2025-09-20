@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="modal-body login-modal p-5" :style="isIos ? { height: '120px' }  : ''">
-            <h5 class="text-white fs-12 mb-1 mt-n1" :style="isIos ? { paddingTop: '40px' }  : ''">Registration Form</h5>
+            <h5 class="text-white fs-12 mb-1 mt-n3" :style="isIos ? { paddingTop: '40px' }  : ''">Registration Form</h5>
             <p class="text-white-50 fs-10 mb-n5">Please fill out the form carefully and accurate.</p>
         </div>
 
@@ -26,9 +26,6 @@
                                 <label class="form-label">Suffix</label>
                                 <input id="name" v-model="form.suffix" type="text"  class="form-control" placeholder="Enter designation" style="background-color: white;" />
                             </div>
-                            <!-- <div class="col-12 mt-n1 mb-0">
-                                <hr class="text-mtued"/>
-                            </div> -->
                             <div class="col-12 mt-1 mb-0">
                                 <label class="form-label">Email Address</label>
                                 <input id="name" v-model="form.email" type="text"  class="form-control" placeholder="Please enter email" style="text-transform: lowercase; background-color: white;" :class="{ 'is-invalid': validationErrors && validationErrors.email }" />
