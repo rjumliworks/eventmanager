@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     applySafeArea() {
-      return this.isIos && this.$route.path !== '/dashboard'
+      return this.isIos && this.$route.path !== '/'
     }
   },
   async created() {
