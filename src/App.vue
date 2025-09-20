@@ -1,6 +1,7 @@
 <template>
-    <router-view></router-view>
-
+    <div id="app" class="safe-area">
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
@@ -27,3 +28,19 @@
         }
     }
 </script>
+<style>
+/* Safe area handling */
+.safe-area {
+  /* Base padding for all platforms */
+  padding-top: 16px;
+
+  /* Add safe area on iOS automatically */
+  padding-top: calc(16px + env(safe-area-inset-top));
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+
+  /* Fallback for older iOS */
+  padding-top: calc(16px + constant(safe-area-inset-top));
+}
+</style>
