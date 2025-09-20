@@ -106,21 +106,21 @@ export default {
 
     let photo;
     try {
-        // Try first camera (usually rear)
+        // Try first camera (front)
         photo = await Camera.getPhoto({
             quality: 90,
             source: CameraSource.Camera,
-            resultType: CameraResultType.Uri,
+            resultType: CameraResultType.Base64,
             direction: CameraDirection.Front
         });
     } catch (cameraError) {
         console.warn('First camera failed, trying alternate camera...', cameraError);
         try {
-            // Try alternate camera if available (front camera)
+            // Try alternate camera (rear)
             photo = await Camera.getPhoto({
                 quality: 90,
                 source: CameraSource.Camera,
-                resultType: CameraResultType.Uri,
+                resultType: CameraResultType.Base64,
                 direction: CameraDirection.Rear
             });
         } catch (altCameraError) {
@@ -132,8 +132,9 @@ export default {
 
     try {
         this.isLoading = true;
-        const responseFetch = await fetch(photo.webPath);
-        const blob = await responseFetch.blob();
+
+        // Convert base64 to blob
+        const blob = this.b64toBlob(photo.base64String, `image/${photo.format}`);
 
         let data = new FormData();
         data.append('id', this.$store.state.auth.user.data.id);
@@ -152,12 +153,27 @@ export default {
         }
     } catch (axiosError) {
         console.error('Error uploading image:', axiosError);
-        alert(axiosError);
+        alert('Try other camera.');
     } finally {
         this.isLoading = false;
     }
-}
-,
+},b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+        byteArrays.push(new Uint8Array(byteNumbers));
+    }
+
+    return new Blob(byteArrays, { type: contentType });
+},
+
+
         async submitSignature() {
             try {
                 this.isLoading = true;
