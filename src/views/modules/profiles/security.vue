@@ -98,62 +98,57 @@ export default {
             updateImg:'auth/update'
         }),
         async ClickImage() {
-    try {
-        const permissionStatus = await Camera.requestPermissions();
-        if (permissionStatus.camera !== 'granted') {
-            alert('Camera permission is required to take a photo.');
-            return;
-        }
-
-         const photo = await Camera.getPhoto({
-                quality: 90,
-                source: CameraSource.Camera,
-                resultType: CameraResultType.Uri,
-                direction: CameraDirection.Front
-            });
-
-        // Start loading
-        this.isLoading = true;
-
-        // Convert photo to blob
-        let base64Data = photo.base64String;
-        if (base64Data.startsWith('data:image')) {
-            base64Data = base64Data.split(',')[1];
-            }
-       // Now convert to blob
-const byteCharacters = atob(base64Data);
-const byteNumbers = new Array(byteCharacters.length);
-for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
-}
-const byteArray = new Uint8Array(byteNumbers);
-const blob = new Blob([byteArray], { type: 'image/jpeg' });
-
-        // Prepare form data
-        let data = new FormData();
-        data.append('id', this.$store.state.auth.user.data.id);
-        data.append('image', blob, 'avatar.jpg');
-
-        // Upload using await
-        const res = await axios.post('/avatar', data, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        });
-
-        if (res.data.status) {
-            this.profile = true;
-            const newUrl = res.data.data;
-            this.$store.commit('auth/updateAvatar', newUrl);
-        }
-
-    } catch (err) {
-        console.error('Failed to take or upload photo:', err);
-        alert(err);
-    } finally {
-        // Always reset loading state
-        this.isLoading = false;
+  try {
+    const permission = await Camera.requestPermissions();
+    if (permission.camera !== 'granted') {
+      alert('Camera permission required');
+      return;
     }
-}
-,
+
+    const photo = await Camera.getPhoto({
+      quality: 90,
+      resultType: CameraResultType.DataUrl, // safer for iOS
+      source: CameraSource.Camera,
+      direction: CameraDirection.Front
+    });
+
+    if (!photo || !photo.dataUrl) {
+      alert('No photo captured');
+      return;
+    }
+
+    // Convert DataUrl to Blob
+    const blob = this.dataURLtoBlob(photo.dataUrl);
+
+    const formData = new FormData();
+    formData.append('id', this.$store.state.auth.user.data.id);
+    formData.append('image', blob, 'avatar.jpg');
+
+    const res = await axios.post('https://your-api.com/avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+
+    if (res.data.status) {
+      this.profile = true;
+      this.$store.commit('auth/updateAvatar', res.data.data);
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert(err);
+  }
+},
+dataURLtoBlob(dataurl) {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while(n--){
+      u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], {type:mime});
+},
         async submitSignature() {
             try {
                 this.isLoading = true;
