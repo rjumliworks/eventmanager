@@ -116,7 +116,7 @@ export default {
         const blob = await response.blob();
 
         // now show loading overlay for upload
-        this.isLoading = true;
+       
 
         const data = new FormData();
         data.append('id', this.$store.state.auth.user.data.id);
@@ -134,10 +134,8 @@ export default {
 
     } catch (error) {
         console.error('Upload failed:', error);
-        alert('Failed to upload image.');
-    } finally {
-        this.isLoading = false; // hide overlay
-    }
+        alert('Try the other camera.');
+    } 
 }
 ,
         async submitSignature() {
