@@ -108,6 +108,7 @@ export default {
                 source: CameraSource.Camera,
                 resultType: CameraResultType.Uri
             });
+            this.isLoading = true;
             const response = await fetch(photo.webPath);
             const blob = await response.blob();
 
