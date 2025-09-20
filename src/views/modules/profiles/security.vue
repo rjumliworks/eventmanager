@@ -98,10 +98,8 @@ export default {
             updateImg:'auth/update'
         }),
         async ClickImage() {
-            this.isLoading = true;
             const permissionStatus = await Camera.requestPermissions();
             if (permissionStatus.camera !== 'granted') {
-                this.isLoading = false;
                 alert('Camera permission is required to take a photo.');
                 return;
             }
