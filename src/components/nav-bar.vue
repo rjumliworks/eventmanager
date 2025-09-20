@@ -179,12 +179,12 @@ export default {
 <style>
 .safe-area {
   /* Add safe area on iOS automatically */
-  padding-top: calc(30px + env(safe-area-inset-top));
+  padding-top: calc(35px + env(safe-area-inset-top));
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
   padding-bottom: env(safe-area-inset-bottom);
 
   /* Fallback for older iOS */
-  padding-top: calc(30px + constant(safe-area-inset-top));
+  padding-top: calc(35px + constant(safe-area-inset-top));
 }
 </style>
