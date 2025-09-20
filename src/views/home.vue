@@ -280,13 +280,15 @@
     <footer class="footer p-2">
         <ul class="nav nav-pills nav-justified card-footer-tabs">
             <li class="nav-item">
-                <router-link to="/" class="nav-link">
+                <router-link to="/" class="nav-link nav-icon">
                     <i class="fs-20 ri-home-wifi-line"></i>
+                    <span class="nav-label">Home</span>
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/sessions" class="nav-link">
+                <router-link to="/sessions" class="nav-link nav-icon">
                     <i class="fs-20 ri-calendar-event-line"></i>
+                    <span class="nav-label">Sessions</span>
                 </router-link>
             </li>
             <li class="nav-item">
@@ -301,13 +303,15 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/exhibitors" class="nav-link">
+                <router-link to="/exhibitors" class="nav-link nav-icon">
                     <i class="fs-20 ri-store-2-line"></i>
+                    <span class="nav-label">Exhibitors</span>
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/hotels" class="nav-link">
+                <router-link to="/hotels" class="nav-link nav-icon">
                     <i class='fs-20 ri-hotel-line'></i>
+                    <span class="nav-label">Hotels</span>
                 </router-link>
             </li>
         </ul>
@@ -454,5 +458,18 @@ export default {
 }
 .pattern{
     background-image: url('../assets/images/nft/bg-pattern.png');
+}
+.nav-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    /* optional, keeps label small */
+}
+
+.nav-label {
+    font-size: 8px;
+    margin-top: 0px;
+    /* little gap between icon and text */
 }
 </style>
