@@ -65,7 +65,7 @@ import { mapActions } from 'vuex';
 import Layout from "@/layouts/main.vue";
 import Vue3SignaturePad from "vue3-signature-pad";
 import Loading from 'vue-loading-overlay';
-import { Camera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 export default {
     components: { Layout, Vue3SignaturePad, Loading },
     data(){
@@ -98,57 +98,51 @@ export default {
             updateImg:'auth/update'
         }),
         async ClickImage() {
-  try {
-    const permission = await Camera.requestPermissions();
-    if (permission.camera !== 'granted') {
-      alert('Camera permission required');
-      return;
+    try {
+        const permissionStatus = await Camera.requestPermissions();
+        if (permissionStatus.camera !== 'granted') {
+            alert('Camera permission is required to take a photo.');
+            return;
+        }
+
+         const photo = await Camera.getPhoto({
+                quality: 90,
+                source: CameraSource.Camera,
+                resultType: CameraResultType.Uri
+            });
+
+        // Start loading
+        this.isLoading = true;
+
+        // Convert photo to blob
+        const response = await fetch(photo.webPath);
+        const blob = await response.blob();
+
+        // Prepare form data
+        let data = new FormData();
+        data.append('id', this.$store.state.auth.user.data.id);
+        data.append('image', blob, 'avatar.jpg');
+
+        // Upload using await
+        const res = await axios.post('/avatar', data, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+
+        if (res.data.status) {
+            this.profile = true;
+            const newUrl = res.data.data;
+            this.$store.commit('auth/updateAvatar', newUrl);
+        }
+
+    } catch (err) {
+        console.error('Failed to take or upload photo:', err);
+        alert('Please try using the other camera.');
+    } finally {
+        // Always reset loading state
+        this.isLoading = false;
     }
-
-    const photo = await Camera.getPhoto({
-      quality: 90,
-      resultType: CameraResultType.DataUrl, // safer for iOS
-      source: CameraSource.Camera,
-      direction: CameraDirection.Front
-    });
-
-    if (!photo || !photo.dataUrl) {
-      alert('No photo captured');
-      return;
-    }
-
-    // Convert DataUrl to Blob
-    const blob = this.dataURLtoBlob(photo.dataUrl);
-
-    const formData = new FormData();
-    formData.append('id', this.$store.state.auth.user.data.id);
-    formData.append('image', blob, 'avatar.jpg');
-
-    const res = await axios.post('/avatar', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
-
-    if (res.data.status) {
-      this.profile = true;
-      this.$store.commit('auth/updateAvatar', res.data.data);
-    }
-
-  } catch (err) {
-    console.error(err);
-    alert(err);
-  }
-},
-dataURLtoBlob(dataurl) {
-  const arr = dataurl.split(',');
-  const mime = arr[0].match(/:(.*?);/)[1];
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-  while(n--){
-      u8arr[n] = bstr.charCodeAt(n);
-  }
-  return new Blob([u8arr], {type:mime});
-},
+}
+,
         async submitSignature() {
             try {
                 this.isLoading = true;
