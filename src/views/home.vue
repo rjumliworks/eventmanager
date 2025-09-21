@@ -9,7 +9,7 @@
                 <div class="d-flex align-items-center mt-n4 mb-3">
                     <div class="avatar-sm me-2">
                         <div class="avatar-title rounded bg-transparent">
-                            <img src="@/assets/images/dost.png" alt="" class="me-1" style="width: 40px; height: 40px;">
+                            <img src="@/assets/images/dost.png" alt="" class="me-1" style="width: 35px; height: 35px;">
                         </div>
                     </div>
                     <div class="flex-grow-1">
