@@ -3,14 +3,29 @@
        
         <section class="section login-modal" id="space"  
             :style="isIos 
-            ? { height: '220px', paddingTop: '100px' } 
-            : { height: '170px' }">
+            ? { height: '240px', paddingTop: '100px' } 
+            : { height: '190px' }">
             <BContainer>
-                <img src="@/assets/images/dost.png" alt="" class="mb-3 me-1" style="width: 40px; height: 40px; margin-top: -40px">
+                <div class="d-flex align-items-center mt-n4 mb-3">
+                    <div class="avatar-sm me-2">
+                        <div class="avatar-title rounded bg-transparent">
+                            <img src="@/assets/images/dost.png" alt="" class="me-1" style="width: 40px; height: 40px;">
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="mb-0 fs-13 fw-semibold text-uppercase text-white"> DEPARTMENT OF SCIENCE AND TECHNOLOGY</h5>
+                        <p class="text-white mb-0 fs-11"><span class="fw-semibold">One<span class="text-info">DOST</span>4U</span>: <span class="text-muted">Solutions and Opportunities for All</span></p>
+                    </div>
+                    <div class="flex-grow-0">
+                            
+                            
+                    </div>
+                </div>
+                <!-- <img src="@/assets/images/dost.png" alt="" class="mb-3 me-1" style="width: 40px; height: 40px; margin-top: -40px"> -->
                 <div class="card" style="margin-bottom: -160px; height: 190px; z-index: 100;">
                     <div class="card-body d-flex flex-column justify-content-between p-0" style="height: 100%;">
                         <div class="flex-fill border-bottom">
-                           <div class="d-flex align-items-center p-3 mb-n2">
+                            <div class="d-flex align-items-center p-3 mb-n2">
                                 <div class="avatar-sm me-3">
                                     <div class="avatar-title rounded bg-transparent">
                                         <img  class="avatar-sm rounded-circle material-shadow" :src="$store.state.auth.user.data.avatar" />
