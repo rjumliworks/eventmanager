@@ -83,7 +83,7 @@
             </BContainer>
         </section>
 
-        <section class="section">
+        <section class="section border-bottom">
             <BContainer>
                 <div class="card border shadow-none bg-light p-4 mt-n4 mb-n4">
                     <div class="d-flex justify-content-center gap-5 text-center">
@@ -122,10 +122,11 @@
                         </div>
                     </div>
                 </div>
-
             </BContainer>
+        </section>
+        <section class="section" id="plans" style="margin-top: 0px;">
             <BContainer>
-                <div class="card overflow-hidden shadow-none border-1 mt-5 mb-n3">
+                <div class="card overflow-hidden shadow-none border-1 mt-n4">
                     <div class="card-body bg-marketplace d-flex">
                         <div class="flex-grow-1">
                             <h4 class="lh-base fs-13 fw-semibold text-uppercase mb-n1"><span class="text-danger">Sessions</span> </h4>
@@ -236,7 +237,7 @@
                     </BRow>
                 </BCardBody> -->
                 <!-- <hr class="text-muted"/>   -->
-                <img src="@/assets/images/rstwhanda/rate.png" class="img-fluid rounded" style="height: auto; width: 100%; margin-bottom:-25px" alt="Responsive image">
+                <img src="@/assets/images/rstwhanda/rate.png" class="img-fluid rounded mt-n4" style="height: auto; width: 100%; margin-bottom:-25px" alt="Responsive image">
             </BContainer>
         </section>
 
