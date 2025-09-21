@@ -20,6 +20,9 @@
                                     <h5 class="mb-0 fs-13 fw-semibold text-uppercase text-primary"> {{ $store.state.auth.user.data.firstname}}  {{ $store.state.auth.user.data.lastname}}</h5>
                                     <p class="text-muted mb-0 fs-11">{{ $store.state.auth.user.data.email }}</p>
                                 </div>
+                                <div class="flex-grow-0">
+                                    <img :src="$store.state.auth.user.data.qr" class="img-fluid" style="width: 45px;" alt="QR Code" />
+                                </div>
                             </div>
                         </div>
                         <div class="flex-fill d-flex">
@@ -58,12 +61,17 @@
             </BContainer>
         </section>
 
-         <section class="section bg-light" id="plans" style="margin-top: 15px; height: 235px;">
+         <section class="section bg-light" id="plans" style="margin-top: 15px; height: 300px;">
             <BContainer>
                <BCard no-body class="bg-primary pattern mt-5">
                     <BCardBody class="p-4">
                         <img class="img-fluid" :src="require('@/assets/images/rstwhanda/banner.png')"/>
                     </BCardBody>
+                    <div class="card-body bg-success-subtle text-success fw-semibold d-flex">
+                        <marquee class="fs-12">
+                            NFT art is a digital asset that is collectable, unique, and non-transferrable, Cortes explained. Every NFT is unique in it's creative design and cannot be duplicated, making them limited and rare. NFTs get their value because the transaction proves ownership of the art.
+                        </marquee>
+                    </div>
                 </BCard>
                 
             </BContainer>

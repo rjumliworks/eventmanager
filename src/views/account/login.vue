@@ -156,14 +156,16 @@
                 this.sub = true;
                 this.isLoading = true;
                 this.form.code = this.code;
-                axios.post('verify', this.form).then(response => {
+                axios.post('verify', this.form).then(async (response) => {
                     if (response.data.status) {
                         this.sub = false;
                         localStorage.setItem('token', response.data.token);
-                        this.signIn();
-                    } 
-                    this.res = response;
-                    this.isLoading = false;
+                        await this.signIn();
+                        this.isLoading = false;
+                    }else{
+                        this.res = response;
+                        this.isLoading = false;
+                    }
                 }).catch(({response})=>{
                     if(response.status===422){
                         this.validationErrors = response.data.errors
