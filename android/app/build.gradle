@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.dost9.myapp"
+    namespace "com.dost9.events"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.dost9.myapp"
+        applicationId "com.dost9.events"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

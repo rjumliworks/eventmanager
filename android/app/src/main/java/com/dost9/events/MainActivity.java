@@ -1,4 +1,4 @@
-package com.dost9.myapp;
+package com.dost9.events;
 
 import com.getcapacitor.BridgeActivity;
 
