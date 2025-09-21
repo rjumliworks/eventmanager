@@ -105,7 +105,15 @@
                         
                         <div>
                             <div class="avatar-sm flex-shrink-0 mx-auto">
-                                <span class="avatar-title bg-white text-warning rounded-circle fs-3 material-shadow">
+                                <span class="avatar-title bg-white text-success rounded-circle fs-3 material-shadow">
+                                    <i class="ri-treasure-map-fill align-middle"></i>
+                                </span>
+                            </div>
+                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Journey</div>
+                        </div>
+                        <div>
+                            <div class="avatar-sm flex-shrink-0 mx-auto">
+                                <span class="avatar-title bg-white text-danger rounded-circle fs-3 material-shadow">
                                     <i class="ri-download-cloud-fill align-middle"></i>
                                 </span>
                             </div>
@@ -113,7 +121,7 @@
                         </div>
                         <div>
                             <div class="avatar-sm flex-shrink-0 mx-auto">
-                                <span class="avatar-title bg-white text-primary rounded-circle fs-3 material-shadow">
+                                <span class="avatar-title bg-white text-secondary rounded-circle fs-3 material-shadow">
                                     <i class="ri-hotel-fill align-middle" style="font-size: 30px;"></i>
                                 </span>
                             </div>
@@ -121,19 +129,11 @@
                         </div>
                         <div>
                             <div class="avatar-sm flex-shrink-0 mx-auto">
-                                <span class="avatar-title bg-white text-success rounded-circle fs-3 material-shadow">
-                                    <i class="ri-bank-card-fill align-middle"></i>
+                                <span class="avatar-title bg-white text-warning rounded-circle fs-3 material-shadow">
+                                    <i class="ri-trophy-fill align-middle"></i>
                                 </span>
                             </div>
-                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Sessions</div>
-                        </div>
-                        <div>
-                            <div class="avatar-sm flex-shrink-0 mx-auto">
-                                <span class="avatar-title bg-white text-danger rounded-circle fs-3 material-shadow">
-                                    <i class="ri-wallet-3-fill align-middle"></i>
-                                </span>
-                            </div>
-                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Exhibits</div>
+                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Points</div>
                         </div>
                     </div>
                 </div>
