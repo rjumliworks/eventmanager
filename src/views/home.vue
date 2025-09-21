@@ -37,7 +37,7 @@
                             <div class="flex-fill border-end" style="width: 33.3%">
                                 <div class="text-center position-relative d-inline-block chart-wrapper mt-2">
                                     <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent($store.state.data.points, total)]" :options="{ ...chartOptions }"></apexchart>
-                                    <i class="ri-trophy-fill center-icon text-secondary"></i>
+                                    <i class="ri-trophy-fill center-icon text-secondary" :class="{ 'ios-center': isIos }"></i>
                                     <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">{{ $store.state.data.points }}</p>
                                     <span class="text-primary fw-semibold" style="font-size: 9px;">Points Collected</span>
                                 </div>
@@ -46,7 +46,7 @@
                             <div class="flex-fill border-end" style="width: 33.3%">
                                 <div class="text-center position-relative d-inline-block chart-wrapper  mt-2">
                                     <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(visited, $store.state.data.exhibitors.length)]" :options="{ ...chartOptions }"></apexchart>
-                                    <i class="ri-store-2-fill center-icon text-secondary"></i>
+                                    <i class="ri-store-2-fill center-icon text-secondary" :class="{ 'ios-center': isIos }"></i>
                                     <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">{{visited}} of {{ $store.state.data.exhibitors.length }}</p>
                                     <span class="text-primary fw-semibold" style="font-size: 9px;">Exhibit Visited</span>
                                 </div>
@@ -55,7 +55,7 @@
                             <div class="flex-fill" style="width: 33.3%">
                                 <div class="text-center position-relative d-inline-block chart-wrapper mt-2">
                                     <apexchart class="apex-charts" height="50" dir="ltr" :series="[calcPercent(attended, registered)]" :options="{ ...chartOptions }"></apexchart>
-                                    <i class="ri-calendar-todo-fill center-icon text-secondary"></i>
+                                    <i class="ri-calendar-todo-fill center-icon text-secondary" :class="{ 'ios-center': isIos }"></i>
                                     <p class="mb-n2 mt-1 fs-11 text-primary fw-semibold">{{ attended }} of {{ registered }}</p>
                                     <span class="text-primary fw-semibold" style="font-size: 9px;">Session Attended</span>
                                 </div>
@@ -85,12 +85,12 @@
 
         <section class="section">
             <BContainer>
-                <div class="card border shadow-none bg-white p-4 mt-n4 mb-n4">
+                <div class="card border shadow-none bg-light p-4 mt-n4 mb-n4">
                     <div class="d-flex justify-content-center gap-5 text-center">
                         
                         <div>
                             <div class="avatar-sm flex-shrink-0 mx-auto">
-                                <span class="avatar-title bg-light text-warning rounded-circle fs-3 material-shadow">
+                                <span class="avatar-title bg-white text-warning rounded-circle fs-3 material-shadow">
                                     <i class="ri-download-cloud-fill align-middle"></i>
                                 </span>
                             </div>
@@ -98,7 +98,7 @@
                         </div>
                         <div>
                             <div class="avatar-sm flex-shrink-0 mx-auto">
-                                <span class="avatar-title bg-light text-primary rounded-circle fs-3 material-shadow">
+                                <span class="avatar-title bg-white text-primary rounded-circle fs-3 material-shadow">
                                     <i class="ri-hotel-fill align-middle" style="font-size: 30px;"></i>
                                 </span>
                             </div>
@@ -106,7 +106,7 @@
                         </div>
                         <div>
                             <div class="avatar-sm flex-shrink-0 mx-auto">
-                                <span class="avatar-title bg-light text-success rounded-circle fs-3 material-shadow">
+                                <span class="avatar-title bg-white text-success rounded-circle fs-3 material-shadow">
                                     <i class="ri-bank-card-fill align-middle"></i>
                                 </span>
                             </div>
@@ -114,7 +114,7 @@
                         </div>
                         <div>
                             <div class="avatar-sm flex-shrink-0 mx-auto">
-                                <span class="avatar-title bg-light text-danger rounded-circle fs-3 material-shadow">
+                                <span class="avatar-title bg-white text-danger rounded-circle fs-3 material-shadow">
                                     <i class="ri-wallet-3-fill align-middle"></i>
                                 </span>
                             </div>
@@ -508,6 +508,9 @@ export default {
   transform: translate(-50%, -50%);
   font-size: 14px;  /* adjust icon size as needed */
   pointer-events: none; /* avoid interfering with chart hover */
+}
+.ios-center {
+  top: 29% !important; /* override for iOS */
 }
 .pattern{
     background-image: url('../assets/images/nft/bg-pattern.png');
