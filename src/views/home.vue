@@ -13,8 +13,8 @@
                         </div>
                     </div>
                     <div class="flex-grow-1">
-                        <h5 class="mb-0 fs-13 fw-semibold text-uppercase text-white"> DEPARTMENT OF SCIENCE AND TECHNOLOGY</h5>
-                        <p class="text-white mb-0 fs-11"><span class="fw-semibold">One<span class="text-info">DOST</span>4U</span>: <span class="text-muted">Solutions and Opportunities for All</span></p>
+                        <h5 class="mb-0 fs-11 fw-semibold text-uppercase text-white"> DEPARTMENT OF SCIENCE AND TECHNOLOGY</h5>
+                        <p class="text-white mb-0 fs-10"><span class="fw-semibold">One<span class="text-info">DOST</span>4U</span> : <span class="text-muted">Solutions and Opportunities for All</span></p>
                     </div>
                     <div class="flex-grow-0">
                             
