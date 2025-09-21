@@ -8,8 +8,8 @@
             </BListGroupItem>
             <BListGroupItem >
                 <div class="text-center mt-3 mb-3">
-                    <div class="profile-user position-relative d-inline-block mx-auto mb-3" @click="takePhoto()">
-                        <img :src="photoPreview" class="rounded-circle avatar-lg img-thumbnail user-profile-image material-shadow">
+                    <div class="profile-user position-relative d-inline-block mx-auto mb-3" @click="ClickImage()">
+                        <img :src="$store.state.auth.user.data.avatar" class="rounded-circle avatar-lg img-thumbnail user-profile-image material-shadow">
                         <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
                             <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
                                 <span class="avatar-title rounded-circle bg-light text-body">
@@ -20,14 +20,6 @@
                     </div>
                     <h5 class="fs-13 mb-0">{{ user.firstname }} {{ user.lastname }}</h5>
                     <p class="text-muted fs-11 mb-0">{{ user.email }}</p>
-                </div>
-            </BListGroupItem>
-            <BListGroupItem >
-                <div class="d-flex ">
-                    <button type="button" @click="uploadPhoto()" class="btn w-100 btn-primary">Save </button>
-                    <button type="button" @click="clearPhoto()" class="btn w-100 btn-light">Clear</button>
-                    <button @click="pickFromGallery" :disabled="isLoading">Pick from Gallery</button>
-                    <input ref="fileInput" type="file" accept="image/*" style="display:none" @change="onFilePicked" />
                 </div>
             </BListGroupItem>
             <BListGroupItem >
@@ -73,8 +65,7 @@ import { mapActions } from 'vuex';
 import Layout from "@/layouts/main.vue";
 import Vue3SignaturePad from "vue3-signature-pad";
 import Loading from 'vue-loading-overlay';
-import { Camera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera'
-import { Capacitor } from '@capacitor/core'
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 export default {
     components: { Layout, Vue3SignaturePad, Loading },
     data(){
@@ -86,11 +77,7 @@ export default {
             render: false,
             profile: (this.$store.state.auth.user.avatar) ? true : false,
             signature: (this.$store.state.auth.user.signature) ? true : false,
-            isLoading: false,
-            photoPreview: null,
-            lastPhotoSource: '',      // camera | gallery | web
-            cameraDirection: 'rear',  // toggle front/rear
-            lastPhotoUri: null,
+            isLoading: false
         }
     }, 
     computed: {
@@ -110,189 +97,6 @@ export default {
         ...mapActions({
             updateImg:'auth/update'
         }),
-        async takePhoto() {
-            this.isLoading = true
-            try {
-                if (!Camera || Capacitor.getPlatform() === 'web') {
-                this.$refs.fileInput.click()
-                this.lastPhotoSource = 'web'
-                this.isLoading = false
-                return
-                }
-
-                const photo = await Camera.getPhoto({
-                quality: 90,
-                allowEditing: false,
-                resultType: CameraResultType.Uri, // ✅ always URI
-                source: CameraSource.Camera,
-                direction:
-                    this.cameraDirection === 'rear'
-                    ? CameraDirection.Rear
-                    : CameraDirection.Front,
-                })
-
-                this.lastPhotoSource = 'camera'
-                this.photoPreview = photo.webPath
-                this.lastPhotoUri = photo.webPath
-            } catch (err) {
-                console.error('takePhoto error', err)
-                if (Capacitor.getPlatform() === 'web') {
-                this.$refs.fileInput.click()
-                this.lastPhotoSource = 'web'
-                } else {
-                alert('Camera error: ' + (err?.message || err))
-                }
-            } finally {
-                this.isLoading = false
-            }
-            },
-        async resizeImage(blob, maxSize = 200) {
-            return new Promise((resolve, reject) => {
-            const img = new Image()
-            img.onload = () => {
-                // keep aspect ratio
-                const canvas = document.createElement('canvas')
-                let width = img.width
-                let height = img.height
-                if (width > height) {
-                if (width > maxSize) {
-                    height *= maxSize / width
-                    width = maxSize
-                }
-                } else {
-                if (height > maxSize) {
-                    width *= maxSize / height
-                    height = maxSize
-                }
-                }
-                canvas.width = width
-                canvas.height = height
-                const ctx = canvas.getContext('2d')
-                ctx.drawImage(img, 0, 0, width, height)
-                canvas.toBlob(
-                (resizedBlob) => resolve(resizedBlob),
-                'image/jpeg',
-                0.8 // compression quality (0–1)
-                )
-            }
-            img.onerror = (err) => reject(err)
-            img.src = URL.createObjectURL(blob)
-            })
-        },
-        async pickFromGallery() {
-      this.isLoading = true
-      try {
-        if (!Camera || Capacitor.getPlatform() === 'web') {
-          this.$refs.fileInput.click()
-          this.lastPhotoSource = 'web'
-          this.isLoading = false
-          return
-        }
-
-        const photo = await Camera.getPhoto({
-          quality: 90,
-          allowEditing: false,
-          resultType: CameraResultType.Uri, // ✅ always URI
-          source: CameraSource.Photos,
-        })
-
-        this.lastPhotoSource = 'gallery'
-        this.photoPreview = photo.webPath
-        this.lastPhotoUri = photo.webPath
-      } catch (err) {
-        console.error('pickFromGallery error', err)
-        if (Capacitor.getPlatform() === 'web') {
-          this.$refs.fileInput.click()
-          this.lastPhotoSource = 'web'
-        } else {
-          alert('Gallery error: ' + (err?.message || err))
-        }
-      } finally {
-        this.isLoading = false
-      }
-    },
-     dataURLToBlob(dataurl) {
-      const arr = dataurl.split(',')
-      const mime = arr[0].match(/:(.*?);/)[1]
-      const bstr = atob(arr[1])
-      let n = bstr.length
-      const u8arr = new Uint8Array(n)
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n)
-      }
-      return new Blob([u8arr], { type: mime })
-    },
-
-async onFilePicked(e) {
-      const file = e.target.files?.[0]
-      if (!file) return
-      this.lastPhotoSource = 'web'
-      this.isLoading = true
-      try {
-        const reader = new FileReader()
-        reader.onload = () => {
-          this.photoPreview = reader.result
-          this.lastPhotoUri = null // since it's local base64, not a URI
-          this.isLoading = false
-        }
-        reader.readAsDataURL(file)
-      } catch (err) {
-        console.error(err)
-        this.isLoading = false
-      } finally {
-        e.target.value = ''
-      }
-    },
-        async uploadPhoto() {
-            if (!this.lastPhotoUri && !this.photoPreview) {
-            alert('No photo to upload')
-            return
-            }
-            this.isLoading = true
-            try {
-                let blob
-
-                if (this.lastPhotoUri) {
-                    const response = await fetch(this.lastPhotoUri)
-                    blob = await response.blob()
-                } else if (this.photoPreview?.startsWith('data:')) {
-                    blob = this.dataURLToBlob(this.photoPreview)
-                }
-
-                if (!blob) {
-                    alert('Failed to prepare file for upload')
-                    return
-                }
-
-                // ✅ compress/resize before upload
-                const resized = await this.resizeImage(blob, 200)
-
-                let data = new FormData();
-                data.append('id', this.$store.state.auth.user.data.id);
-                data.append('image', resized, 'avatar.jpg');
-                const response = await axios.post('/avatar', data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
-    console.log('[UploadPhoto] Server response:', response.data)
-
-    if (response.data.status) {
-      this.profile = true
-      const newUrl = response.data.data
-      this.$store.commit('auth/updateAvatar', newUrl)
-      this.isLoading = false
-    }
-            } catch (err) {
-                console.error('upload error', err)
-                alert('Upload failed: ' + (err?.message || err))
-            } finally {
-                this.isLoading = false
-            }
-        },
-        clearPhoto() {
-            this.photoPreview = null
-            this.lastPhotoUri = null
-            this.lastPhotoSource = ''
-        },
         async ClickImage() {
             const permissionStatus = await Camera.requestPermissions();
             if (permissionStatus.camera !== 'granted') {
