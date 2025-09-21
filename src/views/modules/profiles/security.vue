@@ -10,8 +10,7 @@
             <BListGroupItem>
                 <div class="text-center mt-3 mb-3">
                     <div class="profile-user position-relative d-inline-block mx-auto mb-3" @click="takePhoto()">
-                        <img :src="photoPreview"
-                            class="rounded-circle avatar-lg img-thumbnail user-profile-image material-shadow">
+                        <img  :src="photoPreview ? photoPreview : require('@/assets/images/avatars/avatar.jpg')"  class="rounded-circle avatar-lg img-thumbnail user-profile-image material-shadow">
                         <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
                             <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
                                 <span class="avatar-title rounded-circle bg-light text-body">

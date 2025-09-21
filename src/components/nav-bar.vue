@@ -42,7 +42,7 @@
                     <BDropdown variant="link" class="ms-sm-3 header-item topbar-user" toggle-class="rounded-circle arrow-none" menu-class="dropdown-menu-end" :offset="{ alignmentAxis: -14, crossAxis: 0, mainAxis: 0 }">
                         <template #button-content>
                             <span class="d-flex align-items-center">
-                                <img class="rounded-circle header-profile-user" :src="$store.state.auth.user.data.avatar"
+                                <img class="rounded-circle header-profile-user" :src="$store.state.auth.user.data.avatar ? $store.state.auth.user.data.avatar : require('@/assets/images/avatars/avatar.jpg')"
                                     alt="Header Avatar">
                                 <span class="text-start ms-xl-2">
                                     <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Edward
@@ -56,10 +56,10 @@
                             <i class="mdi mdi-account-circle text-muted fs-14 align-middle me-1"></i>
                             <span class="align-middle fs-12"> Profile</span>
                         </router-link>
-                        <a class="dropdown-item" href="#"><i
+                        <!-- <a class="dropdown-item" href="#"><i
                                 class="mdi mdi-lifebuoy text-muted fs-14 align-middle me-1"></i>
                             <span class="align-middle fs-12"> Help</span>
-                        </a>
+                        </a> -->
                         <div class="dropdown-divider"></div>
 
                         <a class="dropdown-item" href="#">
