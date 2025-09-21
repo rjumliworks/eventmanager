@@ -83,7 +83,7 @@
             </BContainer>
         </section>
 
-        <section class="section bg-light" id="plans" style="margin-top: 15px;" :style="isIos  ? { height: '280px' }  : { height: '300px' }">
+        <section class="section bg-light" id="plans" style="margin-top: 15px;" :style="isIos  ? { height: '285px' }  : { height: '300px' }">
             <BContainer>
                <BCard no-body class="bg-primary pattern mt-5">
                     <BCardBody class="p-4">
