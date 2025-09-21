@@ -23,12 +23,12 @@
                                 <div class="flex-grow-0">
                                     <img  @click="showQr = !showQr" :src="$store.state.auth.user.data.qr" class="img-fluid" style="width: 45px;" alt="QR Code" />
                                    <div v-if="showQr" class="qr-float" @click="showQr = false">
-      <img 
-        :src="$store.state.auth.user.data.qr" 
-        class="qr-large"
-        alt="QR Code Large"
-      />
-    </div>
+                                        <img 
+                                            :src="$store.state.auth.user.data.qr" 
+                                            class="qr-large"
+                                            alt="QR Code Large"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
             </BContainer>
         </section>
 
-         <section class="section bg-light" id="plans" style="margin-top: 15px; height: 300px;">
+        <section class="section bg-light" id="plans" style="margin-top: 15px; height: 300px;">
             <BContainer>
                <BCard no-body class="bg-primary pattern mt-5">
                     <BCardBody class="p-4">
@@ -80,7 +80,6 @@
                         </marquee>
                     </div>
                 </BCard>
-                
             </BContainer>
         </section>
 
@@ -124,6 +123,38 @@
                     </div>
                 </div>
 
+            </BContainer>
+            <BContainer>
+                <div class="card overflow-hidden shadow-none border-1 mt-5 mb-n3">
+                    <div class="card-body bg-marketplace d-flex">
+                        <div class="flex-grow-1">
+                            <h4 class="lh-base fs-13 fw-semibold text-uppercase mb-n1"><span class="text-danger">Sessions</span> </h4>
+                            <p class="mb-0 mt-0 pt-1 fs-10 text-muted">Talks highlighting science, technology and innovation.</p>
+                            <div class="d-flex gap-3 mt-2">
+                                <router-link to="/sessions" class="btn btn-danger btn-sm">Register Now</router-link>
+                            </div>
+                        </div>
+                        <div class="flex-grow-0  d-flex align-items-center">
+                            <img :src="require('@/assets/images/rstwhanda/session.gif')" alt="" style="width: auto; height: 60px;">
+                        </div>
+                    </div>
+                </div>
+            </BContainer>
+            <BContainer>
+                <div class="card overflow-hidden shadow-none border-1 mt-4 mb-n3">
+                    <div class="card-body bg-marketplace2 d-flex">
+                        <div class="flex-grow-1 d-flex align-items-center">
+                            <img :src="require('@/assets/images/rstwhanda/exhibitor.gif')" alt="" style="width: auto; height: 60px;">
+                        </div>
+                        <div class="flex-grow-0 text-end">
+                            <h4 class="lh-base fs-13 text-uppercase fw-semibold mb-n1"><span class="text-warning">Exhibitors</span></h4>
+                            <p class="mb-0 mt-0 pt-1 fs-10 text-muted"> Showcase of Innovations, projects and technologies.</p>
+                            <div class="d-flex gap-3 mt-2 justify-content-end">
+                                <router-link to="/exhibitors" class="btn btn-warning btn-sm">Discover Now</router-link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </BContainer>
         </section>
 
@@ -188,7 +219,7 @@
 
         <section class="py-5 position-relative bg-light">
             <BContainer>
-                <BCardBody>
+                <!-- <BCardBody>
                     <BRow class="g-1 mt-n4 mb-3">
                         <BCol cols="6">
                             <img src="@/assets/images/nft/img-06.png" alt=""
@@ -203,8 +234,8 @@
                                 class="img-fluid rounded">
                         </BCol>
                     </BRow>
-                </BCardBody>
-                <hr class="text-muted"/>  
+                </BCardBody> -->
+                <!-- <hr class="text-muted"/>   -->
                 <img src="@/assets/images/rstwhanda/rate.png" class="img-fluid rounded" style="height: auto; width: 100%; margin-bottom:-25px" alt="Responsive image">
             </BContainer>
         </section>
