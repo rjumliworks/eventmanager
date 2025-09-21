@@ -6,7 +6,7 @@
                     <img src="@/assets/images/logo-sm.png" alt="" class="mb-3" style="width: 70px; height: 70px;">
                     <h1 class="mb-0 ff-secondary fw-semibold text-capitalize lh-base fs-13"><span
                             class="text-white">DEPARTMENT OF SCIENCE AND TECHNOLOGY</span></h1>
-                    <p class="text-muted mb-2 fs-12">Regional Office No. IX</p>
+                    <p class="text-white mb-0 fs-11"><span class="fw-semibold">One<span class="text-info">DOST</span>4U</span> : <span class="text-muted">Solutions and Opportunities for All</span></p>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
                         <div class="text-muted text-center mb-4 mx-lg-3">
                             <h4 class="">Enter One-Time Password</h4>
                             <p>Please enter the one-time Password (OTP) that we sent to <span
-                                    class="fw-semibold">{{ maskedEmail }}</span></p>
+                                    class="fw-semibold text-lowercase">{{ maskedEmail }}</span></p>
                         </div>
                         <form>
                             <div class="d-flex gap-2">
