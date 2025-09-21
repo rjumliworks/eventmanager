@@ -1,6 +1,6 @@
 {
-    "appId": "com.dost9.myapp",
-    "appName": "DOST-IX",
+    "appId": "com.dost9.events",
+    "appName": "DOST9 Events",
     "webDir": "dist",
     "server": {
         "allowNavigation": [
