@@ -217,123 +217,22 @@ export default {
     <template v-if="layoutType === 'vertical' || layoutType === 'semibox'">
         <ul class="navbar-nav h-100" id="navbar-nav">
             <li class="menu-title">
-                <span data-key="t-menu"> Main</span>
+                <span data-key="t-menu">Soon</span>
             </li>
             <li class="nav-item">
                 <router-link to="/" class="nav-link menu-link" href="/">
                     <i class="ri-dashboard-2-line"></i>
-                    <span data-key="t-dashboards"> Dashboard</span>
+                    <span data-key="t-dashboards">Hotels</span>
+                </router-link>
+            </li>
+             <li class="nav-item">
+                <router-link to="/" class="nav-link menu-link" href="/">
+                    <i class="ri-dashboard-2-line"></i>
+                    <span data-key="t-dashboards">Hotels</span>
                 </router-link>
             </li>
 
-            <li class="menu-title">
-                <i class="ri-more-fill"></i>
-                <span data-key="t-pages">Lists</span>
-            </li>
-
-        <li class="nav-item">
-          <BLink class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="sidebarAuth">
-            <i class="ri-account-circle-line"></i>
-            <span data-key="t-authentication">{{
-              $t("t-authentication")
-            }}</span>
-          </BLink>
-          <div class="collapse menu-dropdown" id="sidebarAuth">
-            <ul class="nav nav-sm flex-column">
-              <li class="nav-item">
-                <BLink class="nav-link" href="#sidebarSignIn" data-bs-toggle="collapse" role="button"
-                  aria-expanded="false" aria-controls="sidebarSignIn" data-key="t-signin">{{ $t("t-signin") }}
-                </BLink>
-                <div class="collapse menu-dropdown" id="sidebarSignIn">
-                  <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                      <router-link to="/auth/signin-basic" class="nav-link" data-key="t-basic">{{ $t("t-basic") }}
-                      </router-link>
-                    </li>
-                    <li class="nav-item">
-                      <router-link to="/auth/signin-cover" class="nav-link" data-key="t-cover">{{ $t("t-cover") }}
-                      </router-link>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav-item">
-                <BLink class="nav-link" href="#sidebarSignUp" data-bs-toggle="collapse" role="button"
-                  aria-expanded="false" aria-controls="sidebarSignUp" data-key="t-signup">{{ $t("t-signup") }}
-                </BLink>
-                <div class="collapse menu-dropdown" id="sidebarSignUp">
-                  <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                      <router-link to="/auth/signup-basic" class="nav-link" data-key="t-basic">{{ $t("t-basic") }}
-                      </router-link>
-                    </li>
-                    <li class="nav-item">
-                      <router-link to="/auth/signup-cover" class="nav-link" data-key="t-cover">{{ $t("t-cover") }}
-                      </router-link>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-
-              <li class="nav-item">
-                <BLink class="nav-link" href="#sidebarLogout" data-bs-toggle="collapse" role="button"
-                  aria-expanded="false" aria-controls="sidebarLogout" data-key="t-logout">
-                  {{ $t("t-logout") }}
-                </BLink>
-                <div class="collapse menu-dropdown" id="sidebarLogout">
-                  <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                      <router-link to="/auth/logout-basic" class="nav-link" data-key="t-basic">
-                        {{ $t("t-basic") }}
-                      </router-link>
-                    </li>
-                    <li class="nav-item">
-                      <router-link to="/auth/logout-cover" class="nav-link" data-key="t-cover">
-                        {{ $t("t-cover") }}
-                      </router-link>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav-item">
-                <BLink class="nav-link" href="#sidebarErrors" data-bs-toggle="collapse" role="button"
-                  aria-expanded="false" aria-controls="sidebarErrors" data-key="t-errors">
-                  {{ $t("t-errors") }}
-                </BLink>
-                <div class="collapse menu-dropdown" id="sidebarErrors">
-                  <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                      <router-link to="/auth/404-basic" class="nav-link" data-key="t-404-basic">
-                        {{ $t("t-404-basic") }}
-                      </router-link>
-                    </li>
-                    <li class="nav-item">
-                      <router-link to="/auth/404-cover" class="nav-link" data-key="t-404-cover">
-                        {{ $t("t-404-cover") }}
-                      </router-link>
-                    </li>
-                    <li class="nav-item">
-                      <router-link to="/auth/404" class="nav-link" data-key="t-404-alt">
-                        {{ $t("t-404-alt") }}
-                      </router-link>
-                    </li>
-                    <li class="nav-item">
-                      <router-link to="/auth/500" class="nav-link" data-key="t-500">
-                        {{ $t("t-500") }}
-                      </router-link>
-                    </li>
-                    <li class="nav-item">
-                      <router-link to="/auth/ofline" class="nav-link" data-key="t-offline-page">
-                        {{ $t("t-offline-page") }}
-                      </router-link>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </li>
+        
 
         
       </ul>
