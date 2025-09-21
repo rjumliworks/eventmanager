@@ -7,13 +7,13 @@
             : { height: '190px' }">
             <BContainer>
                 <div class="d-flex align-items-center mt-n4 mb-3">
-                    <div class="avatar-sm me-2">
+                    <div class="avatar-sm me-1">
                         <div class="avatar-title rounded bg-transparent">
                             <img src="@/assets/images/dost.png" alt="" class="me-1" style="width: 35px; height: 35px;">
                         </div>
                     </div>
                     <div class="flex-grow-1">
-                        <h5 class="mb-0 fs-11 fw-semibold text-uppercase text-white"> DEPARTMENT OF SCIENCE AND TECHNOLOGY</h5>
+                        <h5 class="mb-0 fw-semibold text-uppercase text-white" style="font-size: 10.7px"> DEPARTMENT OF SCIENCE AND TECHNOLOGY</h5>
                         <p class="text-white mb-0 fs-10"><span class="fw-semibold">One<span class="text-info">DOST</span>4U</span> : <span class="text-muted">Solutions and Opportunities for All</span></p>
                     </div>
                     <div class="flex-grow-0">
