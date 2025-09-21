@@ -5,6 +5,7 @@ export default {
     namespaced: true,
     state: () => ({
         points: 0,
+        event: null,
         sessions: [],
         exhibitors: [],
         hotels: [],
@@ -17,6 +18,7 @@ export default {
             state.loaded = val 
         },
         SET_DATA(state, payload) {
+            state.event = payload.event
             state.points = payload.points
             state.sessions = payload.sessions
             state.exhibitors = payload.exhibitors
@@ -25,7 +27,8 @@ export default {
             state.loaded = true
             state.pusherInitialized = false
         },
-        RESET_STATE(state) {     
+        RESET_STATE(state) {
+            state.event = null     
             state.points = 0
             state.sessions = []
             state.exhibitors = []

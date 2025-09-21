@@ -21,7 +21,14 @@
                                     <p class="text-muted mb-0 fs-11">{{ $store.state.auth.user.data.email }}</p>
                                 </div>
                                 <div class="flex-grow-0">
-                                    <img :src="$store.state.auth.user.data.qr" class="img-fluid" style="width: 45px;" alt="QR Code" />
+                                    <img  @click="showQr = !showQr" :src="$store.state.auth.user.data.qr" class="img-fluid" style="width: 45px;" alt="QR Code" />
+                                   <div v-if="showQr" class="qr-float" @click="showQr = false">
+      <img 
+        :src="$store.state.auth.user.data.qr" 
+        class="qr-large"
+        alt="QR Code Large"
+      />
+    </div>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +76,7 @@
                     </BCardBody>
                     <div class="card-body bg-success-subtle text-success fw-semibold d-flex">
                         <marquee class="fs-12">
-                            NFT art is a digital asset that is collectable, unique, and non-transferrable, Cortes explained. Every NFT is unique in it's creative design and cannot be duplicated, making them limited and rare. NFTs get their value because the transaction proves ownership of the art.
+                            {{$store.state.data.event}}
                         </marquee>
                     </div>
                 </BCard>
@@ -81,13 +88,22 @@
             <BContainer>
                 <div class="card border shadow-none bg-white p-4 mt-n4 mb-n4">
                     <div class="d-flex justify-content-center gap-5 text-center">
+                        
+                        <div>
+                            <div class="avatar-sm flex-shrink-0 mx-auto">
+                                <span class="avatar-title bg-light text-warning rounded-circle fs-3 material-shadow">
+                                    <i class="ri-download-cloud-fill align-middle"></i>
+                                </span>
+                            </div>
+                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Materials</div>
+                        </div>
                         <div>
                             <div class="avatar-sm flex-shrink-0 mx-auto">
                                 <span class="avatar-title bg-light text-primary rounded-circle fs-3 material-shadow">
-                                    <i class="ri-money-dollar-circle-fill align-middle" style="font-size: 30px;"></i>
+                                    <i class="ri-hotel-fill align-middle" style="font-size: 30px;"></i>
                                 </span>
                             </div>
-                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Points</div>
+                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Hotels</div>
                         </div>
                         <div>
                             <div class="avatar-sm flex-shrink-0 mx-auto">
@@ -104,14 +120,6 @@
                                 </span>
                             </div>
                             <div class="mt-2 fw-semibold" style="font-size: 9px;">Exhibits</div>
-                        </div>
-                        <div>
-                            <div class="avatar-sm flex-shrink-0 mx-auto">
-                                <span class="avatar-title bg-light text-warning rounded-circle fs-3 material-shadow">
-                                    <i class="ri-download-cloud-fill align-middle"></i>
-                                </span>
-                            </div>
-                            <div class="mt-2 fw-semibold" style="font-size: 9px;">Materials</div>
                         </div>
                     </div>
                 </div>
@@ -373,7 +381,8 @@ export default {
                 sessions: 0,
                 exhibits: 0
             },
-            isLoading: false
+            isLoading: false,
+            showQr: false
         };
     },
     computed: {
@@ -484,5 +493,30 @@ export default {
     font-size: 8px;
     margin-top: 0px;
     /* little gap between icon and text */
+}
+qr-small {
+  width: 45px;
+  cursor: pointer;
+}
+
+.qr-float {
+  position: fixed;       /* floats above everything */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;         /* center horizontally & vertically */
+  justify-content: center;
+  align-items: center;
+ background: rgba(0, 0, 0, 0.6); 
+  z-index: 9999;
+}
+
+.qr-large {
+  max-width: 80%;   /* responsive */
+  max-height: 80%;
+  border-radius: 8px;
+  border: 15px solid #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* subtle depth */
 }
 </style>

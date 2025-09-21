@@ -9,23 +9,22 @@
                     <div class="p-2">
                         <h4 class="fs-14 text-primary text-uppercase fw-bold mb-0"> {{ participant.firstname }} {{ participant.middlename }} {{ participant.lastname }}</h4>
                         <p class="fs-11 text-muted mb-0">{{ participant.email }}</p>
-                        <p class="fs-11 text-muted">{{ participant.contact_no }}</p>
                     </div>
-                    <img :src="participant.qr" class="img-fluid mt-2" style="width: 220px;" alt="QR Code" v-if="!showScanner" />
-                    <button type="button" class="btn btn-soft-secondary rounded-pill btn-sm waves-effect material-shadow-none fs-10 mt-2">Enlarge QR <i class="ri-qr-code-line"></i></button>
+                    <!-- <img :src="participant.qr" class="img-fluid mt-2" style="width: 220px;" alt="QR Code" v-if="!showScanner" />
+                    <button type="button" class="btn btn-soft-secondary rounded-pill btn-sm waves-effect material-shadow-none fs-10 mt-2">Enlarge QR <i class="ri-qr-code-line"></i></button> -->
                     <!-- Switch Button -->
                    
 
                     <!-- QR Scanner (if enabled) -->
-                    <div v-if="showScanner" style="width: 250px; height: auto;" class="mt-2">
-                        <div id="qr-reader" style="width: 100%; height: auto;"></div>
+                    <div  class="mt-2 d-flex justify-content-center align-items-center box-wrapper">
+                        <div id="qr-reader"></div>
                     </div>
 
-                    <b-form-group class="mt-4 fs-14">
+                    <!-- <b-form-group class="mt-4 fs-14">
                         <b-form-checkbox switch v-model="showScanner">
                             {{ showScanner ? 'Switch to My QR Code' : 'Switch to Scanner' }}
                         </b-form-checkbox>
-                    </b-form-group>
+                    </b-form-group> -->
                 </div>
             </b-container>
             
@@ -45,19 +44,23 @@ export default {
             session: null
         }
     },
-    watch: {
-        showScanner(newVal) {
-            if (newVal) {
-                this.startScanner();
-            } else {
-                this.stopScanner();
-            }
-        }
+    // watch: {
+    //     showScanner(newVal) {
+    //         if (newVal) {
+    //             this.startScanner();.
+    //         } else {
+    //             this.stopScanner();
+    //         }
+    //     }
+    // },
+    mounted() {
+        // ✅ Start scanner immediately when component is mounted
+        this.startScanner();
     },
     methods: { 
         async startScanner() {
             await this.$nextTick();
-            const config = { fps: 10, qrbox: { width: 200, height: 200 } };
+            const config = { fps: 10, qrbox: { width: 290, height: 290 } };
 
             // Helper to restart the scanner
             const restartScanner = async () => {
@@ -125,3 +128,31 @@ export default {
     },
 };
 </script>
+<style>
+.box-wrapper {
+  width: 90vw;
+  max-width: 330px;
+  aspect-ratio: 1 / 1;   /* always square */
+  margin: 0 auto;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  overflow: hidden;      /* 🚀 keeps child inside the box */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#qr-reader {
+  width: 100%;
+  height: 100%;
+  max-width: 290px;      /* ✅ matches your qrbox size */
+  max-height: 290px;
+}
+
+#qr-reader video {
+  object-fit: cover;     /* ✅ keeps video inside box */
+  width: 100% !important;
+  height: 100% !important;
+}
+
+</style>
