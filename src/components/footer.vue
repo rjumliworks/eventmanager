@@ -3,19 +3,19 @@
         <ul class="nav nav-pills nav-justified card-footer-tabs">
             <li class="nav-item">
                 <router-link to="/" class="nav-link nav-icon">
-                    <i class="fs-20 ri-home-wifi-line"></i>
+                    <i class="ri-home-wifi-line"></i>
                     <span class="nav-label">Home</span>
                 </router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/sessions" class="nav-link nav-icon">
-                    <i class="fs-20 ri-calendar-event-line"></i>
+                    <i class="ri-calendar-event-line"></i>
                     <span class="nav-label">Sessions</span>
                 </router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/qrcode" class="nav-link">
-                    <button class="btn btn-primary btn-md position-relative p-0 avatar-md rounded-circle"
+                    <button class="btn btn-primary btn-md position-relative p-0 rounded-circle circledot"
                         style="margin-top: -55px;" type="button">
                         <div class="btn-content">
                             <span class="avatar-title bg-transparent text-reset">
@@ -27,13 +27,13 @@
             </li>
             <li class="nav-item">
                 <router-link to="/exhibitors" class="nav-link nav-icon">
-                    <i class="fs-20 ri-store-2-line"></i>
+                    <i class="ri-store-2-line"></i>
                     <span class="nav-label">Exhibitors</span>
                 </router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/schedule" class="nav-link nav-icon">
-                    <i class="fs-20 ri-calendar-2-line"></i>
+                    <i class="ri-calendar-2-line"></i>
                     <span class="nav-label">Schedule</span>
                 </router-link>
             </li>
@@ -91,7 +91,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        font-size: 12px;
+        font-size: 20px;
         /* optional, keeps label small */
     }
 
@@ -100,4 +100,21 @@
         margin-top: 0px;
         /* little gap between icon and text */
     }
+    .circledot {
+    height: 4.5rem;
+    width: 4.5rem;
+}
+    @media (max-width: 380px) {
+  .nav-icon {
+    font-size: 16px; /* reduce spacing */
+  }
+  .nav.nav-pills .nav-link {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+   .circledot {
+    height: 3rem;
+    width: 3rem;
+}
+}
 </style>

@@ -347,19 +347,19 @@
             <ul class="nav nav-pills nav-justified card-footer-tabs">
                 <li class="nav-item">
                     <router-link to="/" class="nav-link nav-icon">
-                        <i class="fs-20 ri-home-wifi-line"></i>
+                        <i class="ri-home-wifi-line"></i>
                         <span class="nav-label">Home</span>
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link to="/sessions" class="nav-link nav-icon">
-                        <i class="fs-20 ri-calendar-event-line"></i>
+                        <i class="ri-calendar-event-line"></i>
                         <span class="nav-label">Sessions</span>
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link to="/qrcode" class="nav-link">
-                        <button class="btn btn-primary btn-md position-relative p-0 avatar-md rounded-circle" style="margin-top: -55px;" type="button">
+                        <button class="btn btn-primary btn-md position-relative p-0 rounded-circle circledot" style="margin-top: -55px;" type="button">
                             <div class="btn-content">
                                 <span class="avatar-title bg-transparent text-reset">
                                     <i class='fs-24 ri-qr-code-line'></i>
@@ -370,13 +370,13 @@
                 </li>
                 <li class="nav-item">
                     <router-link to="/exhibitors" class="nav-link nav-icon">
-                        <i class="fs-20 ri-store-2-line"></i>
+                        <i class="ri-store-2-line"></i>
                         <span class="nav-label">Exhibitors</span>
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link to="/schedule" class="nav-link nav-icon">
-                        <i class="fs-20 ri-calendar-2-line"></i>
+                        <i class="ri-calendar-2-line"></i>
                         <span class="nav-label">Schedule</span>
                     </router-link>
                 </li>
@@ -501,11 +501,7 @@ export default {
 </script>
 
 <style scoped>
-.stat-box {
-  width: 100px;
-  flex: 0 0 auto;
-  padding: 0 5px;
-}
+
 .footer {
     position: fixed;
     bottom: 0;
@@ -539,10 +535,26 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 12px;
+    font-size: 20px;
     /* optional, keeps label small */
 }
-
+.circledot {
+    height: 4.5rem;
+    width: 4.5rem;
+}
+@media (max-width: 380px) {
+  .nav-icon {
+    font-size: 16px; /* reduce spacing */
+  }
+  .nav.nav-pills .nav-link {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+  .circledot {
+    height: 3rem;
+    width: 3rem;
+}
+}
 .nav-label {
     font-size: 8px;
     margin-top: 0px;
