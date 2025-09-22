@@ -27,21 +27,35 @@
                     </b-form-group> -->
                 </div>
             </b-container>
-            
+        <Notify ref="notify"/>
     </Layout>
 </template>
 <script>
 import axios from 'axios';
+import Notify from './notify.vue';
 import Layout from "@/layouts/main.vue";
 import { Html5Qrcode } from "html5-qrcode";
 export default {
-    components: { Layout },
+    components: { Layout, Notify },
     data(){
         return {
             participant: this.$store.state.auth.user.data,
             showScanner: false,
             qrScanner: null,
             session: null
+        }
+    },
+     watch: {
+        '$store.state.notifier': {
+            handler(newVal) {
+                if (newVal) {
+                    this.$refs.notify.show();
+                } else {
+                   console.log('aw')
+                }
+            },
+            immediate: true, // run immediately on component mount (optional)
+            deep: false      // set true only if notifier is an object and you need nested changes
         }
     },
     // watch: {

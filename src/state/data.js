@@ -12,6 +12,7 @@ export default {
         csfs: [],
         loaded: false,
         pusherInitialized: false,
+        notifier: null
     }),
     mutations: {
         SET_LOADED(state, val) { 
@@ -34,6 +35,7 @@ export default {
             state.exhibitors = []
             state.hotels = []
             state.loaded = false
+            state.notifier = null
             state.pusherInitialized = false
         },
         UPDATE_SESSION(state, session) {
@@ -80,6 +82,9 @@ export default {
         },
         SET_PUSHER_INITIALIZED(state, val) {
             state.pusherInitialized = val
+        },
+        NOTIFY_USER(state, data) {
+            state.notifier = data
         }
     },
     actions: {
@@ -185,6 +190,11 @@ export default {
                     break;
                     case 'mobile-error':
                         console.log(data);
+                    break;
+                    case 'attendance':
+                        if (data.data.participant_id == currentUserId) {
+                            commit('NOTIFY_USER', data.data.session.title)
+                        }
                     break;
                 }
             })
