@@ -1,7 +1,7 @@
 export const state = {
   layoutType: 'vertical',
   layoutWidth: 'fluid',
-  sidebarSize: 'lg',
+  sidebarSize: 'sm',
   topbar: 'light',
   mode: 'light',
   position: 'fixed',

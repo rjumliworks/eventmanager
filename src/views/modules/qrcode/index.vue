@@ -60,7 +60,7 @@ export default {
     methods: { 
         async startScanner() {
             await this.$nextTick();
-            const config = { fps: 10, qrbox: { width: 290, height: 290 } };
+            const config = { fps: 10, qrbox: { width: 190, height: 190 } };
 
             // Helper to restart the scanner
             const restartScanner = async () => {

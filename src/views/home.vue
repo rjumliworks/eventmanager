@@ -342,46 +342,48 @@
         <BButton variant="danger" @click="topFunction" class="btn-icon" id="back-to-top">
             <i class="ri-arrow-up-line"></i>
         </BButton>
+
+        <footer class="footer p-2">
+            <ul class="nav nav-pills nav-justified card-footer-tabs">
+                <li class="nav-item">
+                    <router-link to="/" class="nav-link nav-icon">
+                        <i class="fs-20 ri-home-wifi-line"></i>
+                        <span class="nav-label">Home</span>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/sessions" class="nav-link nav-icon">
+                        <i class="fs-20 ri-calendar-event-line"></i>
+                        <span class="nav-label">Sessions</span>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/qrcode" class="nav-link">
+                        <button class="btn btn-primary btn-md position-relative p-0 avatar-md rounded-circle" style="margin-top: -55px;" type="button">
+                            <div class="btn-content">
+                                <span class="avatar-title bg-transparent text-reset">
+                                    <i class='fs-24 ri-qr-code-line'></i>
+                                </span>
+                            </div>
+                        </button>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/exhibitors" class="nav-link nav-icon">
+                        <i class="fs-20 ri-store-2-line"></i>
+                        <span class="nav-label">Exhibitors</span>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/schedule" class="nav-link nav-icon">
+                        <i class="fs-20 ri-calendar-2-line"></i>
+                        <span class="nav-label">Schedule</span>
+                    </router-link>
+                </li>
+            </ul>
+        </footer>
     </div>
-    <footer class="footer p-2">
-        <ul class="nav nav-pills nav-justified card-footer-tabs">
-            <li class="nav-item">
-                <router-link to="/" class="nav-link nav-icon">
-                    <i class="fs-20 ri-home-wifi-line"></i>
-                    <span class="nav-label">Home</span>
-                </router-link>
-            </li>
-            <li class="nav-item">
-                <router-link to="/sessions" class="nav-link nav-icon">
-                    <i class="fs-20 ri-calendar-event-line"></i>
-                    <span class="nav-label">Sessions</span>
-                </router-link>
-            </li>
-            <li class="nav-item">
-                <router-link to="/qrcode" class="nav-link">
-                    <button class="btn btn-primary btn-md position-relative p-0 avatar-md rounded-circle" style="margin-top: -55px;" type="button">
-                        <div class="btn-content">
-                            <span class="avatar-title bg-transparent text-reset">
-                                <i class='fs-24 ri-qr-code-line'></i>
-                            </span>
-                        </div>
-                    </button>
-                </router-link>
-            </li>
-            <li class="nav-item">
-                <router-link to="/exhibitors" class="nav-link nav-icon">
-                    <i class="fs-20 ri-store-2-line"></i>
-                    <span class="nav-label">Exhibitors</span>
-                </router-link>
-            </li>
-            <li class="nav-item">
-                <router-link to="/schedule" class="nav-link nav-icon">
-                    <i class="fs-20 ri-calendar-2-line"></i>
-                    <span class="nav-label">Schedule</span>
-                </router-link>
-            </li>
-        </ul>
-    </footer>
+    
     <loading v-model:active="isLoading" background-color="black" :can-cancel="false" :is-full-page="fullPage">
         <div class="text-center">
             <img src="@/assets/images/logo-sm.png" class="heartbeat-spin" style="width: 40px; height: auto;" alt="loading..." />
@@ -401,6 +403,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 export default {
+    layout: null,
     data() {
         return {
             isIos: Capacitor.getPlatform() === 'ios',
@@ -506,6 +509,7 @@ export default {
 .footer {
     position: fixed;
     bottom: 0;
+    left:0;
     width: 100%;
     height: 90px;
     border-top: 0.1rem solid #e4e2e2;

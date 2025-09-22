@@ -22,13 +22,25 @@
                             </span>
                         </router-link>
                     </div>
-                    <BButton v-if="showArrow" variant="white" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" id="topnav-hamburger-icon">
+                    <!-- id="topnav-hamburger-icon" -->
+                    <!-- <BButton v-if="showArrow" variant="white" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" >
                         <span class="hamburger-icon">
                             <span></span>
                             <span></span>
                             <span></span>
                         </span>
-                    </BButton>
+                    </BButton> -->
+                    <div v-if="showArrow" class="d-flex align-items-center">
+                        <div class="avatar-sm me-1">
+                            <div class="avatar-title rounded bg-transparent">
+                                <img src="@/assets/images/dost.png" alt="" class="me-1 header-profile-user" >
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="mb-0 fw-semibold text-uppercase text-white" style="font-size: 10.7px"> DOST-IX Events</h5>
+                            <p class="text-white mb-0 fs-10"><span class="fw-semibold">One<span class="text-info">DOST</span>4U</span></p>
+                        </div>
+                    </div>
                     <BButton @click="goBack" v-else variant="white" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn" >
                         <span class="ri-arrow-left-circle-line text-white fs-24">
                             <span></span>
@@ -45,9 +57,8 @@
                                 <img class="rounded-circle header-profile-user" :src="$store.state.auth.user.data.avatar ? $store.state.auth.user.data.avatar : require('@/assets/images/avatars/avatar.jpg')"
                                     alt="Header Avatar">
                                 <span class="text-start ms-xl-2">
-                                    <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Edward
-                                        Diana</span>
-                                    <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
+                                    <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ $store.state.auth.user.data.firstname}}</span>
+                                    <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Participant</span>
                                 </span>
                             </span>
                         </template>

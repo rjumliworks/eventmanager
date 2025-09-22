@@ -1,10 +1,10 @@
 <script>
 import router from "@/router";
-import simplebar from "simplebar-vue";
+// import simplebar from "simplebar-vue";
 import { layoutComputed } from "@/state/helpers";
 
 import NavBar from "@/components/nav-bar";
-import Menu from "@/components/menu.vue";
+// import Menu from "@/components/menu.vue";
 import RightBar from "@/components/right-bar";
 import Footer from "@/components/footer";
 localStorage.setItem('hoverd', false);
@@ -13,7 +13,8 @@ localStorage.setItem('hoverd', false);
  * Vertical layout
  */
 export default {
-  components: { NavBar, RightBar, Footer, Menu, simplebar },
+  components: { NavBar, RightBar, Footer }, 
+  //Menu, simplebar
   data() {
     return {
       isMenuCondensed: false,
@@ -86,9 +87,9 @@ export default {
       document.documentElement.setAttribute('data-sidebar-size', 'sm-hover-active');
     }
 
-    document.getElementById('overlay').addEventListener('click', () => {
-      document.body.classList.remove('vertical-sidebar-enable');
-    });
+    // document.getElementById('overlay').addEventListener('click', () => {
+    //   document.body.classList.remove('vertical-sidebar-enable');
+    // });
     if (window.screen.width < 1025) {
       document.documentElement.setAttribute("data-sidebar-size", "sm");
     }
@@ -109,45 +110,7 @@ export default {
 <template>
   <div id="layout-wrapper">
     <NavBar />
-    <div>
-      <!-- ========== Left Sidebar Start ========== -->
-      <!-- ========== App Menu ========== -->
-      <div class="app-menu navbar-menu">
-        <!-- LOGO -->
-        <div class="navbar-brand-box">
-          <!-- Dark Logo-->
-          <router-link to="/" class="logo logo-dark">
-            <span class="logo-sm">
-              <img src="@/assets/images/logo-sm.png" alt="" height="22" />
-            </span>
-            <span class="logo-lg">
-              <img src="@/assets/images/logo-dark.png" alt="" height="17" />
-            </span>
-          </router-link>
-          <!-- Light Logo-->
-          <router-link to="/" class="logo logo-light">
-            <span class="logo-sm">
-              <img src="@/assets/images/logo-sm.png" alt="" height="22" />
-            </span>
-            <span class="logo-lg">
-              <img src="@/assets/images/logo-light.png" alt="" height="17" />
-            </span>
-          </router-link>
-          <BButton size="sm" class="p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-            id="vertical-hover" @click="initActiveMenu">
-            <i class="ri-record-circle-line"></i>
-          </BButton>
-        </div>
-
-        <simplebar id="scrollbar" class="h-100" ref="scrollbar">
-          <Menu></Menu>
-        </simplebar>
-        <div class="sidebar-background"></div>
-      </div>
-      <!-- Left Sidebar End -->
-      <!-- Vertical Overlay-->
-      <div class="vertical-overlay" id="overlay"></div>
-    </div>
+   
     <!-- ============================================================== -->
     <!-- Start Page Content here -->
     <!-- ============================================================== -->
