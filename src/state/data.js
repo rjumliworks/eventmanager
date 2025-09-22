@@ -183,6 +183,9 @@ export default {
                             commit('PLUS_POINTS', data.data.points)
                         }
                     break;
+                    case 'mobile-error':
+                        console.log(data);
+                    break;
                 }
             })
 

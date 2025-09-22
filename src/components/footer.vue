@@ -16,7 +16,7 @@
             <li class="nav-item">
                 <router-link to="/qrcode" class="nav-link">
                     <button class="btn btn-primary btn-md position-relative p-0 rounded-circle circledot"
-                        style="margin-top: -55px;" type="button">
+                        style="margin-top: -52px;" type="button">
                         <div class="btn-content">
                             <span class="avatar-title bg-transparent text-reset">
                                 <i class="fs-24 ri-qr-code-line"></i>
