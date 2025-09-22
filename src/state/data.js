@@ -188,12 +188,14 @@ export default {
                             commit('PLUS_POINTS', data.data.points)
                         }
                     break;
-                    case 'mobile-error':
-                        console.log(data);
-                    break;
-                    case 'attendance':
+                    case 'attendance-error':
                         if (data.data.participant_id == currentUserId) {
-                            commit('NOTIFY_USER', data.data.session.title)
+                            commit('NOTIFY_USER', data.data.message)
+                        }
+                    break;
+                    case 'exhibit_visit':
+                        if (data.data.participant_id == currentUserId) {
+                            commit('NOTIFY_USER', data.data.message)
                         }
                     break;
                 }

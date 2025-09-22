@@ -46,16 +46,18 @@ export default {
         }
     },
      watch: {
-        '$store.state.notifier': {
+        '$store.state.data.notifier': {
             handler(newVal) {
-                if (newVal) {
-                    this.$refs.notify.show();
-                } else {
-                   console.log('aw')
-                }
+                this.$nextTick(() => { // wait until DOM updates
+            if (newVal && this.$refs.notify) {
+                this.$refs.notify.show();
+            } else {
+                console.log('aw');
+            }
+        });
             },
             immediate: true, // run immediately on component mount (optional)
-            deep: false      // set true only if notifier is an object and you need nested changes
+            deep: true // set true only if notifier is an object and you need nested changes
         }
     },
     // watch: {
@@ -73,6 +75,7 @@ export default {
     },
     methods: { 
         async startScanner() {
+            this.$store.commit('data/NOTIFY_USER', null)
             await this.$nextTick();
             const config = { fps: 10, qrbox: { width: 190, height: 190 } };
 
